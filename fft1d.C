@@ -86,8 +86,7 @@ class fft : public CBase_fft {
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
       fftMsg **msgs = new fftMsg*[numChares];
       for(int i=0; i<numChares; i++) {
-        msgs[i] = new (n/N*2) fftMsg(n/N*2);
-        msgs[i]->size = n/N;
+        msgs[i] = new (n/numChares*2) fftMsg(n/numChares*2);
         msgs[i]->source = thisIndex;
       }
 
