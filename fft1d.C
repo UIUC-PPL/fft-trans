@@ -132,6 +132,26 @@ class fft : public CBase_fft {
       CkPrintf("[%d] Computing...\n", thisIndex);
     }
 
+    void twiddle() {
+      double a, c, s, re, im;
+
+        int k = thisIndex;
+        for(int i = 0; i<N/numChares; i++)
+          for( int j = 0; j<N; j++) {
+            a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
+            c = cos(a);
+            s = sin(a);
+
+            int idx = i*N+j;
+
+            CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
+
+            re = c*in[idx][0] - s*in[idx][1];
+            im = s*in[idx][0] + c*in[idx][1];
+            in[idx][0] = re;
+            in[idx][1] = im;
+          }
+    }
 };
 
 #include "fft1d.def.h"
