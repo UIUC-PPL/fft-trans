@@ -55,11 +55,20 @@ class fft : public CBase_fft {
     fftw_complex* in; //input data
     fftw_complex* out; //output result
     int n;
+    fftw_plan* plans;
+    int count;
     fftw_plan p1;
+
+    int transposeCount;
+    int computeCount;
 
     fft() {
       __sdag_init();
       iteration = 0;
+
+      count = 0;
+      transposeCount = 0;
+      computeCount = 0;
 
       n = N*N/(numChares);
 
@@ -68,13 +77,18 @@ class fft : public CBase_fft {
       //out = new double[n];
       in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
       out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+
+      fftw_plan* plans = new fftw_plan[N/numChares];
+      for(int i=0; i<N/numChares; i++)
+        plans[i] = fftw_plan_dft_1d(N, &in[i*N], &in[i*N], FFTW_FORWARD, FFTW_ESTIMATE);
+
+      p1 = fftw_plan_dft_1d(N, &in[0], &in[0], FFTW_FORWARD, FFTW_ESTIMATE);
+
       for (int i=0; i<n; i++) {
         in[i][0] = thisIndex*n+i;
         in[i][1] = 0.0;
         printf("init: [%d].%d = %f\n",thisIndex,i,in[i][0]);
       }
-      
-      //p1 = fftw_plan_dft_1d(n, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
     }
 
     fft(CkMigrateMessage* m) {}
@@ -103,14 +117,7 @@ class fft : public CBase_fft {
         thisProxy[k].getTranspose(msgs[k]);
       }
 
-      //one message per element
-      /*
-         for(int j=0; j<N; j++)
-         for(int i=j; i<n; i+=N)
-         msgs[j]->data[0] = real->data[i];
-      //CkPrintf("[%d] packed [%d]=%f for %d\n",thisIndex, i,real->data[i],j);
-
-       */
+      transposeCount++;
     }
 
     void getTranspose(fftMsg *m)
@@ -123,13 +130,34 @@ class fft : public CBase_fft {
           out[k*N/numChares+(i*N+j)][1] = m->data[l++];
           CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
+
+      count++;
+
+      if(transposeCount == 3)
+        contribute(0, 0, CkReduction::concat, CkCallback(CkIndex_Main::done(), mainProxy));
+      else if(count == numChares)
+        compute();
     }
 
     void compute()
     {
-      fftw_execute(p1); /* repeat as needed */                         
-      fftw_destroy_plan(p1);
+      count = 0;
+      for(int i=0; i<N/numChares; i++)
+        fftw_execute_dft(p1,&in[i*N],&in[i*N]);
+      //fftw_execute(plans[0]);
+
+      for(int i=0; i<n; i++)
+        //CkPrintf("[%d] in[%d] = %f -> out[%d] = %f\n",thisIndex, i, in[i][0], i, out[i][0]);
+        CkPrintf("[%d] in[%d] = %f + %fi\n",thisIndex, i, in[i][0], in[i][1]);
+
+      //fftw_destroy_plan(p1);
       CkPrintf("[%d] Computing...\n", thisIndex);
+      if(computeCount == 0)
+        twiddle();
+      computeCount++;
+
+      if(thisIndex == 0)
+        thisProxy.sendTranspose();
     }
 
     void twiddle() {
