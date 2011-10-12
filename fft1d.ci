@@ -5,7 +5,7 @@ mainmodule fft1d {
   readonly int N;
 
   message fftMsg {
-    double data[];
+    fftw_complex data[];
   };
 
   mainchare Main {

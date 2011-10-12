@@ -17,7 +17,7 @@ class fftMsg : public CMessage_fftMsg {
   public:
     int size;
     int source;
-    double *data;
+    fftw_complex *data;
 
     fftMsg() {}
 
@@ -102,7 +102,7 @@ class fft : public CBase_fft {
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
       fftMsg **msgs = new fftMsg*[numChares];
       for(int i=0; i<numChares; i++) {
-        msgs[i] = new (n/numChares*2) fftMsg(n/numChares*2);
+        msgs[i] = new (n/numChares) fftMsg(n/numChares);
         msgs[i]->source = thisIndex;
       }
 
@@ -111,8 +111,8 @@ class fft : public CBase_fft {
         l = 0;
         for(int j=0; j<N/numChares; j++) {
           for(int i=0; i<N/numChares; i++) {
-            msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][0];
-            msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][1];
+            msgs[k]->data[l][0] = in[k*N/numChares+(j*N+i)][0];
+            msgs[k]->data[l++][1] = in[k*N/numChares+(j*N+i)][1];
             //CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
           }
         }
@@ -128,8 +128,8 @@ class fft : public CBase_fft {
       int l = 0;
       for(int j=0; j<N/numChares; j++)
         for(int i=0; i<N/numChares; i++) {
-          in[k*N/numChares+(i*N+j)][0] = m->data[l++];
-          in[k*N/numChares+(i*N+j)][1] = m->data[l++];
+          in[k*N/numChares+(i*N+j)][0] = m->data[l][0];
+          in[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
           //CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
 
