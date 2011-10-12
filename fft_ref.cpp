@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void readCommFile(char *filename);
+void readCommFile(fftw_complex *data, char *filename);
 
 int main(int argc, char *argv[]) 
 { 
@@ -33,30 +33,25 @@ int main(int argc, char *argv[])
   ptrdiff_t local_ni=N*N/size, local_i_start = N*N/size*rank;
   ptrdiff_t local_no=local_ni, local_o_start = local_i_start;
 
+  int b_or_f = FFTW_BACKWARD;
+
   ptrdiff_t alloc_local =  fftw_mpi_local_size_1d(N*N, MPI_COMM_WORLD,
-      FFTW_FORWARD, FFTW_ESTIMATE, &local_ni, &local_i_start,
+      b_or_f, FFTW_ESTIMATE, &local_ni, &local_i_start,
       &local_no, &local_o_start);
 
   data = fftw_alloc_complex(alloc_local);
 
-  plan = fftw_mpi_plan_dft_1d(N*N, data, data, MPI_COMM_WORLD,FFTW_FORWARD, FFTW_ESTIMATE);
+  plan = fftw_mpi_plan_dft_1d(N*N, data, data, MPI_COMM_WORLD,b_or_f, FFTW_ESTIMATE);
+
+  char filename[80];
+  sprintf(filename,"%d-%d.dump%d",size,N,rank);
+  readCommFile(data, filename);
 
   for (int i=0; i<N*N/size; i++) {
-    data[i][0] = rank*N*N/size+i;
-    data[i][1] = 0.0;
-    printf("init: [%d].%d = %f\n",rank,i,data[i][0]);
+    //data[i][0] = rank*N*N/size+i;
+    //data[i][1] = 0.0;
+    printf("init: [%d].%d = %f + %fi\n",rank,i,data[i][0], data[i][1]);
   }
-
-  /*
-  char filename[80];
-  int x2,y2,z2,send_size,recv_size;
-  FILE * pFile;
-
-  int *send_sizes = new int[size];
-
-  sprintf(filename,"%d-%d.dump%d",size,N,rank);
-  readCommFile(filename);
-  */
 
   fftw_execute(plan);
 
@@ -70,21 +65,18 @@ int main(int argc, char *argv[])
   return 0; 
 } 
 
-void readCommFile(char *filename)
+void readCommFile(fftw_complex *data, char *filename)
 {
   FILE *pFile;
   if(!(pFile = fopen (filename,"r"))){
     //printf("Warning: File not found or open failure on rank %d\n",rank);
-    //MPI_Abort(MPI_COMM_WORLD,1);
+    printf("File open failed\n");
+    MPI_Abort(MPI_COMM_WORLD,1);
     return;
   }
 
-  int x2, z2, y2, comm_volume;
-  unsigned int rank;
-
-  while(fscanf (pFile, "%d %d %d %d", &x2,&y2,&z2,&comm_volume) != EOF)
-  {
-  }
+  int l = 0;
+  while(fscanf (pFile, "%lf %lf", &data[l][0],&data[l][1]) != EOF) {l++;}
 
   fclose(pFile);
 }
