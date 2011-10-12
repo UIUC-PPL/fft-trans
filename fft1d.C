@@ -34,6 +34,10 @@ class Main : public CBase_Main {
       numChares = atoi(m->argv[1]);
       N = atoi(m->argv[2]);
       delete m;
+
+      if(N%numChares !=0)
+        CkAbort("numChares not a multiple of N\n");
+
       CkPrintf("Each chare will have %d values\n", N*N/numChares);
 
       CkPrintf("Starting 1D FFT computation ...\n\n");
