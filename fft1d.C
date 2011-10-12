@@ -96,6 +96,8 @@ class fft : public CBase_fft {
 
     void sendTranspose()
     {
+      if(thisIndex == 0)
+        CkPrintf("TRANSPOSING\n");
       //CkPrintf("[%d] sending an array to [%d]\n", thisIndex.x, thisIndex.y, thisIndex.y, thisIndex.x);
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
       fftMsg **msgs = new fftMsg*[numChares];
@@ -111,7 +113,7 @@ class fft : public CBase_fft {
           for(int i=0; i<N/numChares; i++) {
             msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][0];
             msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][1];
-            CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
+            //CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
           }
         }
         thisProxy[k].getTranspose(msgs[k]);
@@ -128,6 +130,7 @@ class fft : public CBase_fft {
         for(int i=0; i<N/numChares; i++) {
           in[k*N/numChares+(i*N+j)][0] = m->data[l++];
           in[k*N/numChares+(i*N+j)][1] = m->data[l++];
+          //CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
 
       count++;
