@@ -52,8 +52,8 @@ class fft : public CBase_fft {
 
   public:
     int iteration;
-    double* in; //input data
-    double* out; //output result
+    fftw_complex* in; //input data
+    fftw_complex* out; //output result
     int n;
     fftw_plan p1;
 
@@ -64,14 +64,14 @@ class fft : public CBase_fft {
       n = N*N/(numChares);
 
       //Initialize data
-      in = new double[n];
-      out = new double[n];
-      //in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
-      //out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+      //in = new double[n];
+      //out = new double[n];
+      in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+      out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
       for (int i=0; i<n; i++) {
-        in[i] = thisIndex*n+i;
-        //in[i][1] = 0.0;
-        printf("init: [%d].%d = %f\n",thisIndex,i,in[i]);
+        in[i][0] = thisIndex*n+i;
+        in[i][1] = 0.0;
+        printf("init: [%d].%d = %f\n",thisIndex,i,in[i][0]);
       }
       
       //p1 = fftw_plan_dft_1d(n, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
@@ -96,9 +96,9 @@ class fft : public CBase_fft {
         l = 0;
         for(int j=0; j<N/numChares; j++) {
           for(int i=0; i<N/numChares; i++) {
-            msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)];
-            //msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][1];
-            CkPrintf("[%d].%d %f\n",thisIndex,l-1,in[k*N/numChares+(j*N+i)]);
+            msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][0];
+            msgs[k]->data[l++] = in[k*N/numChares+(j*N+i)][1];
+            CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
           }
         }
         thisProxy[k].getTranspose(msgs[k]);
@@ -120,9 +120,9 @@ class fft : public CBase_fft {
       int l = 0;
       for(int j=0; j<N/numChares; j++)
         for(int i=0; i<N/numChares; i++) {
-          out[k*N/numChares+(i*N+j)] = m->data[l++];
-          //out[k*N/numChares+(i*N+j)][1] = m->data[l++];
-          CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-1]);
+          out[k*N/numChares+(i*N+j)][0] = m->data[l++];
+          out[k*N/numChares+(i*N+j)][1] = m->data[l++];
+          CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
     }
 
