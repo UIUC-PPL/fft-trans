@@ -126,9 +126,8 @@ class fft : public CBase_fft {
       int l = 0;
       for(int j=0; j<N/numChares; j++)
         for(int i=0; i<N/numChares; i++) {
-          out[k*N/numChares+(i*N+j)][0] = m->data[l++];
-          out[k*N/numChares+(i*N+j)][1] = m->data[l++];
-          CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
+          in[k*N/numChares+(i*N+j)][0] = m->data[l++];
+          in[k*N/numChares+(i*N+j)][1] = m->data[l++];
         }
 
       count++;
