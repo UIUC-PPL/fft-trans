@@ -1,0 +1,33 @@
+mainmodule fft1d {
+
+  readonly CProxy_Main mainProxy;
+  readonly int numChares;
+  readonly int N;
+
+  message fftMsg {
+    double data[];
+  };
+
+  mainchare Main {
+    entry Main(CkArgMsg *m);
+    entry void done();
+  };
+
+  array [1D] fft {
+    entry fft();
+    entry void sendTranspose();
+    entry void getTranspose(fftMsg *m);
+
+    entry void doFFT() {
+
+        atomic "transpose1" { sendTranspose(); }
+
+        //when getTranspose[iteration] (fftMsg *m) {
+        //    atomic "compute1" { compute(); }
+        //    atomic "tranpose2" { sendTranspose(); }
+        //}
+
+     	//atomic "reduction" { contribute(0, 0, CkReduction::concat, CkCallback(CkIndex_Main::done(), mainProxy)); }
+    };
+  };
+};
