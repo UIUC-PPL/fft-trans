@@ -28,7 +28,7 @@ void writeCommFile(int n, fftw_complex *data, char *filename)
   }
 
   for(int l=0; l<n; l++)
-    fprintf(pFile, "%lf %lf\n", data[l][0],data[l][1]);
+    fprintf(pFile, "%.24f %.24f\n", data[l][0],data[l][1]);
 
   fclose(pFile);
 }
