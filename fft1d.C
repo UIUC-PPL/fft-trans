@@ -39,15 +39,11 @@ class Main : public CBase_Main {
       if(N%numChares !=0)
         CkAbort("numChares not a multiple of N\n");
 
-      CkPrintf("Each chare will have %d values\n", N*N/numChares);
-
-      CkPrintf("Starting 1D FFT computation ...\n\n");
       fftProxy = CProxy_fft::ckNew(numChares);
       fftProxy.doFFT();
     }
 
     void done() {
-      CkPrintf("All done ...\n");
       CkExit();
     }
 };
@@ -94,7 +90,6 @@ class fft : public CBase_fft {
       for (int i=0; i<n; i++) {
         in[i][0] = drand48();
         in[i][1] = drand48();
-        printf("init: [%d].%d = %f\n",thisIndex,i,in[i][0]);
       }
     }
 
@@ -159,12 +154,12 @@ class fft : public CBase_fft {
         fftw_execute_dft(p1,&in[i*N],&in[i*N]);
       //fftw_execute(plans[0]);
 
-      for(int i=0; i<n; i++)
+      //for(int i=0; i<n; i++)
         //CkPrintf("[%d] in[%d] = %f -> out[%d] = %f\n",thisIndex, i, in[i][0], i, out[i][0]);
-        CkPrintf("[%d] in[%d] = %f + %fi\n",thisIndex, i, in[i][0], in[i][1]);
+        //CkPrintf("[%d] in[%d] = %f + %fi\n",thisIndex, i, in[i][0], in[i][1]);
 
       //fftw_destroy_plan(p1);
-      CkPrintf("[%d] Computing...\n", thisIndex);
+      //CkPrintf("[%d] Computing...\n", thisIndex);
       if(computeCount == 0)
         twiddle();
       computeCount++;
@@ -185,7 +180,7 @@ class fft : public CBase_fft {
 
             int idx = i*N+j;
 
-            CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
+            //CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
 
             re = c*in[idx][0] - s*in[idx][1];
             im = s*in[idx][0] + c*in[idx][1];
