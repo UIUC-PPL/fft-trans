@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
   fftw_mpi_init();
 
   if(rank==0){
-    if(argc < 2){
-      printf("Usage: ./binary <path to files>\n");
+    if(argc != 2){
+      printf("Usage: ./binary <N>\n");
       MPI_Abort(MPI_COMM_WORLD,-1);
     }
   }
