@@ -1,13 +1,15 @@
-#include <stdio.h>
-#include <iostream>
+//#include <stdio.h>
+//#include <iostream>
 
 #include <mpi.h> 
 #include <cstdlib>
 #include "fftw3-mpi.h"
 
+#include "verify.h"
+
 using namespace std;
 
-void readCommFile(fftw_complex *data, char *filename);
+//void readCommFile(fftw_complex *data, char *filename);
 
 int main(int argc, char *argv[]) 
 { 
@@ -65,6 +67,7 @@ int main(int argc, char *argv[])
   return 0; 
 } 
 
+/*
 void readCommFile(fftw_complex *data, char *filename)
 {
   FILE *pFile;
@@ -80,3 +83,4 @@ void readCommFile(fftw_complex *data, char *filename)
 
   fclose(pFile);
 }
+*/

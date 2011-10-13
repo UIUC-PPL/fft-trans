@@ -6,6 +6,7 @@
 #include "fft1d.decl.h"
 #include <math.h>
 #include <fftw3.h>
+#include "verify.h"
 
 #define TWOPI 6.283185307179586
 
@@ -139,8 +140,12 @@ class fft : public CBase_fft {
 
       count++;
 
-      if(transposeCount == 3)
+      if(transposeCount == 3){
         contribute(0, 0, CkReduction::concat, CkCallback(CkIndex_Main::done(), mainProxy));
+        char filename[80];
+        sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
+        writeCommFile(n, in, filename);
+      }
       else if(count == numChares)
         compute();
     }
