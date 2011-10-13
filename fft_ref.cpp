@@ -51,16 +51,8 @@ int main(int argc, char *argv[])
   sprintf(filename,"%d-%d.dump%d",size,N,rank);
   readCommFile(data, filename);
 
-  for (int i=0; i<N*N/size; i++) {
-    //data[i][0] = rank*N*N/size+i;
-    //data[i][1] = 0.0;
-    printf("init: [%d].%d = %f + %fi\n",rank,i,data[i][0], data[i][1]);
-  }
-
   fftw_execute(plan);
 
-  for (int i=0; i<N*N/size; i++)
-    printf("[%d] in[%d] = %f + %fi\n",rank, i, data[i][0], data[i][1]);
   double infNorm = 0.0;
   srand48(rank);
   for (int i=0; i<N*N/size; i++){
@@ -71,8 +63,6 @@ int main(int argc, char *argv[])
       infNorm = fabs(data[i][0]);
     if(fabs(data[i][1]) > infNorm)
       infNorm = fabs(data[i][1]);
-
-    //printf("[%d] in[%d] = %g + %gi\n",rank, i, data[i][0], data[i][1]);
   }
 
   double r = infNorm/(std::numeric_limits<double>::epsilon()*log(N*N));
