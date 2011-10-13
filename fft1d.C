@@ -89,9 +89,11 @@ class fft : public CBase_fft {
 
       p1 = fftw_plan_dft_1d(N, &in[0], &in[0], FFTW_FORWARD, FFTW_ESTIMATE);
 
+      //TODO: numbers need to be generated independantly?
+      srand48(thisIndex);
       for (int i=0; i<n; i++) {
-        in[i][0] = thisIndex*n+i;
-        in[i][1] = 0.0;
+        in[i][0] = drand48();
+        in[i][1] = drand48();
         printf("init: [%d].%d = %f\n",thisIndex,i,in[i][0]);
       }
     }

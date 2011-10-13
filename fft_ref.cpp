@@ -4,6 +4,8 @@
 #include <mpi.h> 
 #include <cstdlib>
 #include "fftw3-mpi.h"
+#include <cmath>
+#include <limits>
 
 #include "verify.h"
 
@@ -59,6 +61,26 @@ int main(int argc, char *argv[])
 
   for (int i=0; i<N*N/size; i++)
     printf("[%d] in[%d] = %f + %fi\n",rank, i, data[i][0], data[i][1]);
+  double infNorm = 0.0;
+  srand48(rank);
+  for (int i=0; i<N*N/size; i++){
+    data[i][0] = data[i][0]/(N*N) - drand48(); 
+    data[i][1] = data[i][1]/(N*N) - drand48();
+
+    if(fabs(data[i][0]) > infNorm)
+      infNorm = fabs(data[i][0]);
+    if(fabs(data[i][1]) > infNorm)
+      infNorm = fabs(data[i][1]);
+
+    //printf("[%d] in[%d] = %g + %gi\n",rank, i, data[i][0], data[i][1]);
+  }
+
+  double r = infNorm/(std::numeric_limits<double>::epsilon()*log(N*N));
+
+  if(r < 16)
+    printf("r = %g, PASS!\n",r);
+  else
+    printf("r = %g, FAIL\n",r);
 
   fftw_destroy_plan(plan);
 
