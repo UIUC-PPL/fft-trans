@@ -99,9 +99,8 @@ class fft : public CBase_fft {
         msgs[i]->source = thisIndex;
       }
 
-      int l;
       for(int k=0; k<numChares; k++) {
-        l = 0;
+        int l = 0;
         for(int j=0; j<N/numChares; j++) {
           for(int i=0; i<N/numChares; i++) {
             msgs[k]->data[l][0] = in[k*N/numChares+(j*N+i)][0];
