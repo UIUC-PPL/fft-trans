@@ -20,8 +20,6 @@ struct fftMsg : public CMessage_fftMsg {
 };
 
 struct Main : public CBase_Main {
-    int iteration;
-
     Main(CkArgMsg* m) {
       numChares = atoi(m->argv[1]);
       N = atoi(m->argv[2]);
