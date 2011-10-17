@@ -19,8 +19,7 @@ struct fftMsg : public CMessage_fftMsg {
     fftw_complex *data;
 };
 
-class Main : public CBase_Main {
-  public:
+struct Main : public CBase_Main {
     CProxy_fft fftProxy;
     int iteration;
 
@@ -41,10 +40,9 @@ class Main : public CBase_Main {
     }
 };
 
-class fft : public CBase_fft {
+struct fft : public CBase_fft {
   fft_SDAG_CODE
 
-  public:
     int iteration, count;
     fftw_complex* in; //input data
     fftw_complex* out; //output result
