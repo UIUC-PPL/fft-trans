@@ -52,20 +52,15 @@ class fft : public CBase_fft {
   fft_SDAG_CODE
 
   public:
-    int iteration;
+    int iteration, count;
     fftw_complex* in; //input data
     fftw_complex* out; //output result
     int n;
     fftw_plan* plans;
     fftw_plan p1;
 
-    int transposeCount;
-
     fft() {
       __sdag_init();
-      iteration = 0;
-
-      transposeCount = 0;
 
       n = N*N/(numChares);
 

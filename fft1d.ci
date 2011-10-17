@@ -19,7 +19,7 @@ mainmodule fft1d {
     entry void getTranspose(fftMsg *m);
 
     entry void doFFT() {
-	for (transposeCount = 0; transposeCount < 3; ++transposeCount) {
+	for (iteration = 0; iteration < 3; ++iteration) {
 	  atomic "transpose" { sendTranspose(); }
 
 	  for (count = 0; count < numChares; ++count)
@@ -28,8 +28,8 @@ mainmodule fft1d {
 	    }
 
 	  atomic "compute" {
-	    if (transposeCount < 2)
-	      compute(transposeCount == 0);
+	    if (iteration < 2)
+	      compute(iteration == 0);
 	  }
 	}
 
