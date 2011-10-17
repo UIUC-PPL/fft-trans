@@ -14,16 +14,9 @@
 /*readonly*/ int numChares;
 /*readonly*/ int N;
 
-class fftMsg : public CMessage_fftMsg {
-  public:
-    int size;
+struct fftMsg : public CMessage_fftMsg {
     int source;
     fftw_complex *data;
-
-    fftMsg() {}
-
-    fftMsg(int _size) : size(_size) {
-    }
 };
 
 class Main : public CBase_Main {
@@ -95,7 +88,7 @@ class fft : public CBase_fft {
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
       fftMsg **msgs = new fftMsg*[numChares];
       for(int i=0; i<numChares; i++) {
-        msgs[i] = new (n/numChares) fftMsg(n/numChares);
+        msgs[i] = new (n/numChares) fftMsg;
         msgs[i]->source = thisIndex;
       }
 
