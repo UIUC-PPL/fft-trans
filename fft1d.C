@@ -57,19 +57,15 @@ class fft : public CBase_fft {
     fftw_complex* out; //output result
     int n;
     fftw_plan* plans;
-    int count;
     fftw_plan p1;
 
     int transposeCount;
-    int computeCount;
 
     fft() {
       __sdag_init();
       iteration = 0;
 
-      count = 0;
       transposeCount = 0;
-      computeCount = 0;
 
       n = N*N/(numChares);
 
@@ -120,11 +116,9 @@ class fft : public CBase_fft {
         }
         thisProxy[k].getTranspose(msgs[k]);
       }
-
-      transposeCount++;
     }
 
-    void getTranspose(fftMsg *m)
+    void applyTranspose(fftMsg *m)
     {
       int k = m->source;
       int l = 0;
@@ -134,22 +128,10 @@ class fft : public CBase_fft {
           in[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
           //CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
-
-      count++;
-
-      if(transposeCount == 3){
-        contribute(0, 0, CkReduction::concat, CkCallback(CkIndex_Main::done(), mainProxy));
-        char filename[80];
-        sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
-        writeCommFile(n, in, filename);
-      }
-      else if(count == numChares)
-        compute();
     }
 
-    void compute()
+    void compute(bool doTwiddle)
     {
-      count = 0;
       for(int i=0; i<N/numChares; i++)
         fftw_execute_dft(p1,&in[i*N],&in[i*N]);
       //fftw_execute(plans[0]);
@@ -160,12 +142,9 @@ class fft : public CBase_fft {
 
       //fftw_destroy_plan(p1);
       //CkPrintf("[%d] Computing...\n", thisIndex);
-      if(computeCount == 0)
-        twiddle();
-      computeCount++;
 
-      if(thisIndex == 0)
-        thisProxy.sendTranspose();
+      if(doTwiddle)
+        twiddle();
     }
 
     void twiddle() {

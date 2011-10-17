@@ -19,15 +19,26 @@ mainmodule fft1d {
     entry void getTranspose(fftMsg *m);
 
     entry void doFFT() {
+	for (transposeCount = 0; transposeCount < 3; ++transposeCount) {
+	  atomic "transpose" { sendTranspose(); }
 
-        atomic "transpose1" { sendTranspose(); }
+	  for (count = 0; count < numChares; ++count)
+	    when getTranspose(fftMsg *m) atomic {
+	      applyTranspose(m);
+	    }
 
-        //when getTranspose[iteration] (fftMsg *m) {
-        //    atomic "compute1" { compute(); }
-        //    atomic "tranpose2" { sendTranspose(); }
-        //}
+	  atomic "compute" {
+	    if (transposeCount < 2)
+	      compute(transposeCount == 0);
+	  }
+	}
 
-     	//atomic "reduction" { contribute(0, 0, CkReduction::concat, CkCallback(CkIndex_Main::done(), mainProxy)); }
+	atomic "writeResults" {
+	  contribute(CkCallback(CkIndex_Main::done(), mainProxy));
+	  char filename[80];
+	  sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
+	  writeCommFile(n, in, filename);
+	}
     };
   };
 };
