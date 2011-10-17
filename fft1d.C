@@ -20,7 +20,6 @@ struct fftMsg : public CMessage_fftMsg {
 };
 
 struct Main : public CBase_Main {
-    CProxy_fft fftProxy;
     int iteration;
 
     Main(CkArgMsg* m) {
@@ -31,7 +30,7 @@ struct Main : public CBase_Main {
       if(N%numChares !=0)
         CkAbort("numChares not a multiple of N\n");
 
-      fftProxy = CProxy_fft::ckNew(numChares);
+      CProxy_fft fftProxy = CProxy_fft::ckNew(numChares);
       fftProxy.doFFT();
     }
 
