@@ -54,7 +54,6 @@ struct fft : public CBase_fft {
     fftw_complex* in; //input data
     fftw_complex* out; //output result
     int n;
-    fftw_plan* plans;
     fftw_plan p1;
 
     fft() {
@@ -67,12 +66,6 @@ struct fft : public CBase_fft {
       //out = new double[n];
       in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
       out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
-
-      fftw_plan* plans = new fftw_plan[N/numChares];
-      for(int i=0; i<N/numChares; i++)
-        plans[i] = fftw_plan_dft_1d(N, &in[i*N], &in[i*N], FFTW_FORWARD, FFTW_ESTIMATE);
-
-      //p1 = fftw_plan_dft_1d(N, &in[0], &in[0], FFTW_FORWARD, FFTW_ESTIMATE);
 
       int rank = 1; /* not 2: we are computing 1d transforms */
       int length[] = {N}; /* 1d transforms of length 10 */
@@ -143,8 +136,6 @@ struct fft : public CBase_fft {
 
     void compute(bool doTwiddle)
     {
-      //for(int i=0; i<N/numChares; i++)
-        //fftw_execute_dft(p1,&in[i*N],&in[i*N]);
       fftw_execute(p1);
 
       //for(int i=0; i<n; i++)
