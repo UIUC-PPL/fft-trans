@@ -17,6 +17,7 @@ mainmodule fft1d {
     entry fft();
     entry void sendTranspose();
     entry void getTranspose(fftMsg *m);
+    entry void writeResults(int);
 
     entry void doFFT() {
 	for (iteration = 0; iteration < 3; ++iteration) {
@@ -33,11 +34,13 @@ mainmodule fft1d {
 	  }
 	}
 
-	atomic "writeResults" {
-	  contribute(CkCallback(CkIndex_Main::done(), mainProxy));
+	atomic { contribute(CkCallback(CkIndex_Main::done(), mainProxy)); }
+
+	when writeResults(int a) atomic {
 	  char filename[80];
 	  sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
 	  writeCommFile(n, in, filename);
+	  contribute(CkCallback(CkCallback::ckExit));
 	}
     };
   };

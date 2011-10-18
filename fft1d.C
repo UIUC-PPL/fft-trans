@@ -20,7 +20,10 @@ struct fftMsg : public CMessage_fftMsg {
 };
 
 struct Main : public CBase_Main {
-    Main(CkArgMsg* m) {
+  double start;
+  CProxy_fft fftProxy;
+
+  Main(CkArgMsg* m) {
       numChares = atoi(m->argv[1]);
       N = atoi(m->argv[2]);
       delete m;
@@ -28,12 +31,16 @@ struct Main : public CBase_Main {
       if(N%numChares !=0)
         CkAbort("numChares not a multiple of N\n");
 
-      CProxy_fft fftProxy = CProxy_fft::ckNew(numChares);
+      fftProxy = CProxy_fft::ckNew(numChares);
+      start = CkWallTimer();
       fftProxy.doFFT();
     }
 
     void done() {
-      CkExit();
+      double time = CkWallTimer() - start;
+      CkPrintf("FFT on %d elements with %d chares took %f time at %f GFlop/s\n",
+	       N, numChares, time, 5*N*log2(N)/(time*1000000000));
+      fftProxy.writeResults(0);
     }
 };
 
