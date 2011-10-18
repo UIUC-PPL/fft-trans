@@ -27,6 +27,7 @@ mainmodule fft1d {
 	  for (count = 0; count < numChares; ++count)
 	    when getTranspose(fftMsg *m) atomic {
 	      applyTranspose(m);
+              delete(m);
 	    }
 
 	  atomic "compute" {
