@@ -72,7 +72,24 @@ struct fft : public CBase_fft {
       for(int i=0; i<N/numChares; i++)
         plans[i] = fftw_plan_dft_1d(N, &in[i*N], &in[i*N], FFTW_FORWARD, FFTW_ESTIMATE);
 
-      p1 = fftw_plan_dft_1d(N, &in[0], &in[0], FFTW_FORWARD, FFTW_ESTIMATE);
+      //p1 = fftw_plan_dft_1d(N, &in[0], &in[0], FFTW_FORWARD, FFTW_ESTIMATE);
+
+      int rank = 1; /* not 2: we are computing 1d transforms */
+      int length[] = {N}; /* 1d transforms of length 10 */
+      int howmany = N/numChares;
+      int idist = N;
+      int odist = N;
+      int istride = 1;
+      int ostride = 1; /* distance between two elements in
+                                    the same column */
+      int *inembed = length, *onembed = length;
+
+      p1 = fftw_plan_many_dft(rank, length, howmany,
+          in, inembed,
+          istride, idist,
+          in, onembed,
+          ostride, odist,
+          FFTW_FORWARD, FFTW_ESTIMATE);
 
       //TODO: numbers need to be generated independantly?
       srand48(thisIndex);
@@ -126,13 +143,13 @@ struct fft : public CBase_fft {
 
     void compute(bool doTwiddle)
     {
-      for(int i=0; i<N/numChares; i++)
-        fftw_execute_dft(p1,&in[i*N],&in[i*N]);
-      //fftw_execute(plans[0]);
+      //for(int i=0; i<N/numChares; i++)
+        //fftw_execute_dft(p1,&in[i*N],&in[i*N]);
+      fftw_execute(p1);
 
       //for(int i=0; i<n; i++)
-        //CkPrintf("[%d] in[%d] = %f -> out[%d] = %f\n",thisIndex, i, in[i][0], i, out[i][0]);
-        //CkPrintf("[%d] in[%d] = %f + %fi\n",thisIndex, i, in[i][0], in[i][1]);
+      //CkPrintf("[%d] in[%d] = %f -> out[%d] = %f\n",thisIndex, i, in[i][0], i, out[i][0]);
+      //CkPrintf("[%d] in[%d] = %f + %fi\n",thisIndex, i, in[i][0], in[i][1]);
 
       //fftw_destroy_plan(p1);
       //CkPrintf("[%d] Computing...\n", thisIndex);
@@ -144,22 +161,22 @@ struct fft : public CBase_fft {
     void twiddle() {
       double a, c, s, re, im;
 
-        int k = thisIndex;
-        for(int i = 0; i<N/numChares; i++)
-          for( int j = 0; j<N; j++) {
-            a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
-            c = cos(a);
-            s = sin(a);
+      int k = thisIndex;
+      for(int i = 0; i<N/numChares; i++)
+        for( int j = 0; j<N; j++) {
+          a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
+          c = cos(a);
+          s = sin(a);
 
-            int idx = i*N+j;
+          int idx = i*N+j;
 
-            //CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
+          //CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
 
-            re = c*in[idx][0] - s*in[idx][1];
-            im = s*in[idx][0] + c*in[idx][1];
-            in[idx][0] = re;
-            in[idx][1] = im;
-          }
+          re = c*in[idx][0] - s*in[idx][1];
+          im = s*in[idx][0] + c*in[idx][1];
+          in[idx][0] = re;
+          in[idx][1] = im;
+        }
     }
 };
 
