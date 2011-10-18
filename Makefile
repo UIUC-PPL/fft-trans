@@ -1,19 +1,20 @@
 OPTS	= -O3
 CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
 CC=mpicxx
+LIBS = -lfftw3 -lm -lz
 
 OBJS = fft1d.o
 
 all: fft1d fft_ref
 
 fft1d: $(OBJS)
-	$(CHARMC) -language charm++ -o fft1d $(OBJS) -lfftw3 -lm
+	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS)
 
 projections: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode projections -lz -o fft1d.prj $(OBJS)
+	$(CHARMC) -language charm++ -tracemode projections $(LIBS) -o fft1d.prj $(OBJS)
 
 summary: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode summary -lz -o fft1d.sum $(OBJS)
+	$(CHARMC) -language charm++ -tracemode summary $(LIBS) -o fft1d.sum $(OBJS)
 
 fft1d.decl.h: fft1d.ci
 	$(CHARMC)  fft1d.ci
