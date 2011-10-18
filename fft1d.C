@@ -32,9 +32,12 @@ struct Main : public CBase_Main {
         CkAbort("numChares not a multiple of N\n");
 
       fftProxy = CProxy_fft::ckNew(numChares);
+    }
+
+  void startTiming() {
       start = CkWallTimer();
       fftProxy.doFFT();
-    }
+  }
 
     void done() {
       double time = CkWallTimer() - start;
@@ -77,6 +80,8 @@ struct fft : public CBase_fft {
         in[i][0] = drand48();
         in[i][1] = drand48();
       }
+
+      contribute(CkCallback(CkIndex_Main::startTiming(), mainProxy));
     }
 
     fft(CkMigrateMessage* m) {}

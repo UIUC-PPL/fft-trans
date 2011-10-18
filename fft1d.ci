@@ -10,6 +10,7 @@ mainmodule fft1d {
 
   mainchare Main {
     entry Main(CkArgMsg *m);
+    entry void startTiming();
     entry void done();
   };
 
