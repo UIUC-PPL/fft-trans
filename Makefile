@@ -5,12 +5,13 @@ LIBS = -lfftw3 -lm -lz
 
 OBJS = fft1d.o
 
-all: fft1d fft_ref
+all: fft1d fft_ref fft1d.prj
 
 fft1d: $(OBJS)
 	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS)
 
-projections: $(OBJS)
+projections: fft1d.prj
+fft1d.prj: $(OBJS)
 	$(CHARMC) -language charm++ -tracemode projections $(LIBS) -o fft1d.prj $(OBJS)
 
 summary: $(OBJS)
