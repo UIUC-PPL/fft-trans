@@ -55,6 +55,7 @@ struct fft : public CBase_fft {
     fftw_complex* out; //output result
     int n;
     fftw_plan p1;
+    fftMsg **msgs;
 
     fft() {
       __sdag_init();
@@ -91,6 +92,12 @@ struct fft : public CBase_fft {
         in[i][1] = drand48();
       }
 
+      msgs = new fftMsg*[numChares*3];
+      for(int i=0; i<numChares*3; i++) {
+        msgs[i] = new (n/numChares) fftMsg;
+        msgs[i]->source = thisIndex;
+      }
+
       contribute(CkCallback(CkIndex_Main::startTiming(), mainProxy));
     }
 
@@ -103,22 +110,18 @@ struct fft : public CBase_fft {
         CkPrintf("TRANSPOSING\n");
       //CkPrintf("[%d] sending an array to [%d]\n", thisIndex.x, thisIndex.y, thisIndex.y, thisIndex.x);
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
-      fftMsg **msgs = new fftMsg*[numChares];
-      for(int i=0; i<numChares; i++) {
-        msgs[i] = new (n/numChares) fftMsg;
-        msgs[i]->source = thisIndex;
-      }
 
+      int offset = iteration*numChares;
       for(int k=0; k<numChares; k++) {
         int l = 0;
         for(int j=0; j<N/numChares; j++) {
           for(int i=0; i<N/numChares; i++) {
-            msgs[k]->data[l][0] = in[k*N/numChares+(j*N+i)][0];
-            msgs[k]->data[l++][1] = in[k*N/numChares+(j*N+i)][1];
+            msgs[k+offset]->data[l][0] = in[k*N/numChares+(j*N+i)][0];
+            msgs[k+offset]->data[l++][1] = in[k*N/numChares+(j*N+i)][1];
             //CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
           }
         }
-        thisProxy[k].getTranspose(msgs[k]);
+        thisProxy[k].getTranspose(msgs[k+offset]);
       }
     }
 
