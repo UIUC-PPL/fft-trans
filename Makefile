@@ -26,6 +26,9 @@ fft_ref: fft_ref.o
 fft_ref.o: fft_ref.cpp
 	${CC} -c fft_ref.cpp -I/expand/home/arya/fftw-3.3/include
 
+cleanproj:
+	rm -f *.log *.sts *.projrc
+
 clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj charmrun fft_ref *~
 
