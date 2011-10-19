@@ -114,13 +114,8 @@ struct fft : public CBase_fft {
       int offset = iteration*numChares;
       for(int k=0; k<numChares; k++) {
         int l = 0;
-        for(int j=0; j<N/numChares; j++) {
-          for(int i=0; i<N/numChares; i++) {
-            msgs[k+offset]->data[l][0] = in[k*N/numChares+(j*N+i)][0];
-            msgs[k+offset]->data[l++][1] = in[k*N/numChares+(j*N+i)][1];
-            //CkPrintf("[%d].%d %f\n",thisIndex,l-2,in[k*N/numChares+(j*N+i)][0]);
-          }
-        }
+        for(int j=0; j<N/numChares; j++)
+          memcpy(msgs[k+offset]->data[(l++)*N/numChares], in[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
         thisProxy[k].getTranspose(msgs[k+offset]);
       }
     }
