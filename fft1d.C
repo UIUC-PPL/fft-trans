@@ -57,10 +57,14 @@ struct fft : public CBase_fft {
     fftw_plan p1;
     fftMsg **msgs;
 
+    double copytime, computetime, sendtime, twiddletime;
+
     fft() {
       __sdag_init();
 
       n = N*N/(numChares);
+
+      copytime = computetime = sendtime = 0.0;
 
       //Initialize data
       //in = new double[n];
@@ -110,14 +114,25 @@ struct fft : public CBase_fft {
         CkPrintf("TRANSPOSING\n");
       //CkPrintf("[%d] sending an array to [%d]\n", thisIndex.x, thisIndex.y, thisIndex.y, thisIndex.x);
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
+      
+      double this_copytime = CkWallTimer();
 
       int offset = iteration*numChares;
       for(int k=0; k<numChares; k++) {
         int l = 0;
         for(int j=0; j<N/numChares; j++)
           memcpy(msgs[k+offset]->data[(l++)*N/numChares], in[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
-        thisProxy[k].getTranspose(msgs[k+offset]);
+        //thisProxy[k].getTranspose(msgs[k+offset]);
       }
+
+      copytime += CkWallTimer() - this_copytime;
+
+      double this_sendtime = CkWallTimer();
+
+      for(int k=0; k<numChares; k++)
+        thisProxy[k].getTranspose(msgs[k+offset]);
+    
+      sendtime += CkWallTimer() - this_sendtime;
     }
 
     void applyTranspose(fftMsg *m)
@@ -134,6 +149,8 @@ struct fft : public CBase_fft {
 
     void compute(bool doTwiddle)
     {
+      double this_computetime = CkWallTimer();
+
       fftw_execute(p1);
 
       //for(int i=0; i<n; i++)
@@ -143,8 +160,13 @@ struct fft : public CBase_fft {
       //fftw_destroy_plan(p1);
       //CkPrintf("[%d] Computing...\n", thisIndex);
 
-      if(doTwiddle)
+      if(doTwiddle) {
+        twiddletime = CkWallTimer();
         twiddle();
+        twiddletime = CkWallTimer() - twiddletime;
+      }
+
+      computetime += CkWallTimer() - this_computetime;
     }
 
     void twiddle() {

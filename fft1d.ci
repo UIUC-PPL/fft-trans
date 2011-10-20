@@ -42,7 +42,8 @@ mainmodule fft1d {
 	  char filename[80];
 	  sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
 	  //writeCommFile(n, in, filename);
-	  contribute(CkCallback(CkCallback::ckExit));
+	  CkPrintf("[%d] copy/comp = %f copy = %f compute = %f twid = %f send = %f\n",thisIndex,copytime/computetime, copytime, computetime, twiddletime, sendtime);
+          contribute(CkCallback(CkCallback::ckExit));
 	}
     };
   };
