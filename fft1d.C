@@ -7,6 +7,7 @@
 #include <math.h>
 #include <fftw3.h>
 #include "verify.h"
+#include "register.h"
 
 #define TWOPI 6.283185307179586
 
@@ -96,8 +97,8 @@ struct fft : public CBase_fft {
         in[i][1] = drand48();
       }
 
-      msgs = new fftMsg*[numChares*3];
-      for(int i=0; i<numChares*3; i++) {
+      msgs = new fftMsg*[numChares];
+      for(int i=0; i<numChares; i++) {
         msgs[i] = new (n/numChares) fftMsg;
         msgs[i]->source = thisIndex;
       }
@@ -118,11 +119,21 @@ struct fft : public CBase_fft {
 
       double this_copytime = CkWallTimer();
 
-      int offset = iteration*numChares;
       for(int k=0; k<numChares; k++) {
         int l = 0;
+        envelope *env = UsrToEnv(msgs[k]);
+        _SET_USED(env, 0);
+        if (env->isPacked()) {
+          //CkPrintf("[%d] isPacked\n", thisIndex);
+          unsigned char msgidx = env->getMsgIdx();
+          if(_msgTable[msgidx]->unpack) {
+            msgs[k] = (fftMsg*)_msgTable[msgidx]->unpack(msgs[k]);
+            UsrToEnv(msgs[k])->setPacked(0);
+          }
+        }
+
         for(int j=0; j<N/numChares; j++)
-          memcpy(msgs[k+offset]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+          memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
         //thisProxy[k].getTranspose(msgs[k+offset]);
       }
 
@@ -130,8 +141,10 @@ struct fft : public CBase_fft {
 
       double this_sendtime = CkWallTimer();
 
-      for(int k=0; k<numChares; k++)
-        thisProxy[k].getTranspose(msgs[k+offset]);
+      for(int k=0; k<numChares; k++) {
+        CmiReference(UsrToEnv(msgs[k]));
+        thisProxy[k].getTranspose(msgs[k]);
+      }
     
       sendtime += CkWallTimer() - this_sendtime;
     }
