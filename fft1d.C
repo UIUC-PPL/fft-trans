@@ -83,9 +83,9 @@ struct fft : public CBase_fft {
       int *inembed = length, *onembed = length;
 
       p1 = fftw_plan_many_dft(rank, length, howmany,
-          in, inembed,
+          out, inembed,
           istride, idist,
-          in, onembed,
+          out, onembed,
           ostride, odist,
           FFTW_FORWARD, FFTW_ESTIMATE);
 
@@ -114,14 +114,15 @@ struct fft : public CBase_fft {
         CkPrintf("TRANSPOSING\n");
       //CkPrintf("[%d] sending an array to [%d]\n", thisIndex.x, thisIndex.y, thisIndex.y, thisIndex.x);
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
-      
+      fftw_complex *buf = (iteration == 0) ? buf = in : buf = out;
+
       double this_copytime = CkWallTimer();
 
       int offset = iteration*numChares;
       for(int k=0; k<numChares; k++) {
         int l = 0;
         for(int j=0; j<N/numChares; j++)
-          memcpy(msgs[k+offset]->data[(l++)*N/numChares], in[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+          memcpy(msgs[k+offset]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
         //thisProxy[k].getTranspose(msgs[k+offset]);
       }
 
@@ -141,8 +142,8 @@ struct fft : public CBase_fft {
       int l = 0;
       for(int j=0; j<N/numChares; j++)
         for(int i=0; i<N/numChares; i++) {
-          in[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-          in[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+          out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
+          out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
           //CkPrintf("[%d] real[%d] = %f\n",thisIndex,k*N/numChares+(i*N+j),m->data[l-2]);
         }
     }
@@ -183,10 +184,10 @@ struct fft : public CBase_fft {
 
           //CkPrintf("[%d] Twiddle for [%d,%d]: tw_re = %f tw_im = %f\n",thisIndex,(i+k*N/numChares), j, c, s);
 
-          re = c*in[idx][0] - s*in[idx][1];
-          im = s*in[idx][0] + c*in[idx][1];
-          in[idx][0] = re;
-          in[idx][1] = im;
+          re = c*out[idx][0] - s*out[idx][1];
+          im = s*out[idx][0] + c*out[idx][1];
+          out[idx][0] = re;
+          out[idx][1] = im;
         }
     }
 };
