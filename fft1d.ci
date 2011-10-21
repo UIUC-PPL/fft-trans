@@ -25,7 +25,7 @@ mainmodule fft1d {
 	  atomic "transpose" { sendTranspose(); }
 
 	  for (count = 0; count < numChares; ++count)
-	    when getTranspose(fftMsg *m) atomic {
+	    when getTranspose[iteration] (fftMsg *m) atomic {
 	      applyTranspose(m);
               delete(m);
 	    }
@@ -39,10 +39,6 @@ mainmodule fft1d {
 	atomic { contribute(CkCallback(CkIndex_Main::done(), mainProxy)); }
 
 	when writeResults(int a) atomic {
-	  char filename[80];
-	  sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
-	  //writeCommFile(n, out, filename);
-	  CkPrintf("[%d] copy/comp = %f copy = %f compute = %f twid = %f send = %f\n",thisIndex,copytime/computetime, copytime, computetime, twiddletime, sendtime);
           contribute(CkCallback(CkCallback::ckExit));
 	}
     };
