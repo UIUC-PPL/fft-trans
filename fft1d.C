@@ -5,6 +5,7 @@
 
 #include "fft1d.decl.h"
 #include <fftw3.h>
+#include "verify.h"
 
 #define TWOPI 6.283185307179586
 
@@ -65,12 +66,8 @@ struct fft : public CBase_fft {
 
       n = N*N/numChares;
 
-      in = new fftw_complex[n];
-      for(int i=0; i<n; i++) {
-        in[i][0] = i+thisIndex*n;
-        in[i][1] = -i-thisIndex*n;
-      }
-      out = new fftw_complex[n];
+      in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+      out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
       int rank = 1; /* not 2: we are computing 1d transforms */
       int length[] = {N}; /* 1d transforms of length 10 */
@@ -88,9 +85,10 @@ struct fft : public CBase_fft {
               ostride, odist,
               FFTW_FORWARD, FFTW_ESTIMATE);
 
+      srand48(thisIndex);
       for(int i=0; i<n; i++) {
-        in[i][0] = i+thisIndex*n;
-        in[i][1] = -i-thisIndex*n;
+        in[i][0] = drand48();
+        in[i][1] = drand48();
       }
 
       //printMat(buf, N/numChares, N, "Initialized", thisIndex);

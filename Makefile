@@ -1,7 +1,7 @@
 OPTS	= -g -O0
 CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
 CC=mpicxx
-#LIBS = -lfftw3 -lm -lz
+LIBS = -lfftw3 -lm -lz
 
 OBJS = fft1d.o
 
