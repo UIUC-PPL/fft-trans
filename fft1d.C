@@ -18,16 +18,6 @@ struct fftMsg : public CMessage_fftMsg {
     fftw_complex *data;
 };
 
-void printMat(fftw_complex *data, int x, int y, const char* msg, int idx) {
-  CkPrintf("[%d] %s\n",idx,msg);
-  for(int i=0; i<x; i++) {
-    for(int j=0; j<y; j++) {
-     CkPrintf(" %5.0f", data[i*y+j][0]);
-    }
-    CkPrintf("\n");
-  }
-}
-
 struct Main : public CBase_Main {
   double start;
   CProxy_fft fftProxy;
@@ -94,8 +84,6 @@ struct fft : public CBase_fft {
         in[i][1] = drand48();
       }
 
-      //printMat(buf, N/numChares, N, "Initialized", thisIndex);
-
       msgs = new fftMsg*[numChares*3];
       for(int i=0; i<numChares*3; i++) {
         msgs[i] = new (n/numChares) fftMsg;
@@ -144,8 +132,6 @@ struct fft : public CBase_fft {
 
     void compute(bool doTwiddle)
     {
-      //printMat(buf, N/numChares, N, "AtCompute", thisIndex);
-
       fftw_execute(p1);
       if(doTwiddle) {
         twiddle();
