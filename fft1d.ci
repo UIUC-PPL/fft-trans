@@ -47,7 +47,7 @@ mainmodule fft1d {
         else {
           char filename[80];
           sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());
-          writeCommFile(n, in, filename);
+          //writeCommFile(n, in, filename);
           calcResidual();
         }
       }
