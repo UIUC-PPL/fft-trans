@@ -1,11 +1,14 @@
 OPTS	= -O3
-CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
+CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
 CC=mpicxx
-LIBS = -lfftw3 -lm
+
+FFTWPATH = /soft/apps/fftw-3.1.2-double
+INC = -I$(FFTWPATH)/include
+LIBS = -L$(FFTWPATH)/lib -lfftw3 -lm
 
 OBJS = fft1d.o
 
-all: fft1d fft_ref fft1d.prj fft_bench
+all: fft1d fft_bench #fft_ref fft1d.prj
 
 fft_bench: fft_bench.o
 	${CC} fft_bench.o -o fft_bench $(LIBS)
@@ -39,4 +42,4 @@ clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft_bench charmrun fft_ref *~
 
 fft1d.o: fft1d.C fft1d.decl.h
-	$(CHARMC) -c fft1d.C
+	$(CHARMC) -c fft1d.C $(INC)
