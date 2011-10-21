@@ -143,14 +143,6 @@ struct fft : public CBase_fft {
     {
       //printMat(buf, N/numChares, N, "AtCompute", thisIndex);
 
-      int n = N*N/numChares;
-      if(iteration == 1) {
-        for(int i=0; i<n; i++) {
-          if(out[i][0] != i+thisIndex*n || out[i][1] != -i-thisIndex*n)
-            CkPrintf("ERROR: transpose failed\n");
-        }
-      }
-
       fftw_execute(p1);
       if(doTwiddle) {
         twiddle();
