@@ -1,4 +1,4 @@
-OPTS	= -g -O0
+OPTS	= -O3
 CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
 CC=mpicxx
 LIBS = -lfftw3 -lm -lz
