@@ -3,9 +3,10 @@
  *  Date Created: July 16th, 2010
  */
 
-typedef double fftw_complex[2];
-
 #include "fft1d.decl.h"
+#include <fftw3.h>
+
+#define TWOPI 6.283185307179586
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
@@ -55,6 +56,7 @@ struct fft : public CBase_fft {
 
     int iteration, count;
     int n;
+    fftw_plan p1;
     fftMsg **msgs;
     fftw_complex *in, *out;
 
@@ -69,6 +71,27 @@ struct fft : public CBase_fft {
         in[i][1] = -i-thisIndex*n;
       }
       out = new fftw_complex[n];
+
+      int rank = 1; /* not 2: we are computing 1d transforms */
+      int length[] = {N}; /* 1d transforms of length 10 */
+      int howmany = N/numChares;
+      int idist = N;
+      int odist = N;
+      int istride = 1;
+      int ostride = 1;
+      int *inembed = length, *onembed = length;
+
+      p1 = fftw_plan_many_dft(rank, length, howmany,
+              out, inembed,
+              istride, idist,
+              out, onembed,
+              ostride, odist,
+              FFTW_FORWARD, FFTW_ESTIMATE);
+
+      for(int i=0; i<n; i++) {
+        in[i][0] = i+thisIndex*n;
+        in[i][1] = -i-thisIndex*n;
+      }
 
       //printMat(buf, N/numChares, N, "Initialized", thisIndex);
 
@@ -129,6 +152,30 @@ struct fft : public CBase_fft {
             CkPrintf("ERROR: transpose failed\n");
         }
       }
+
+      fftw_execute(p1);
+      if(doTwiddle) {
+        twiddle();
+      }
+    }
+
+    void twiddle() {
+      double a, c, s, re, im;
+
+      int k = thisIndex;
+      for(int i = 0; i<N/numChares; i++)
+        for( int j = 0; j<N; j++) {
+          a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
+          c = cos(a);
+          s = sin(a);
+
+          int idx = i*N+j;
+
+          re = c*out[idx][0] - s*out[idx][1];
+          im = s*out[idx][0] + c*out[idx][1];
+          out[idx][0] = re;
+          out[idx][1] = im;
+        }
     }
 };
 
