@@ -48,6 +48,9 @@ struct Main : public CBase_Main {
   }
 
     void done() {
+      double time = CkWallTimer() - start;
+      CkPrintf("FFT on %d elements with %d chares took %f time at %f GFlop/s\n",
+                N, numChares, time, 5*N*N*log2(N*N)/(time*1000000000));
       fftProxy.writeResults(0);
     }
 };
