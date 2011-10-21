@@ -53,7 +53,7 @@ struct fft : public CBase_fft {
   fft_SDAG_CODE
 
     int iteration, count;
-    int n;
+    long n;
     fftw_plan p1;
     fftMsg **msgs;
     fftw_complex *in, *out;
