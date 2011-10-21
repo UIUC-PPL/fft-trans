@@ -1,13 +1,15 @@
-OPTS	= -std=c++0x -O3
-CHARMC	?= $(HOME)/charm-debug/bin/charmc $(OPTS)
+OPTS	= -O3
+CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
 CC=mpicxx
-LIBS = -lfftw3 -lm
+
+FFTWPATH = /soft/apps/fftw-3.1.2-double
+INC = -I$(FFTWPATH)/include
+LIBS = -L$(FFTWPATH)/lib -lfftw3 -lm
 CHARMLIBS = -module NDMeshStreamer -module completion
-FFTW3 ?= $(HOME)/fftw-3.3
 
 OBJS = fft1d.o
 
-all: fft1d fft_ref projections fft_bench
+all: fft1d projections fft_bench
 
 fft_bench: fft_bench.o
 	${CC} fft_bench.o -o fft_bench $(LIBS)
@@ -28,17 +30,11 @@ fft1d.sum: $(OBJS)
 fft1d.decl.h: fft1d.ci
 	$(CHARMC)  fft1d.ci
 
-fft_ref: fft_ref.o
-	${CC} fft_ref.o -o fft_ref -L$(FFTW3)/lib -lfftw3_mpi $(LIBS)
-
-fft_ref.o: fft_ref.cpp
-	${CC} -c fft_ref.cpp -I$(FFTW3)/include
-
 cleanproj:
 	rm -f *.log *.sts *.projrc
 
 clean:
-	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun fft_ref *~
+	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun *~
 
 fft1d.o: fft1d.cc fft1d.decl.h
-	$(CHARMC) -c fft1d.cc
+	$(CHARMC) -c fft1d.cc $(INC)
