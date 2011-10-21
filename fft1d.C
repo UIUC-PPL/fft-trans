@@ -56,18 +56,19 @@ struct fft : public CBase_fft {
     int iteration, count;
     int n;
     fftMsg **msgs;
-    fftw_complex* buf;
+    fftw_complex *in, *out;
 
     fft() {
       __sdag_init();
 
       n = N*N/numChares;
 
-      buf = new fftw_complex[n];
+      in = new fftw_complex[n];
       for(int i=0; i<n; i++) {
-        buf[i][0] = i+thisIndex*n;
-        buf[i][1] = -i-thisIndex*n;
+        in[i][0] = i+thisIndex*n;
+        in[i][1] = -i-thisIndex*n;
       }
+      out = new fftw_complex[n];
 
       //printMat(buf, N/numChares, N, "Initialized", thisIndex);
 
@@ -87,6 +88,8 @@ struct fft : public CBase_fft {
     {
       if(thisIndex == 0)
         CkPrintf("TRANSPOSING\n");
+
+      fftw_complex *buf = (iteration == 0) ? in : out;
 
       int offset = iteration*numChares;
 
@@ -110,8 +113,8 @@ struct fft : public CBase_fft {
       int l = 0;
       for(int j=0; j<N/numChares; j++)
         for(int i=0; i<N/numChares; i++) {
-          buf[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-          buf[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+          out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
+          out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
         }
     }
 
@@ -122,7 +125,7 @@ struct fft : public CBase_fft {
       int n = N*N/numChares;
       if(iteration == 1) {
         for(int i=0; i<n; i++) {
-          if(buf[i][0] != i+thisIndex*n || buf[i][1] != -i-thisIndex*n)
+          if(out[i][0] != i+thisIndex*n || out[i][1] != -i-thisIndex*n)
             CkPrintf("ERROR: transpose failed\n");
         }
       }
