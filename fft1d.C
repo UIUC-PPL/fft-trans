@@ -115,7 +115,7 @@ struct fft : public CBase_fft {
         CkPrintf("TRANSPOSING\n");
       //CkPrintf("[%d] sending an array to [%d]\n", thisIndex.x, thisIndex.y, thisIndex.y, thisIndex.x);
       //thisProxy(thisIndex.y,thisIndex.x).getTranspose(real);
-      fftw_complex *buf = (iteration == 0) ? buf = in : buf = out;
+      fftw_complex *buf = (iteration == 0) ? in : out;
 
       double this_copytime = CkWallTimer();
 
