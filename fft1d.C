@@ -29,6 +29,8 @@ struct Main : public CBase_Main {
       N = atoi(m->argv[2]);
       delete m;
 
+      mainProxy = thisProxy;
+
       if(N%numChares !=0)
         CkAbort("numChares not a multiple of N\n");
 
