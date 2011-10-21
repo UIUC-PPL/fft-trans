@@ -62,21 +62,9 @@ struct fft : public CBase_fft {
       in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
       out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
-      int rank = 1; /* not 2: we are computing 1d transforms */
-      int length[] = {N}; /* 1d transforms of length 10 */
-      int howmany = N/numChares;
-      int idist = N;
-      int odist = N;
-      int istride = 1;
-      int ostride = 1;
-      int *inembed = length, *onembed = length;
-
-      p1 = fftw_plan_many_dft(rank, length, howmany,
-              out, inembed,
-              istride, idist,
-              out, onembed,
-              ostride, odist,
-              FFTW_FORWARD, FFTW_ESTIMATE);
+      int length[] = {N};
+      p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+              out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
       srand48(thisIndex);
       for(int i=0; i<n; i++) {
