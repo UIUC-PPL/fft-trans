@@ -115,6 +115,7 @@ struct fft : public CBase_fft {
 
         CkSetRefNum(msgs[k], iteration);
         thisProxy[k].getTranspose(msgs[k]);
+        msgs[k] = NULL;
       }
     }
 
@@ -127,6 +128,7 @@ struct fft : public CBase_fft {
           out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
           out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
         }
+      delete msgs[k];
       msgs[k] = m;
       msgs[k]->source = thisIndex;
     }
