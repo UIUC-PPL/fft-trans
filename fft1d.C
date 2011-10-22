@@ -106,9 +106,10 @@ struct fft : public CBase_fft {
 
       fftw_complex *buf = (iteration == 0) ? in : out;
 
-      for(int k=0; k<numChares; k++) {
+      for(int i=thisIndex; i<thisIndex+numChares; i++) {
 
         int l = 0;
+        int k = i % numChares;
         for(int j=0; j<N/numChares; j++)
           memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
