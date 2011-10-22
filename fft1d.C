@@ -12,7 +12,7 @@
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
-/*readonly*/ long N;
+/*readonly*/ uint64_t N;
 
 struct fftMsg : public CMessage_fftMsg {
     int source;
@@ -25,7 +25,7 @@ struct Main : public CBase_Main {
 
   Main(CkArgMsg* m) {
       numChares = atoi(m->argv[1]);
-      N = atoi(m->argv[2]);
+      N = atol(m->argv[2]);
       delete m;
 
       mainProxy = thisProxy;
@@ -44,7 +44,7 @@ struct Main : public CBase_Main {
   void doneFFT() {
       double time = CkWallTimer() - start;
       double gflops = 5*(double)N*N*log2((double)N*N)/(time*1000000000);
-      CkPrintf("chares: %d\ncores: %d\nsize: %d\ntime: %f sec\nrate: %f GFlop/s\n",
+      CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
         numChares, CkNumPes(), N*N, time, gflops);
 
       fftProxy.initValidation();
@@ -61,7 +61,7 @@ struct fft : public CBase_fft {
   fft_SDAG_CODE
 
     int iteration, count;
-    long n;
+    uint64_t n;
     fftw_plan p1;
     fftMsg **msgs;
     fftw_complex *in, *out;

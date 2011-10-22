@@ -2,7 +2,7 @@ mainmodule fft1d {
 
   readonly CProxy_Main mainProxy;
   readonly int numChares;
-  readonly long N;
+  readonly uint64_t N;
 
   message fftMsg {
     fftw_complex data[];
@@ -41,7 +41,7 @@ mainmodule fft1d {
             contribute(CkCallback(CkIndex_Main::doneFFT(), mainProxy));
           else {
             char filename[80];
-            sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
+            sprintf(filename,"%d-%ld.dump%d",numChares,N,thisIndex);
             writeCommFile(n, in, filename);
             calcResidual();
           }
