@@ -170,12 +170,6 @@ struct fft : public CBase_fft {
       p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                     out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
-      msgs = new fftMsg*[numChares*3];
-      for(int i=0; i<numChares*3; i++) {
-        msgs[i] = new (n/numChares) fftMsg;
-        msgs[i]->source = thisIndex;
-      }
-
       contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
     }
 
