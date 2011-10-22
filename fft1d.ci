@@ -10,15 +10,16 @@ mainmodule fft1d {
 
   mainchare Main {
     entry Main(CkArgMsg *m);
-    entry void startTiming();
-    entry void done();
+    entry void startFFT();
+    entry void doneFFT();
+    entry void printResidual(CkReductionMsg *m);
   };
 
   array [1D] fft {
     entry fft();
     entry void sendTranspose();
     entry void getTranspose(fftMsg *m);
-    entry void writeResults(int);
+    entry void initValidation();
 
     entry void doFFT() {
 	for (iteration = 0; iteration < 3; ++iteration) {
@@ -36,14 +37,16 @@ mainmodule fft1d {
 	  }
 	}
 
-	atomic { contribute(CkCallback(CkIndex_Main::done(), mainProxy)); }
-
-	when writeResults(int a) atomic {
-          char filename[80];
-          sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
-          writeCommFile(n, out, filename);
-          contribute(CkCallback(CkCallback::ckExit));
-	}
+	atomic {
+          if(!validating)
+            contribute(CkCallback(CkIndex_Main::doneFFT(), mainProxy));
+          else {
+            char filename[80];
+            sprintf(filename,"%d-%d.dump%d",numChares,N,thisIndex);
+            writeCommFile(n, in, filename);
+            calcResidual();
+          }
+        }
     };
   };
 };

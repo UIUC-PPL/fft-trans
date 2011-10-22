@@ -5,6 +5,7 @@
 
 #include "fft1d.decl.h"
 #include <fftw3.h>
+#include <limits>
 #include "verify.h"
 
 #define TWOPI 6.283185307179586
@@ -35,18 +36,25 @@ struct Main : public CBase_Main {
       fftProxy = CProxy_fft::ckNew(numChares);
     }
 
-  void startTiming() {
+  void startFFT() {
       start = CkWallTimer();
       fftProxy.doFFT();
   }
 
-    void done() {
+  void doneFFT() {
       double time = CkWallTimer() - start;
       double gflops = 5*(double)N*N*log2((double)N*N)/(time*1000000000);
       CkPrintf("chares: %d\ncores: %d\nsize: %d\ntime: %f sec\nrate: %f GFlop/s\n",
         numChares, CkNumPes(), N*N, time, gflops);
-      fftProxy.writeResults(0);
-    }
+
+      fftProxy.initValidation();
+  }
+
+  void printResidual(CkReductionMsg *m) {
+    double *r = (double *)m->getData();
+    CkPrintf("residual = %g\n", *r);
+    CkExit();
+  }
 };
 
 struct fft : public CBase_fft {
@@ -57,9 +65,12 @@ struct fft : public CBase_fft {
     fftw_plan p1;
     fftMsg **msgs;
     fftw_complex *in, *out;
+    bool validating;
 
     fft() {
       __sdag_init();
+
+      validating = false;
 
       n = N*N/numChares;
 
@@ -82,7 +93,7 @@ struct fft : public CBase_fft {
         msgs[i]->source = thisIndex;
       }
 
-      contribute(CkCallback(CkIndex_Main::startTiming(), mainProxy));
+      contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
     }
 
     fft(CkMigrateMessage* m) {}
@@ -137,6 +148,7 @@ struct fft : public CBase_fft {
       for(int i = 0; i<N/numChares; i++)
         for( int j = 0; j<N; j++) {
           a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
+          if(validating) a *= -1;
           c = cos(a);
           s = sin(a);
 
@@ -148,6 +160,42 @@ struct fft : public CBase_fft {
           out[idx][1] = im;
         }
     }
+
+    void initValidation() {
+      memcpy(in, out, sizeof(fftw_complex) * n);
+
+      validating = true;
+      fftw_destroy_plan(p1);
+      int length[] = {N};
+      p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+                    out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+      msgs = new fftMsg*[numChares*3];
+      for(int i=0; i<numChares*3; i++) {
+        msgs[i] = new (n/numChares) fftMsg;
+        msgs[i]->source = thisIndex;
+      }
+
+      contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+    }
+
+  void calcResidual() {
+    double infNorm = 0.0;
+
+    srand48(thisIndex);
+    for(int i=0; i<n; i++) {
+      out[i][0] = out[i][0]/(N*N) - drand48();
+      out[i][1] = out[i][1]/(N*N) - drand48();
+
+      double mag = sqrt(pow(out[i][0],2) + pow(out[i][1], 2));
+      if(mag > infNorm) infNorm = mag;
+    }
+
+    double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
+
+    CkCallback cb(CkIndex_Main::printResidual(NULL), mainProxy);
+    contribute(sizeof(double), &r, CkReduction::max_double, cb);
+  }
 };
 
 #include "fft1d.def.h"
