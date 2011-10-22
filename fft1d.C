@@ -111,10 +111,7 @@ struct fft : public CBase_fft {
         int l = 0;
         for(int j=0; j<N/numChares; j++)
           memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
-        //thisProxy[k].getTranspose(msgs[k+offset]);
-      }
 
-      for(int k=0; k<numChares; k++) {
         CkSetRefNum(msgs[k], iteration);
         thisProxy[k].getTranspose(msgs[k]);
       }
