@@ -87,8 +87,8 @@ struct fft : public CBase_fft {
         in[i][1] = drand48();
       }
 
-      msgs = new fftMsg*[numChares*3];
-      for(int i=0; i<numChares*3; i++) {
+      msgs = new fftMsg*[numChares];
+      for(int i=0; i<numChares; i++) {
         msgs[i] = new (n/numChares) fftMsg;
         msgs[i]->source = thisIndex;
       }
@@ -106,19 +106,17 @@ struct fft : public CBase_fft {
 
       fftw_complex *buf = (iteration == 0) ? in : out;
 
-      int offset = iteration*numChares;
-
       for(int k=0; k<numChares; k++) {
 
         int l = 0;
         for(int j=0; j<N/numChares; j++)
-          memcpy(msgs[k+offset]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+          memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
         //thisProxy[k].getTranspose(msgs[k+offset]);
       }
 
       for(int k=0; k<numChares; k++) {
-        CkSetRefNum(msgs[k+offset], iteration);
-        thisProxy[k].getTranspose(msgs[k+offset]);
+        CkSetRefNum(msgs[k], iteration);
+        thisProxy[k].getTranspose(msgs[k]);
       }
     }
 
@@ -131,6 +129,8 @@ struct fft : public CBase_fft {
           out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
           out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
         }
+      msgs[k] = m;
+      msgs[k]->source = thisIndex;
     }
 
     void compute(bool doTwiddle)
