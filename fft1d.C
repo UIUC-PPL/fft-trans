@@ -12,7 +12,7 @@
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
-/*readonly*/ int N;
+/*readonly*/ long N;
 
 struct fftMsg : public CMessage_fftMsg {
     int source;

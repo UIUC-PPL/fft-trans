@@ -2,7 +2,7 @@ mainmodule fft1d {
 
   readonly CProxy_Main mainProxy;
   readonly int numChares;
-  readonly int N;
+  readonly long N;
 
   message fftMsg {
     fftw_complex data[];
