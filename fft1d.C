@@ -1,5 +1,5 @@
 #include "fft1d.decl.h"
-#include <fftw3.h>
+#include <fftw3_essl.h>
 #include <limits>
 #include "fileio.h"
 
