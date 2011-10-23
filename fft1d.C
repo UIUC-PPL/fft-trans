@@ -1,8 +1,3 @@
-/** \file fft1d.C
- *  Author: Abhinav S Bhatele
- *  Date Created: July 16th, 2010
- */
-
 #include "fft1d.decl.h"
 #include <fftw3.h>
 #include <limits>
