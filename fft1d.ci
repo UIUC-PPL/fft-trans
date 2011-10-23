@@ -32,7 +32,7 @@ mainmodule fft1d {
         if (iteration < 2) atomic "compute" {
           fftw_execute(p1);
           if(iteration == 0)
-            twiddle();
+            twiddle(validating ? 1 : -1);
         }
       }
 

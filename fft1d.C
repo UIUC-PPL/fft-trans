@@ -136,14 +136,13 @@ struct fft : public CBase_fft {
     msgs[k]->source = thisIndex;
   }
 
-  void twiddle() {
+  void twiddle(double sign) {
     double a, c, s, re, im;
 
     int k = thisIndex;
     for(int i = 0; i<N/numChares; i++)
       for( int j = 0; j<N; j++) {
-        a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
-        if(validating) a *= -1;
+        a = sign * (TWOPI*(i+k*N/numChares)*j)/(N*N);
         c = cos(a);
         s = sin(a);
 
