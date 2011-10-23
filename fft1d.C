@@ -41,7 +41,7 @@ struct Main : public CBase_Main {
   void FFTDone() {
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
-    CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
+    CkPrintf("chares: %d\ncores: %d\nsize: %llu\ntime: %f sec\nrate: %f GFlop/s\n",
              numChares, CkNumPes(), N*N, time, gflops);
 
     fftProxy.initValidation();
