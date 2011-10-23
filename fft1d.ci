@@ -12,7 +12,7 @@ mainmodule fft1d {
     entry Main(CkArgMsg *m);
     entry void startFFT();
     entry void doneFFT();
-    entry void printResidual(CkReductionMsg *m);
+    entry [reductiontarget] void printResidual(double residual);
   };
 
   array [1D] fft {

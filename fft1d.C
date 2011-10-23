@@ -47,9 +47,8 @@ struct Main : public CBase_Main {
     fftProxy.initValidation();
   }
 
-  void printResidual(CkReductionMsg *m) {
-    double *r = (double *)m->getData();
-    CkPrintf("residual = %g\n", *r);
+  void printResidual(double r) {
+    CkPrintf("residual = %g\n", r);
     CkExit();
   }
 };
@@ -178,7 +177,7 @@ struct fft : public CBase_fft {
 
     double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
 
-    CkCallback cb(CkIndex_Main::printResidual(NULL), mainProxy);
+    CkCallback cb(CkReductionTarget(Main, printResidual), mainProxy);
     contribute(sizeof(double), &r, CkReduction::max_double, cb);
   }
 
