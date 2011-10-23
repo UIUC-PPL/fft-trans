@@ -94,12 +94,10 @@ struct fft : public CBase_fft {
     contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
   }
 
-  void sendTranspose()
+  void sendTranspose(fftw_complex *src_buf)
   {
     if(thisIndex == 0)
       CkPrintf("TRANSPOSING\n");
-
-    fftw_complex *buf = (iteration == 0) ? in : out;
 
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
@@ -109,7 +107,7 @@ struct fft : public CBase_fft {
       int k = i % numChares;
       int l = 0;
       for(int j=0; j<N/numChares; j++)
-        memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
       // Tag each message with the iteration in which it was
       // generated, to prevent mis-matched messages from chares that

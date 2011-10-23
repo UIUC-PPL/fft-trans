@@ -17,13 +17,12 @@ mainmodule fft1d {
 
   array [1D] fft {
     entry fft();
-    entry void sendTranspose();
     entry void getTranspose(fftMsg *m);
     entry void initValidation();
 
     entry void doFFT() {
       for (iteration = 0; iteration < 3; ++iteration) {
-        atomic "transpose" { sendTranspose(); }
+        atomic "transpose" { sendTranspose(iteration == 0 ? in : out); }
 
         for (count = 0; count < numChares; ++count)
           when getTranspose[iteration] (fftMsg *m) atomic {
