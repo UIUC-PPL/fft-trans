@@ -10,8 +10,8 @@
 /*readonly*/ uint64_t N;
 
 struct fftMsg : public CMessage_fftMsg {
-    int source;
-    fftw_complex *data;
+  int source;
+  fftw_complex *data;
 };
 
 struct Main : public CBase_Main {
@@ -19,32 +19,32 @@ struct Main : public CBase_Main {
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
-      numChares = atoi(m->argv[1]);
-      N = atol(m->argv[2]);
-      delete m;
+    numChares = atoi(m->argv[1]);
+    N = atol(m->argv[2]);
+    delete m;
 
-      mainProxy = thisProxy;
+    mainProxy = thisProxy;
 
-      if (N % numChares !=0)
-        CkAbort("numChares not a factor of N\n");
+    if (N % numChares !=0)
+      CkAbort("numChares not a factor of N\n");
 
-      // Construct an array of fft chares to do the calculation
-      fftProxy = CProxy_fft::ckNew(numChares);
-    }
+    // Construct an array of fft chares to do the calculation
+    fftProxy = CProxy_fft::ckNew(numChares);
+  }
 
   void startFFT() {
-      start = CkWallTimer();
-      // Broadcast the 'go' signal to the fft chare array
-      fftProxy.doFFT();
+    start = CkWallTimer();
+    // Broadcast the 'go' signal to the fft chare array
+    fftProxy.doFFT();
   }
 
   void doneFFT() {
-      double time = CkWallTimer() - start;
-      double gflops = 5*(double)N*N*log2((double)N*N)/(time*1000000000);
-      CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
-        numChares, CkNumPes(), N*N, time, gflops);
+    double time = CkWallTimer() - start;
+    double gflops = 5*(double)N*N*log2((double)N*N)/(time*1000000000);
+    CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
+             numChares, CkNumPes(), N*N, time, gflops);
 
-      fftProxy.initValidation();
+    fftProxy.initValidation();
   }
 
   void printResidual(CkReductionMsg *m) {
@@ -57,118 +57,118 @@ struct Main : public CBase_Main {
 struct fft : public CBase_fft {
   fft_SDAG_CODE
 
-    int iteration, count;
-    uint64_t n;
-    fftw_plan p1;
-    fftMsg **msgs;
-    fftw_complex *in, *out;
-    bool validating;
+  int iteration, count;
+  uint64_t n;
+  fftw_plan p1;
+  fftMsg **msgs;
+  fftw_complex *in, *out;
+  bool validating;
 
-    fft() {
-      __sdag_init();
+  fft() {
+    __sdag_init();
 
-      validating = false;
+    validating = false;
 
-      n = N*N/numChares;
+    n = N*N/numChares;
 
-      in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
-      out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
-      int length[] = {N};
-      p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
-              out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
+    int length[] = {N};
+    p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+                            out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
-      srand48(thisIndex);
-      for(int i=0; i<n; i++) {
-        in[i][0] = drand48();
-        in[i][1] = drand48();
-      }
-
-      msgs = new fftMsg*[numChares];
-      for(int i=0; i<numChares; i++) {
-        msgs[i] = new (n/numChares) fftMsg;
-        msgs[i]->source = thisIndex;
-      }
-
-      // Reduction to the mainchare to signal that initialization is complete
-      contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+    srand48(thisIndex);
+    for(int i=0; i<n; i++) {
+      in[i][0] = drand48();
+      in[i][1] = drand48();
     }
 
-    void sendTranspose()
-    {
-      if(thisIndex == 0)
-        CkPrintf("TRANSPOSING\n");
-
-      fftw_complex *buf = (iteration == 0) ? in : out;
-
-      // All-to-all transpose by constructing and sending
-      // point-to-point messages to each chare in the array.
-      for(int i=thisIndex; i<thisIndex+numChares; i++) {
-        //  Stagger communication order to avoid hotspots and the
-        //  associated contention.
-        int k = i % numChares;
-        int l = 0;
-        for(int j=0; j<N/numChares; j++)
-          memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
-
-        // Tag each message with the iteration in which it was
-        // generated, to prevent mis-matched messages from chares that
-        // got all of their input quickly and moved to the next step.
-        CkSetRefNum(msgs[k], iteration);
-        thisProxy[k].getTranspose(msgs[k]);
-        // Runtime system takes ownership of messages once they're sent
-        msgs[k] = NULL;
-      }
+    msgs = new fftMsg*[numChares];
+    for(int i=0; i<numChares; i++) {
+      msgs[i] = new (n/numChares) fftMsg;
+      msgs[i]->source = thisIndex;
     }
 
-    void applyTranspose(fftMsg *m)
-    {
-      int k = m->source;
+    // Reduction to the mainchare to signal that initialization is complete
+    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+  }
+
+  void sendTranspose()
+  {
+    if(thisIndex == 0)
+      CkPrintf("TRANSPOSING\n");
+
+    fftw_complex *buf = (iteration == 0) ? in : out;
+
+    // All-to-all transpose by constructing and sending
+    // point-to-point messages to each chare in the array.
+    for(int i=thisIndex; i<thisIndex+numChares; i++) {
+      //  Stagger communication order to avoid hotspots and the
+      //  associated contention.
+      int k = i % numChares;
       int l = 0;
       for(int j=0; j<N/numChares; j++)
-        for(int i=0; i<N/numChares; i++) {
-          out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-          out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
-        }
+        memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      // Save just-received messages to reuse for later sends, to
-      // avoid reallocation
-      delete msgs[k];
-      msgs[k] = m;
-      msgs[k]->source = thisIndex;
+      // Tag each message with the iteration in which it was
+      // generated, to prevent mis-matched messages from chares that
+      // got all of their input quickly and moved to the next step.
+      CkSetRefNum(msgs[k], iteration);
+      thisProxy[k].getTranspose(msgs[k]);
+      // Runtime system takes ownership of messages once they're sent
+      msgs[k] = NULL;
     }
+  }
 
-    void twiddle() {
-      double a, c, s, re, im;
+  void applyTranspose(fftMsg *m)
+  {
+    int k = m->source;
+    int l = 0;
+    for(int j=0; j<N/numChares; j++)
+      for(int i=0; i<N/numChares; i++) {
+        out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
+        out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+      }
 
-      int k = thisIndex;
-      for(int i = 0; i<N/numChares; i++)
-        for( int j = 0; j<N; j++) {
-          a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
-          if(validating) a *= -1;
-          c = cos(a);
-          s = sin(a);
+    // Save just-received messages to reuse for later sends, to
+    // avoid reallocation
+    delete msgs[k];
+    msgs[k] = m;
+    msgs[k]->source = thisIndex;
+  }
 
-          int idx = i*N+j;
+  void twiddle() {
+    double a, c, s, re, im;
 
-          re = c*out[idx][0] - s*out[idx][1];
-          im = s*out[idx][0] + c*out[idx][1];
-          out[idx][0] = re;
-          out[idx][1] = im;
-        }
-    }
+    int k = thisIndex;
+    for(int i = 0; i<N/numChares; i++)
+      for( int j = 0; j<N; j++) {
+        a = -(TWOPI*(i+k*N/numChares)*j)/(N*N);
+        if(validating) a *= -1;
+        c = cos(a);
+        s = sin(a);
 
-    void initValidation() {
-      memcpy(in, out, sizeof(fftw_complex) * n);
+        int idx = i*N+j;
 
-      validating = true;
-      fftw_destroy_plan(p1);
-      int length[] = {N};
-      p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
-                    out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+        re = c*out[idx][0] - s*out[idx][1];
+        im = s*out[idx][0] + c*out[idx][1];
+        out[idx][0] = re;
+        out[idx][1] = im;
+      }
+  }
 
-      contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
-    }
+  void initValidation() {
+    memcpy(in, out, sizeof(fftw_complex) * n);
+
+    validating = true;
+    fftw_destroy_plan(p1);
+    int length[] = {N};
+    p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+                            out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+  }
 
   void calcResidual() {
     double infNorm = 0.0;
