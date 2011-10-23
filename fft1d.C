@@ -138,14 +138,6 @@ struct fft : public CBase_fft {
       msgs[k]->source = thisIndex;
     }
 
-    void compute(bool doTwiddle)
-    {
-      fftw_execute(p1);
-      if(doTwiddle) {
-        twiddle();
-      }
-    }
-
     void twiddle() {
       double a, c, s, re, im;
 

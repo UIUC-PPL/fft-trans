@@ -30,10 +30,11 @@ mainmodule fft1d {
 	      applyTranspose(m);
 	    }
 
-	  atomic "compute" {
-	    if (iteration < 2)
-	      compute(iteration == 0);
-	  }
+          if (iteration < 2) atomic "compute" {
+            fftw_execute(p1);
+            if(iteration == 0)
+              twiddle();
+          }
 	}
 
 	atomic {
