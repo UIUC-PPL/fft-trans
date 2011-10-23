@@ -25,14 +25,16 @@ struct Main : public CBase_Main {
 
       mainProxy = thisProxy;
 
-      if(N%numChares !=0)
-        CkAbort("numChares not a multiple of N\n");
+      if (N % numChares !=0)
+        CkAbort("numChares not a factor of N\n");
 
+      // Construct an array of fft chares to do the calculation
       fftProxy = CProxy_fft::ckNew(numChares);
     }
 
   void startFFT() {
       start = CkWallTimer();
+      // Broadcast the 'go' signal to the fft chare array
       fftProxy.doFFT();
   }
 
@@ -88,11 +90,9 @@ struct fft : public CBase_fft {
         msgs[i]->source = thisIndex;
       }
 
+      // Reduction to the mainchare to signal that initialization is complete
       contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
     }
-
-    fft(CkMigrateMessage* m) {}
-    ~fft() {}
 
     void sendTranspose()
     {
@@ -101,15 +101,22 @@ struct fft : public CBase_fft {
 
       fftw_complex *buf = (iteration == 0) ? in : out;
 
+      // All-to-all transpose by constructing and sending
+      // point-to-point messages to each chare in the array.
       for(int i=thisIndex; i<thisIndex+numChares; i++) {
-
-        int l = 0;
+        //  Stagger communication order to avoid hotspots and the
+        //  associated contention.
         int k = i % numChares;
+        int l = 0;
         for(int j=0; j<N/numChares; j++)
           memcpy(msgs[k]->data[(l++)*N/numChares], buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
+        // Tag each message with the iteration in which it was
+        // generated, to prevent mis-matched messages from chares that
+        // got all of their input quickly and moved to the next step.
         CkSetRefNum(msgs[k], iteration);
         thisProxy[k].getTranspose(msgs[k]);
+        // Runtime system takes ownership of messages once they're sent
         msgs[k] = NULL;
       }
     }
@@ -123,6 +130,9 @@ struct fft : public CBase_fft {
           out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
           out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
         }
+
+      // Save just-received messages to reuse for later sends, to
+      // avoid reallocation
       delete msgs[k];
       msgs[k] = m;
       msgs[k]->source = thisIndex;
@@ -185,6 +195,9 @@ struct fft : public CBase_fft {
     CkCallback cb(CkIndex_Main::printResidual(NULL), mainProxy);
     contribute(sizeof(double), &r, CkReduction::max_double, cb);
   }
+
+  fft(CkMigrateMessage* m) {}
+  ~fft() {}
 };
 
 #include "fft1d.def.h"
