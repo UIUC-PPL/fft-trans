@@ -2,7 +2,7 @@
 //#include <iostream>
 
 #include <mpi.h>
-#include <fftw3.h>
+#include <fftw3_essl.h>
 #include <cstdlib>
 #include <limits>
 #include <cmath>

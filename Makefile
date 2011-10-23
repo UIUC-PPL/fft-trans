@@ -2,9 +2,15 @@ OPTS	= -O3
 CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
 CC=mpixlcxx $(OPTS)
 
-FFTWPATH = /soft/apps/fftw-3.1.2-double
-INC = -I$(FFTWPATH)/include
-LIBS = -L$(FFTWPATH)/lib -lfftw3 -lm
+ESSLPATH = /soft/apps/ESSL-4.4
+WRAPPATH = $(HOME)/esslfftw
+INC = -I$(WRAPPATH)/include -I$(ESSLPATH)/include
+BGP_LIBS = -L$(ESSLPATH)/lib \
+           -L$(WRAPPATH)/lib \
+           -L/bgsys/ibm_compilers/sles10/prod/opt/ibmcmp/xlf/bg/11.1/bglib/ \
+           -L/soft/apps/ibmcmp/xlsmp/bg/1.7/bglib \
+           -L/soft/apps/ibmcmp/xlf/bg/11.1/bglib
+LIBS = $(BGP_LIBS) -lfftw3_esslbg -lesslbg -lmass -lxlfmath -lxlf90_r -lxlsmp -lxlomp_ser -lpthread
 CHARMLIBS = -module NDMeshStreamer -module completion
 
 OBJS = fft1d.o
