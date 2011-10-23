@@ -22,7 +22,11 @@ mainmodule fft1d {
 
     entry void doFFT() {
       for (iteration = 0; iteration < 3; ++iteration) {
-        atomic "transpose" { sendTranspose(iteration == 0 ? in : out); }
+        atomic "transpose" {
+          if(thisIndex == 0)
+            CkPrintf("TRANSPOSING\n");
+          sendTranspose(iteration == 0 ? in : out);
+        }
 
         for (count = 0; count < numChares; ++count)
           when getTranspose[iteration] (fftMsg *m) atomic {

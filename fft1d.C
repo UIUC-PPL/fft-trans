@@ -96,9 +96,6 @@ struct fft : public CBase_fft {
 
   void sendTranspose(fftw_complex *src_buf)
   {
-    if(thisIndex == 0)
-      CkPrintf("TRANSPOSING\n");
-
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
     for(int i=thisIndex; i<thisIndex+numChares; i++) {
