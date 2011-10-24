@@ -11,8 +11,6 @@
 
 using namespace std;
 
-//void readCommFile(fftw_complex *data, char *filename);
-
 int main(int argc, char *argv[]) 
 { 
   int rank, size; 
@@ -78,21 +76,3 @@ int main(int argc, char *argv[])
   MPI_Finalize();      
   return 0; 
 } 
-
-/*
-void readCommFile(fftw_complex *data, char *filename)
-{
-  FILE *pFile;
-  if(!(pFile = fopen (filename,"r"))){
-    //printf("Warning: File not found or open failure on rank %d\n",rank);
-    printf("File open failed\n");
-    MPI_Abort(MPI_COMM_WORLD,1);
-    return;
-  }
-
-  int l = 0;
-  while(fscanf (pFile, "%lf %lf", &data[l][0],&data[l][1]) != EOF) {l++;}
-
-  fclose(pFile);
-}
-*/
