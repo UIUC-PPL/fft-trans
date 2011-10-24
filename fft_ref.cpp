@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 { 
   int rank, size; 
   MPI_Init(&argc, &argv);
-  MPI_Comm_size(MPI_COMM_WORLD,&size); 
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); 
 
   fftw_plan plan;
@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
 
   fftw_mpi_init();
 
-  if(rank==0){
-    if(argc != 2){
+  if(rank == 0) {
+    if(argc != 2) {
       printf("Usage: ./binary <N>\n");
       MPI_Abort(MPI_COMM_WORLD,-1);
     }
@@ -43,17 +43,17 @@ int main(int argc, char *argv[])
 
   data = fftw_alloc_complex(alloc_local);
 
-  plan = fftw_mpi_plan_dft_1d(N*N, data, data, MPI_COMM_WORLD,b_or_f, FFTW_ESTIMATE);
+  plan = fftw_mpi_plan_dft_1d(N*N, data, data, MPI_COMM_WORLD, b_or_f, FFTW_ESTIMATE);
 
   char filename[80];
-  sprintf(filename,"%d-%d.dump%d",size,N,rank);
+  sprintf(filename, "%d-%d.dump%d", size, N, rank);
   readCommFile(data, filename);
 
   fftw_execute(plan);
 
   double infNorm = 0.0;
   srand48(rank);
-  for (int i=0; i<N*N/size; i++){
+  for(int i = 0; i < N*N/size; i++) {
     data[i][0] = data[i][0]/(N*N) - drand48();
     data[i][1] = data[i][1]/(N*N) - drand48();
 
