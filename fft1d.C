@@ -101,8 +101,7 @@ struct fft : public CBase_fft {
       //  Stagger communication order to avoid hotspots and the
       //  associated contention.
       int k = i % numChares;
-      int l = 0;
-      for(int j=0; j<N/numChares; j++)
+      for(int j=0, l=0; j<N/numChares; j++)
         memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
       // Tag each message with the iteration in which it was
@@ -118,8 +117,7 @@ struct fft : public CBase_fft {
   void applyTranspose(fftMsg *m)
   {
     int k = m->source;
-    int l = 0;
-    for(int j=0; j<N/numChares; j++)
+    for(int j=0, l=0; j<N/numChares; j++)
       for(int i=0; i<N/numChares; i++) {
         out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
         out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
