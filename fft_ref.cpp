@@ -54,21 +54,24 @@ int main(int argc, char *argv[])
   double infNorm = 0.0;
   srand48(rank);
   for (int i=0; i<N*N/size; i++){
-    data[i][0] = data[i][0]/(N*N) - drand48(); 
+    data[i][0] = data[i][0]/(N*N) - drand48();
     data[i][1] = data[i][1]/(N*N) - drand48();
 
-    if(fabs(data[i][0]) > infNorm)
-      infNorm = fabs(data[i][0]);
-    if(fabs(data[i][1]) > infNorm)
-      infNorm = fabs(data[i][1]);
+    double mag = sqrt(pow(data[i][0], 2) + pow(data[i][1], 2));
+    if(mag > infNorm) infNorm = mag;
   }
 
-  double r = infNorm/(std::numeric_limits<double>::epsilon()*log(N*N));
+  double my_r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
+  double r;
 
-  if(r < 16)
-    printf("r = %g, PASS!\n",r);
-  else
-    printf("r = %g, FAIL\n",r);
+  MPI_Reduce(&my_r, &r, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+  if(rank == 0) {
+    if(r < 16)
+      printf("r = %g, PASS!\n",r);
+    else
+      printf("r = %g, FAIL\n",r);
+  }
 
   fftw_destroy_plan(plan);
 
