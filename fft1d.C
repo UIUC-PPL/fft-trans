@@ -1,7 +1,7 @@
 #include "fft1d.decl.h"
 #include <fftw3.h>
 #include <limits>
-#include "verify.h"
+#include "fileio.h"
 
 #define TWOPI 6.283185307179586
 
