@@ -32,13 +32,13 @@ struct Main : public CBase_Main {
     fftProxy = CProxy_fft::ckNew(numChares);
   }
 
-  void startFFT() {
+  void FFTReady() {
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
     fftProxy.doFFT();
   }
 
-  void doneFFT() {
+  void FFTDone() {
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
     CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
@@ -90,7 +90,7 @@ struct fft : public CBase_fft {
     }
 
     // Reduction to the mainchare to signal that initialization is complete
-    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+    contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
   void sendTranspose(fftw_complex *src_buf) {
@@ -156,7 +156,7 @@ struct fft : public CBase_fft {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
-    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
+    contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
   void calcResidual() {
