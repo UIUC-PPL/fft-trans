@@ -93,8 +93,7 @@ struct fft : public CBase_fft {
     contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
   }
 
-  void sendTranspose(fftw_complex *src_buf)
-  {
+  void sendTranspose(fftw_complex *src_buf) {
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
     for(int i = thisIndex; i < thisIndex+numChares; i++) {
@@ -114,8 +113,7 @@ struct fft : public CBase_fft {
     }
   }
 
-  void applyTranspose(fftMsg *m)
-  {
+  void applyTranspose(fftMsg *m) {
     int k = m->source;
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++) {
