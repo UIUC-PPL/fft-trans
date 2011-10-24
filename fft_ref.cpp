@@ -1,12 +1,8 @@
-//#include <stdio.h>
-//#include <iostream>
-
 #include <mpi.h> 
 #include <cstdlib>
 #include "fftw3-mpi.h"
 #include <cmath>
 #include <limits>
-
 #include "fileio.h"
 
 using namespace std;
