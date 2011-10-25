@@ -155,5 +155,5 @@ struct fft : public CBase_fft {
   ~fft() {}
 };
 
-#include "verify.h"
+#include "verify.cc"
 #include "fft1d.def.h"
