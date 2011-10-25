@@ -12,10 +12,10 @@ REFINC = -I$(FFTW3DIR)/include
 REFLIBDIR = -L$(FFTW3DIR)/lib
 REFLIBS = -lfftw3_mpi -lfftw3 -lm
 
+all: fft1d fft_ref
+
 test: all
 	./test.sh 4 64
-
-all: fft1d fft_ref
 
 fft1d: fft1d.o
 	$(CHARMC) $(OPTS) -language charm++ -o fft1d fft1d.o $(LIBDIR) $(LIBS)
