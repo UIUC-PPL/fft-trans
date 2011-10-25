@@ -1,0 +1,26 @@
+Steps to install:
+
+(1) ../config.mk should point to your charm installation
+(2) Change CC and FFTW3DIR in the Makefile to your C++ mpi compiler of choice
+    and an installation of FFTW3 with fftw-mpi built.
+(3) "make test" to ensure it runs
+
+Running:
+
+Usage: ./charmrun +p{numprocs} ./fft1d {numChares} {size}
+Example: ./charmrun +p4 ./fft1d 12 144
+Restrictions: "size" must be a multiple of "numChares"
+
+numChares is the level of virtualization for the charm runtime.  The problem is
+decomposed into "numChares" parts during execution and is independant of number
+of processors.
+
+Testing:
+
+Test script usage: ./test.sh {numprocs} {size}
+Example: ./test.sh 4 64
+Restrictions: "numprocs" must be a multiple of "size"
+
+The seperate "fft_ref" program uses fftw-mpi to perform the inverse FFT of the
+benchmark output. The "test.sh" script runs the benchmark and validates against
+parallel MPI fftw.

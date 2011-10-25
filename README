@@ -1,0 +1,13 @@
+GLOBAL 1D FFT Benchmark
+
+This implementation of Global FFT takes input size N and performs a complex 1D
+FFT on an NxN matrix where subsequent rows are contiguous data elements of a
+double precision complex vector. Three all-to-all transposes are required to
+perform the FFT and unscramble the data. All-to-all operations are executed via
+point-to-point messages and external libraries (FFTW or ESSL) perform serial
+FFTs on the rows of the matrix.
+
+Verification is performed via two methods: (1) the bench-mark code
+self-validates by executing an inverse FFT on the output result and (2) the
+output is dumped to a file and an inverse FFT is performed on the dumped data
+by a separate MPI program that invokes parallel FFTW.
