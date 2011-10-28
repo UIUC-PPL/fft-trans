@@ -7,7 +7,8 @@
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
-/*readonly*/ uint64_t N;
+/*readonly*/ uint64_t N, n;
+/*readonly*/ CProxy_transpose transposer;
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
@@ -23,6 +24,7 @@ struct Main : public CBase_Main {
     N = atol(m->argv[2]);
     delete m;
 
+    n = N*N/numChares;
     mainProxy = thisProxy;
 
     if (N % numChares != 0)
@@ -30,6 +32,10 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew(numChares);
+
+    CkArrayOptions opts(numChares);
+    opts.bindTo(fftProxy);
+    transposer = CProxy_p2p_transpose::ckNew(opts);
   }
 
   void FFTReady() {
@@ -53,13 +59,18 @@ struct Main : public CBase_Main {
   }
 };
 
+struct transpose : public CBase_transpose
+{
+  transpose() { }
+  transpose(CkMigrateMessage *) { }
+  virtual void sendTranspose(int, fftw_complex*, fft *fft_obj) { CkAbort("Should not be here"); }
+};
+
 struct fft : public CBase_fft {
   fft_SDAG_CODE
 
   int iteration, count;
-  uint64_t n;
   fftw_plan p1;
-  fftMsg **msgs;
   fftw_complex *in, *out;
   bool validating;
 
@@ -67,8 +78,6 @@ struct fft : public CBase_fft {
     __sdag_init();
 
     validating = false;
-
-    n = N*N/numChares;
 
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
@@ -83,49 +92,8 @@ struct fft : public CBase_fft {
       in[i][1] = drand48();
     }
 
-    msgs = new fftMsg*[numChares];
-    for(int i = 0; i < numChares; i++) {
-      msgs[i] = new (n/numChares) fftMsg;
-      msgs[i]->source = thisIndex;
-    }
-
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
-  }
-
-  void sendTranspose(fftw_complex *src_buf) {
-    // All-to-all transpose by constructing and sending
-    // point-to-point messages to each chare in the array.
-    for(int i = thisIndex; i < thisIndex+numChares; i++) {
-      //  Stagger communication order to avoid hotspots and the
-      //  associated contention.
-      int k = i % numChares;
-      for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
-
-      // Tag each message with the iteration in which it was
-      // generated, to prevent mis-matched messages from chares that
-      // got all of their input quickly and moved to the next step.
-      CkSetRefNum(msgs[k], iteration);
-      thisProxy[k].getTranspose(msgs[k]);
-      // Runtime system takes ownership of messages once they're sent
-      msgs[k] = NULL;
-    }
-  }
-
-  void applyTranspose(fftMsg *m) {
-    int k = m->source;
-    for(int j = 0, l = 0; j < N/numChares; j++)
-      for(int i = 0; i < N/numChares; i++) {
-        out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-        out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
-      }
-
-    // Save just-received messages to reuse for later sends, to
-    // avoid reallocation
-    delete msgs[k];
-    msgs[k] = m;
-    msgs[k]->source = thisIndex;
   }
 
   void twiddle(double sign) {
@@ -179,6 +147,64 @@ struct fft : public CBase_fft {
 
   fft(CkMigrateMessage* m) {}
   ~fft() {}
+};
+
+struct p2p_transpose : public CBase_p2p_transpose
+{
+  fft *fft_obj;
+  fftMsg **msgs;
+  int count;
+
+  p2p_transpose() {
+    __sdag_init();
+    msgs = new fftMsg*[numChares];
+    for(int i = 0; i < numChares; i++) {
+      msgs[i] = new (n/numChares) fftMsg;
+      msgs[i]->source = thisIndex;
+    }
+  }
+  p2p_transpose(CkMigrateMessage *) { }
+
+  p2p_transpose_SDAG_CODE
+
+  void sendTranspose(int iteration, fftw_complex *src_buf, fft *obj) {
+    fft_obj = obj;
+
+    // All-to-all transpose by constructing and sending
+    // point-to-point messages to each chare in the array.
+    for(int i = thisIndex; i < thisIndex+numChares; i++) {
+      //  Stagger communication order to avoid hotspots and the
+      //  associated contention.
+      int k = i % numChares;
+      for(int j = 0, l = 0; j < N/numChares; j++)
+        memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+
+      // Tag each message with the iteration in which it was
+      // generated, to prevent mis-matched messages from chares that
+      // got all of their input quickly and moved to the next step.
+      CkSetRefNum(msgs[k], iteration);
+      thisProxy[k].getTranspose(msgs[k]);
+      // Runtime system takes ownership of messages once they're sent
+      msgs[k] = NULL;
+    }
+
+    thisProxy[thisIndex].receive(iteration);
+  }
+
+  void applyTranspose(fftMsg *m, fftw_complex *out) {
+    int k = m->source;
+    for(int j = 0, l = 0; j < N/numChares; j++)
+      for(int i = 0; i < N/numChares; i++) {
+        out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
+        out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+      }
+
+    // Save just-received messages to reuse for later sends, to
+    // avoid reallocation
+    delete msgs[k];
+    msgs[k] = m;
+    msgs[k]->source = thisIndex;
+  }
 };
 
 #include "fft1d.def.h"
