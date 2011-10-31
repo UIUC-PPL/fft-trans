@@ -1,0 +1,20 @@
+module p2p_transpose {
+  
+  extern module transpose_to_transpose;
+  
+  chare p2p_transpose : transpose_to_transpose {
+    entry p2p_transpose();
+    
+    entry void from_transpose(CProxy_transpose_to_transpose);
+    
+    entry void receive(int iteration) {
+      for(count = 0; count < numChares; ++count)
+        when getTranspose[iteration] (fftMsg *m) atomic {
+          applyTranspose(m, out_buf);
+        }
+      atomic { from_fft->transposeDone(iteration); }
+    };
+    entry void getTranspose(fftMsg *m);
+  };
+  
+};

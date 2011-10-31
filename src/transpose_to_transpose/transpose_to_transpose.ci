@@ -1,0 +1,11 @@
+module transpose_to_transpose {
+
+  message fftMsg {
+    fftw_complex data[];
+  };
+
+  chare transpose_to_transpose {
+    entry void getTranspose(fftMsg *m);
+  };
+  
+};

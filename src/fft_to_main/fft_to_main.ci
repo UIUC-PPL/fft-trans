@@ -1,0 +1,9 @@
+module fft_to_main {
+  
+  chare fft_to_main {
+    entry void init(uint64_t N);
+    entry void doFFT();
+    entry void initValidation();
+  };
+  
+};

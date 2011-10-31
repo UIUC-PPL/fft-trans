@@ -1,0 +1,13 @@
+module main {
+  
+  extern module main_to_fft;
+  
+  chare main: main_to_fft {
+    entry main();
+    entry void from_fft(CProxy_fft_to_main);
+    entry [reductiontarget] void FFTReady();
+    entry [reductiontarget] void FFTDone();
+    entry [reductiontarget] void printResidual(double residual);
+  };
+  
+};

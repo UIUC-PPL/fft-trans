@@ -1,0 +1,9 @@
+module main_to_fft {
+  
+  chare main_to_fft {
+    entry void FFTReady();
+    entry void FFTDone();
+    entry void printResidual(double residual);
+  };
+  
+};
