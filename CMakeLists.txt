@@ -1,0 +1,55 @@
+project(fft_trans)
+cmake_minimum_required(VERSION 2.8)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+find_package(Charm++)
+
+include_directories(include ${Charm_INCLUDE_PATH})
+link_directories(${CMAKE_CURRENT_BINARY_DIR} ${Charm_LIBRARY_DIRS})
+
+ci_files(fft_to_main_HEADERS src/fft_to_main/fft_to_main.ci)
+add_library(fft_to_main SHARED src/fft_to_main/fft_to_main.cpp ${fft_to_main_HEADERS})
+set_property(TARGET fft_to_main APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET fft_to_main APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS fft_to_main LIBRARY DESTINATION lib)
+install(FILES ${fft_to_main_HEADERS} DESTINATION include/fft_trans)
+
+ci_files(main_to_fft_HEADERS src/main_to_fft/main_to_fft.ci)
+add_library(main_to_fft SHARED src/main_to_fft/main_to_fft.cpp ${main_to_fft_HEADERS})
+set_property(TARGET main_to_fft APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET main_to_fft APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS main_to_fft LIBRARY DESTINATION lib)
+install(FILES ${main_to_fft_HEADERS} DESTINATION include/fft_trans)
+
+ci_files(transpose_to_transpose_HEADERS src/transpose_to_transpose/transpose_to_transpose.ci)
+add_library(transpose_to_transpose SHARED src/transpose_to_transpose/transpose_to_transpose.cpp ${transpose_to_transpose_HEADERS})
+target_link_libraries(transpose_to_transpose -lfftw3)
+set_property(TARGET transpose_to_transpose APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET transpose_to_transpose APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS transpose_to_transpose LIBRARY DESTINATION lib)
+install(FILES ${transpose_to_transpose_HEADERS} DESTINATION include/fft_trans)
+
+ci_files(fft_HEADERS src/fft/fft.ci)
+add_library(fft MODULE src/fft/fft.cpp ${fft_HEADERS})
+target_link_libraries(fft fft_to_main main_to_fft -lfftw3)
+set_property(TARGET fft APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET fft APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS fft LIBRARY DESTINATION lib)
+
+ci_files(main_HEADERS src/main/main.ci)
+add_library(main MODULE src/main/main.cpp ${main_HEADERS})
+target_link_libraries(main fft_to_main main_to_fft)
+set_property(TARGET main APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET main APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS main LIBRARY DESTINATION lib)
+
+ci_files(p2p_transpose_HEADERS src/p2p_transpose/p2p_transpose.ci)
+add_library(p2p_transpose MODULE src/p2p_transpose/p2p_transpose.cpp ${p2p_transpose_HEADERS})
+target_link_libraries(p2p_transpose transpose_to_transpose)
+set_property(TARGET p2p_transpose APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET p2p_transpose APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS p2p_transpose LIBRARY DESTINATION lib)
+
+install(DIRECTORY include/ DESTINATION include/fft_trans FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY gad/ DESTINATION lib/gad/fft_trans FILES_MATCHING PATTERN "*.gad")
