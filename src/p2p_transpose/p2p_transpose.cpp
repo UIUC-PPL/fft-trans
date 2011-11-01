@@ -22,7 +22,6 @@ struct p2p_transpose : public CBase_p2p_transpose, transpose_to_fft
   }
   
   void init(uint64_t N) {
-    CkPrintf("p2p init on %d\n", CkMyPe());
     this->N = N;
     n = N*N/numChares;
     msgs = new fftMsg*[numChares];
@@ -44,7 +43,6 @@ struct p2p_transpose : public CBase_p2p_transpose, transpose_to_fft
   p2p_transpose_SDAG_CODE
   
   void sendTranspose(int iteration, fftw_complex *src_buf, fftw_complex* out_buf) {
-    CkPrintf("p2p sendTranspose on %d\n", CkMyPe());
     this->out_buf = out_buf;
     
     // All-to-all transpose by constructing and sending

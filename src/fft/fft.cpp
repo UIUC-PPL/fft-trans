@@ -34,7 +34,6 @@ struct fft : public CBase_fft, fft_to_transpose {
   }
   
   void init(uint64_t N) {
-    CkPrintf("init on %d\n", CkMyPe());
     from_transpose->init(N);
     
     validating = false;
@@ -57,7 +56,6 @@ struct fft : public CBase_fft, fft_to_transpose {
     
     // Reduction to the mainchare to signal that initialization is complete
     //TODO: contribute(CkCallback(CkReductionTarget(Main,FFTReady), from_main));
-    CkPrintf("init done on %d\n", CkMyPe());
     from_main.FFTReady();
     
   }
