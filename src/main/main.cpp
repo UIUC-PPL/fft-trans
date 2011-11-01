@@ -1,3 +1,4 @@
+#include <limits>
 #include <vector>
 
 #include <gluon/gluon.h>
@@ -15,6 +16,9 @@ struct main : public CBase_main, llcmcpp::Go {
   char** argv;
   int argc;
   uint32_t numChares;
+  
+  main(): FFTReady_count(0), FFTDone_count(0), printResidual_count(0) {
+  }
   
   void from_fft (CProxy_fft_to_main from_fft) {
     m_from_fft.push_back(from_fft);
@@ -35,15 +39,23 @@ struct main : public CBase_main, llcmcpp::Go {
     for ( int ii=0; ii<m_from_fft.size(); ++ii ) m_from_fft[ii].init(N);
   }
 
+  uint32_t FFTReady_count;
   void FFTReady() {
     CkPrintf("FFTReady\n");
+    if ( ++FFTReady_count < numChares ) return;
+    FFTReady_count = 0;
+    CkPrintf("FFTReady go\n");
     start = CkWallTimer();
     //TODO: Broadcast the 'go' signal to the fft chare array
     for ( int ii=0; ii<m_from_fft.size(); ++ii ) m_from_fft[ii].doFFT();
   }
 
+  uint32_t FFTDone_count;
   void FFTDone() {
     CkPrintf("FFTDone\n");
+    if ( ++FFTDone_count < numChares ) return;
+    FFTDone_count = 0;
+    CkPrintf("FFTDone go\n");
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
     CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
@@ -52,8 +64,14 @@ struct main : public CBase_main, llcmcpp::Go {
     for ( int ii=0; ii<m_from_fft.size(); ++ii ) m_from_fft[ii].initValidation();
   }
 
+  uint32_t printResidual_count;
+  double printResidual_max;
   void printResidual(double r) {
-    CkPrintf("residual = %g\n", r);
+    CkPrintf("printResidual\n");
+    if ( printResidual_count == 0 || r > printResidual_count ) printResidual_max = r;
+    if ( ++printResidual_count < numChares ) return;
+    printResidual_count = 0;
+    CkPrintf("residual = %g\n", printResidual_max);
     CkExit();
   }
 };
