@@ -2,6 +2,8 @@
 #include <fftw3.h>
 #include <limits>
 #include "fileio.h"
+#include "MeshStreamer.h"
+#include "TopoManager.h"
 
 #define TWOPI 6.283185307179586
 
@@ -9,6 +11,7 @@
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N, n;
 /*readonly*/ CProxy_transpose transposer;
+/*readonly*/ CProxy_MeshStreamer<double> aggregator;
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
@@ -36,6 +39,18 @@ struct Main : public CBase_Main {
     CkArrayOptions opts(numChares);
     opts.bindTo(fftProxy);
     transposer = CProxy_p2p_transpose::ckNew(opts);
+
+    TopoManager tmgr;
+    //use this if you do not want to differentiate based on core ID's
+    int NUM_ROWS = tmgr.getDimNX()*tmgr.getDimNT();
+    int NUM_COLUMNS = tmgr.getDimNY();
+    int NUM_PLANES = tmgr.getDimNZ();
+    int NUM_MESSAGES_BUFFERED = numChares;
+    CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
+    uint64_t DATA_ITEM_SIZE = (n/numChares+1)*sizeof(fftw_complex);
+
+    CProxy_transpose mesh_transposer = CProxy_mesh_transpose::ckNew();
+    aggregator = CProxy_MeshStreamer<double>::ckNew(DATA_ITEM_SIZE, NUM_MESSAGES_BUFFERED, NUM_ROWS, NUM_COLUMNS, NUM_PLANES, mesh_transposer);
   }
 
   void FFTReady() {
@@ -51,6 +66,14 @@ struct Main : public CBase_Main {
              numChares, CkNumPes(), N*N, time, gflops);
 
     fftProxy.initValidation();
+  }
+
+  void startFlush() {
+    CkStartQD(CkCallback(CkIndex_Main::doFlush(), mainProxy));
+  }
+
+  void doFlush() {
+    aggregator.flushDirect();
   }
 
   void printResidual(double r) {
@@ -204,6 +227,52 @@ struct p2p_transpose : public CBase_p2p_transpose
     delete msgs[k];
     msgs[k] = m;
     msgs[k]->source = thisIndex;
+  }
+};
+
+struct mesh_transpose : public CBase_mesh_transpose
+{
+  fft *fft_obj;
+  fftw_complex *buf;
+  int count;
+
+  mesh_transpose() {
+    __sdag_init();
+    buf = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (n/numChares+1));
+  }
+  mesh_transpose(CkMigrateMessage *) { }
+
+  mesh_transpose_SDAG_CODE
+
+  void sendTranspose(int iteration, fftw_complex *src_buf, fft *obj) {
+    // All-to-all transpose by constructing and sending
+    // point-to-point messages to each chare in the array.
+    for(int i = thisIndex; i < thisIndex+numChares; i++) {
+      //  Stagger communication order to avoid hotspots and the
+      //  associated contention.
+      int k = i % numChares;
+      for(int j = 0, l = 0; j < N/numChares; j++)
+        memcpy(buf[(l++)*N/numChares+1], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+
+      buf[0][0] = iteration;
+      buf[0][1] = thisIndex;
+
+      aggregator.ckLocalBranch()->insertData((double *)buf, k);
+    }
+
+    if (thisIndex == 0)
+      CkStartQD(CkCallback(CkIndex_MeshStreamer<double>::flushDirect(), aggregator));
+  }
+
+  void applyTranspose(MeshStreamerMessage<double> *m, fftw_complex *out) {
+    int k = ( (fftw_complex*) m->data)[0][1];
+    for(int j = 0, l = 1; j < N/numChares; j++)
+      for(int i = 0; i < N/numChares; i++) {
+        out[k*N/numChares+(i*N+j)][0] = ( (fftw_complex*) m->data)[l][0];
+        out[k*N/numChares+(i*N+j)][1] = ( (fftw_complex*) m->data)[l++][1];
+      }
+
+    delete m;
   }
 };
 
