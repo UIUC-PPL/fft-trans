@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-find_package(Charm++)
+find_package(Charm)
 
-include_directories(include ${Charm_INCLUDE_PATH})
+include_directories(include ${Charm_INCLUDE_DIRS})
 link_directories(${CMAKE_CURRENT_BINARY_DIR} ${Charm_LIBRARY_DIRS})
 
 ci_files(fft_to_main_HEADERS src/fft_to_main/fft_to_main.ci)
