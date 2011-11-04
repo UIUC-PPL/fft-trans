@@ -29,7 +29,6 @@
               <charmref instance="transpose_1" property="to_transpose"/>
               <charmref instance="transpose_2" property="to_transpose"/>
             </property>
-            <property id="from_fft"><cppref instance="fft_0" property="to_transpose"/></property>
         </instance>
     </pe>
     
@@ -49,7 +48,6 @@
               <charmref instance="transpose_1" property="to_transpose"/>
               <charmref instance="transpose_2" property="to_transpose"/>
             </property>
-            <property id="from_fft"><cppref instance="fft_1" property="to_transpose"/></property>
         </instance>
     </pe>
     
@@ -69,7 +67,6 @@
               <charmref instance="transpose_1" property="to_transpose"/>
               <charmref instance="transpose_2" property="to_transpose"/>
             </property>
-            <property id="from_fft"><cppref instance="fft_2" property="to_transpose"/></property>
         </instance>
     </pe>
 </gad>

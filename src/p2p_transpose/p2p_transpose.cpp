@@ -2,7 +2,6 @@
 
 #include <gluon/gluon.h>
 
-#include <fft_to_transpose.h>
 #include <transpose_to_fft.h>
 #include <transpose_to_transpose.h>
 
@@ -11,8 +10,8 @@
 struct p2p_transpose : public CBase_p2p_transpose, transpose_to_fft
 {
   //TODO: cfg
-  fft_to_transpose* from_fft;
   std::vector<CProxy_transpose_to_transpose> m_from_transpose;
+  fft_to_transpose* from_fft;
   uint32_t numChares;
   uint32_t thisIndex;
   uint64_t N, n;
@@ -42,7 +41,8 @@ struct p2p_transpose : public CBase_p2p_transpose, transpose_to_fft
   
   p2p_transpose_SDAG_CODE
   
-  void sendTranspose(int iteration, fftw_complex *src_buf, fftw_complex* out_buf) {
+  void sendTranspose(int iteration, fftw_complex *src_buf, fftw_complex* out_buf, fft_to_transpose& callback) {
+    this->from_fft = &callback;
     this->out_buf = out_buf;
     
     // All-to-all transpose by constructing and sending
@@ -90,5 +90,4 @@ GCMP(p2p_transpose)
   G_CHARM_PROVIDE(transpose_to_transpose, to_transpose);
   G_CPP_PROVIDE(transpose_to_fft, to_fft);
   G_CHARM_USE2(transpose_to_transpose, from_transpose);
-  G_CPP_USE(fft_to_transpose, from_fft);
 GEND

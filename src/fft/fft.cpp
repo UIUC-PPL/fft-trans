@@ -5,7 +5,6 @@
 #include <gluon/gluon.h>
 
 #include <fft_to_main.h>
-#include <fft_to_transpose.h>
 #include <fileio.h>
 #include <main_to_fft.h>
 #include <transpose_to_fft.h>
@@ -118,7 +117,6 @@ GCMP(fft);
   G_PROPERTY(uint32_t, numChares);
   G_PROPERTY(uint32_t, thisIndex);
   G_CHARM_PROVIDE(fft_to_main, to_main);
-  G_CPP_PROVIDE(fft_to_transpose, to_transpose);
   G_CHARM_USE(main_to_fft, from_main);
   G_CPP_USE(transpose_to_fft, from_transpose)
 GEND
