@@ -1,0 +1,22 @@
+mainmodule mesh_transpose {
+  extern module MeshStreamer;
+  include "MeshStreamer.h";
+
+  group MeshStreamer<double>;
+
+  array [1D] mesh_transpose:
+      MeshStreamerClient<double>
+  {
+    entry mesh_transpose();
+    
+    entry [local] void receive(int iteration) {
+      for(count = 0; count < numChares; ++count)
+        when receiveCombinedData[iteration] (MeshStreamerMessage<double> *m) atomic {
+          applyTranspose(m, fft_obj->out);
+        }
+      atomic { fft_obj->transposeDone(iteration); }
+    };
+    
+    entry void receiveCombinedData(MeshStreamerMessage<double> *m);
+  };
+};

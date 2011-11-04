@@ -8,65 +8,18 @@
             <property id="argv"><systemref name="argv"/></property>
             <property id="numChares"><value type="uint32">3</value></property>
             <property id="from_fft">
-              <charmref instance="fft_0" property="to_main"/>
-              <charmref instance="fft_1" property="to_main"/>
-              <charmref instance="fft_2" property="to_main"/>
-            </property>
-        </instance>
-        
-        <instance id="fft_0" type="fft" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">0</value></property>
-            <property id="from_main"><charmref instance="main" property="to_fft"/></property>
-            <property id="from_transpose"><cppref instance="transpose_0" property="to_fft"/></property>
-        </instance>
-        
-        <instance id="transpose_0" type="p2p_transpose" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">0</value></property>
-            <property id="from_transpose">
-              <charmref instance="transpose_0" property="to_transpose"/>
-              <charmref instance="transpose_1" property="to_transpose"/>
-              <charmref instance="transpose_2" property="to_transpose"/>
+              <arrayref instance="fft" property="to_main"/>
             </property>
         </instance>
     </pe>
-    
-    <pe>
-        <instance id="fft_1" type="fft" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">1</value></property>
-            <property id="from_main"><charmref instance="main" property="to_fft"/></property>
-            <property id="from_transpose"><cppref instance="transpose_1" property="to_fft"/></property>
-        </instance>
         
-        <instance id="transpose_1" type="p2p_transpose" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">1</value></property>
-            <property id="from_transpose">
-              <charmref instance="transpose_0" property="to_transpose"/>
-              <charmref instance="transpose_1" property="to_transpose"/>
-              <charmref instance="transpose_2" property="to_transpose"/>
-            </property>
-        </instance>
-    </pe>
-    
-    <pe>
-        <instance id="fft_2" type="fft" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">2</value></property>
-            <property id="from_main"><charmref instance="main" property="to_fft"/></property>
-            <property id="from_transpose"><cppref instance="transpose_2" property="to_fft"/></property>
-        </instance>
-        
-        <instance id="transpose_2" type="p2p_transpose" >
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="thisIndex"><value type="uint32">2</value></property>
-            <property id="from_transpose">
-              <charmref instance="transpose_0" property="to_transpose"/>
-              <charmref instance="transpose_1" property="to_transpose"/>
-              <charmref instance="transpose_2" property="to_transpose"/>
-            </property>
-        </instance>
-    </pe>
+	<instance id="fft" type="fft" size="3">
+		<property id="numChares"><value type="uint32">3</value></property>
+		<property id="from_main"><charmref instance="main" property="to_fft"/></property>
+		<property id="from_transpose"><arrayref instance="transpose" property="to_fft"/></property>
+	</instance>
+	
+	<instance id="transpose" type="p2p_transpose" size="3">
+		<property id="numChares"><value type="uint32">3</value></property>
+	</instance>
 </gad>

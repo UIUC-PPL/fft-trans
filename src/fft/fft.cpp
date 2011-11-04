@@ -7,19 +7,19 @@
 #include <fft_to_main.h>
 #include <fileio.h>
 #include <main_to_fft.h>
-#include <transpose_to_fft.h>
+#include <transpose.h>
 
 #include "fft.decl.h"
 
 #define TWOPI 6.283185307179586
 
-struct fft : public CBase_fft, fft_to_transpose {
+struct fft : public CBase_fft, transpose_callback {
+  fft(CkMigrateMessage*) { CkPrintf("Ugly Workaround, should not get there"); CkExit(); }
   fft_SDAG_CODE
   
   //TODO: cfg
-  CProxy_main_to_fft from_main;
-  transpose_to_fft* from_transpose;
-  uint32_t thisIndex;
+  CProxy_main_to_fft m_main;
+  transpose* m_transpose;
   uint32_t numChares;
   
   int iteration, count;
@@ -32,8 +32,18 @@ struct fft : public CBase_fft, fft_to_transpose {
     __sdag_init();
   }
   
+  void from_transpose ( CProxy_transpose from_transpose )
+  {
+    m_transpose = from_transpose[thisIndex].ckLocal();
+  }
+  
+  void from_main ( CProxy_main_to_fft from_main )
+  {
+    m_main = from_main;
+  }
+  
   void init(uint64_t N) {
-    from_transpose->init(N);
+    m_transpose->init(N);
     
     validating = false;
     
@@ -54,8 +64,7 @@ struct fft : public CBase_fft, fft_to_transpose {
     }
     
     // Reduction to the mainchare to signal that initialization is complete
-    //TODO: contribute(CkCallback(CkReductionTarget(Main,FFTReady), from_main));
-    from_main.FFTReady();
+    contribute(CkCallback(CkReductionTarget(main_to_fft,FFTReady), m_main));
     
   }
   
@@ -87,8 +96,7 @@ struct fft : public CBase_fft, fft_to_transpose {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
     
-    //TODO: contribute(CkCallback(CkReductionTarget(Main,FFTReady), from_main));
-    from_main.FFTReady();
+    contribute(CkCallback(CkReductionTarget(main_to_fft,FFTReady), m_main));
   }
   
   void calcResidual() {
@@ -105,18 +113,16 @@ struct fft : public CBase_fft, fft_to_transpose {
     
     double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
     
-    //TODO: CkCallback cb(CkReductionTarget(Main, printResidual), from_main);
-    //TODO: contribute(sizeof(double), &r, CkReduction::max_double, cb);
-    from_main.printResidual(r);
+    CkCallback cb(CkReductionTarget(main_to_fft, printResidual), m_main);
+    contribute(sizeof(double), &r, CkReduction::max_double, cb);
   }
 };
 
 #include "fft.def.h"
 
-GCMP(fft);
+GCMP_A(fft);
   G_PROPERTY(uint32_t, numChares);
-  G_PROPERTY(uint32_t, thisIndex);
-  G_CHARM_PROVIDE(fft_to_main, to_main);
-  G_CHARM_USE(main_to_fft, from_main);
-  G_CPP_USE(transpose_to_fft, from_transpose)
+  G_CHARM_APROVIDE(fft_to_main, to_main);
+  G_CHARM_USE2(main_to_fft, from_main);
+  G_CHARM_AUSE2(transpose, from_transpose)
 GEND
