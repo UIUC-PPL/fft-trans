@@ -1,7 +1,7 @@
 module fft_to_main {
   
   array [1D] fft_to_main {
-    entry void init(uint64_t N);
+    entry void init(uint64_t N, uint32_t numChares);
     entry void doFFT();
     entry void initValidation();
   };

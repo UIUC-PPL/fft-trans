@@ -19,7 +19,8 @@ struct p2p_transpose : public CBase_p2p_transpose
 	uint32_t numChares;
 	uint64_t N, n;
 
-	void init(uint64_t N) {
+	void init(uint64_t N, uint32_t numChares) {
+		this->numChares = numChares;
 		this->N = N;
 		n = N*N/numChares;
 		msgs = new fftMsg*[numChares];
@@ -84,6 +85,5 @@ struct p2p_transpose : public CBase_p2p_transpose
 #include "p2p_transpose.def.h"
 
 GCMP_A(p2p_transpose)
-	G_PROPERTY(uint32_t, numChares);
 	G_CHARM_APROVIDE(transpose, to_fft);
 GEND

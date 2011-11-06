@@ -14,7 +14,7 @@ struct transpose_callback
 
 struct transpose: public CBase_transpose
 {
-	virtual void init(uint64_t N) = 0;
+	virtual void init(uint64_t N, uint32_t numChares) = 0;
 	virtual void sendTranspose(int iteration, fftw_complex* in, fftw_complex* out, transpose_callback& cb) = 0;
 };
 

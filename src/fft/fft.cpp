@@ -42,8 +42,9 @@ struct fft : public CBase_fft, transpose_callback {
     m_main = from_main;
   }
   
-  void init(uint64_t N) {
-    m_transpose->init(N);
+  void init(uint64_t N, uint32_t numChares) {
+    this->numChares = numChares;
+    m_transpose->init(N, numChares);
     
     validating = false;
     
@@ -121,7 +122,6 @@ struct fft : public CBase_fft, transpose_callback {
 #include "fft.def.h"
 
 GCMP_A(fft);
-  G_PROPERTY(uint32_t, numChares);
   G_CHARM_APROVIDE(fft_to_main, to_main);
   G_CHARM_USE2(main_to_fft, from_main);
   G_CHARM_AUSE2(transpose, from_transpose)

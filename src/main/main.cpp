@@ -1,4 +1,3 @@
-#include <limits>
 #include <vector>
 
 #include <gluon/gluon.h>
@@ -32,7 +31,8 @@ struct main : public CBase_main, llcmcpp::Go {
 
     if (N % numChares != 0)
       CkAbort("numChares not a factor of N\n");
-      m_from_fft.init(N);
+    CkGroupID id = m_from_fft.ckGetArrayID();
+    m_from_fft.init(N, numChares);
   }
 
   void FFTReady() {

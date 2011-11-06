@@ -1,25 +1,22 @@
 <?xml version='1.0'?>
 <gad xmlns="http://www.inria.fr/graal/gad/1.0.0">
-    <pe>
-        <start_property instance="main" property="go"/>
-        
-        <instance id="main" type="main" >
-            <property id="argc"><systemref name="argc"/></property>
-            <property id="argv"><systemref name="argv"/></property>
-            <property id="numChares"><value type="uint32">3</value></property>
-            <property id="from_fft">
-              <arrayref instance="fft" property="to_main"/>
-            </property>
-        </instance>
-    </pe>
-        
-	<instance id="fft" type="fft" size="3">
-		<property id="numChares"><value type="uint32">3</value></property>
+	<pe>
+		<start_property instance="main" property="go"/>
+		
+		<instance id="main" type="main" >
+			<property id="argc"><systemref name="argc"/></property>
+			<property id="argv"><systemref name="argv"/></property>
+			<property id="numChares"><value type="uint32">3</value></property>
+			<property id="from_fft">
+			<arrayref instance="fft" property="to_main"/>
+			</property>
+		</instance>
+	</pe>
+	
+	<array id="fft" type="fft" size="3">
 		<property id="from_main"><charmref instance="main" property="to_fft"/></property>
 		<property id="from_transpose"><arrayref instance="transpose" property="to_fft"/></property>
-	</instance>
+	</array>
 	
-	<instance id="transpose" type="p2p_transpose" size="3">
-		<property id="numChares"><value type="uint32">3</value></property>
-	</instance>
+	<array id="transpose" type="p2p_transpose" size="3" />
 </gad>
