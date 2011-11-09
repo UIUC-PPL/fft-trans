@@ -1,0 +1,22 @@
+module FftValidator
+{
+
+extern module Fft;
+extern module Validation;
+
+array [1D] FftValidator:
+		Validation
+{
+	entry void size ( uint32_t );
+	
+	entry void callback ( CProxy_ValidationCallback );
+	
+	entry void fft ( CProxy_Fft );
+	
+	
+	
+	entry FftValidator();
+	
+};
+
+}

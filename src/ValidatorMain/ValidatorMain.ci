@@ -1,0 +1,13 @@
+module ValidatorMain
+{
+
+extern module Validation;
+
+chare ValidatorMain:
+		ValidationCallback
+{
+	entry ValidatorMain ();
+	
+};
+
+}

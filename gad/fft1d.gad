@@ -3,20 +3,26 @@
 	<pe>
 		<start_property instance="main" property="go"/>
 		
-		<instance id="main" type="main" >
+		<instance id="main" type="ValidatorMain" >
 			<property id="argc"><systemref name="argc"/></property>
 			<property id="argv"><systemref name="argv"/></property>
 			<property id="numChares"><value type="uint32">2</value></property>
-			<property id="from_fft">
-			<arrayref instance="fft" property="to_main"/>
-			</property>
+			<property id="validator"><arrayref instance="validator" property="validator"/></property>
 		</instance>
 	</pe>
 	
-	<array id="fft" type="fft" size="2">
-		<property id="from_main"><charmref instance="main" property="to_fft"/></property>
-		<property id="from_transpose"><arrayref instance="transpose" property="to_fft"/></property>
+	<array id="validator" type="FftValidator" size="2">
+		<property id="size"><value type="uint32">2</value></property>
+		<property id="callback"><charmref instance="main" property="validator_callback"/></property>
+		<property id="fft"><arrayref instance="computer" property="fft"/></property>
 	</array>
 	
-	<array id="transpose" type="p2p_transpose" size="2" bound_to="fft" />
+	<array id="computer" type="FftComputer" size="2" bound_to="validator">
+		<property id="size"><value type="uint32">2</value></property>
+		<property id="transposer"><arrayref instance="transpose" property="transposer"/></property>
+	</array>
+	
+	<array id="transpose" type="p2p_transpose" size="2" bound_to="validator">
+		<property id="size"><value type="uint32">2</value></property>
+	</array>
 </gad>

@@ -1,0 +1,16 @@
+module Validation {
+
+chare ValidationCallback {
+	entry [reductiontarget] void ready ();
+	entry [reductiontarget] void FFTDone ();
+	entry [reductiontarget] void validationDone ( double residual );
+};
+
+array [1D] Validation
+{
+	entry void init ( uint64_t N );
+	entry void doFFT ();
+	entry void doValidation ();
+};
+
+}

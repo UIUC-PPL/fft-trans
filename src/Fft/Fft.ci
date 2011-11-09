@@ -1,0 +1,7 @@
+module Fft
+{
+array [1D] Fft
+{
+};
+
+}

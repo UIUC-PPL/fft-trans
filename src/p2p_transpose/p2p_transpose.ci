@@ -9,14 +9,16 @@ module p2p_transpose {
   array [1D] p2p_transpose: transpose {
     entry p2p_transpose();
     
+    entry void size (uint32_t size);
+    
     entry void getTranspose(fftMsg *m);
     
     entry void receive(int iteration) {
       for(count = 0; count < numChares; ++count)
         when getTranspose[iteration] (fftMsg *m) atomic {
-          applyTranspose(m, out_buf);
+          applyTranspose(m);
         }
-      atomic { from_fft->transposeDone(iteration); }
+      atomic { user->transposeDone(iteration); }
     };
   };
   

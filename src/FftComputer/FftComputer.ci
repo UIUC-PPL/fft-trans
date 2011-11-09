@@ -1,0 +1,41 @@
+module FftComputer {
+
+extern module Fft;
+extern module transpose;
+
+array [1D] FftComputer:
+		Fft
+{
+	entry void size ( uint32_t );
+	
+	entry void transposer ( CProxy_transpose );
+	
+	
+	
+	entry FftComputer ();
+	
+	entry void transposeDone ( int iteration );
+	
+	entry void doFFT ()
+	{
+		for(iteration = 0; iteration < 3; ++iteration) {
+			atomic "transpose" {
+				if(thisIndex == 0) CkPrintf("TRANSPOSING\n");
+				m_transpose->sendTranspose(iteration, iteration == 0 ? in : out, out, this);
+			}
+			
+			when transposeDone[iteration](int iter) { }
+			
+			if ( iteration < 2 ) atomic "compute" {
+				fftw_execute(p1);
+				if ( iteration == 0 ) twiddle();
+			}
+		}
+		
+		atomic {
+			callback->FFTDone();
+		}
+	};
+};
+
+}
