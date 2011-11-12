@@ -141,7 +141,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
       // Runtime system takes ownership of messages once they're sent
       msg->iter = iteration;
       msg->source = thisIndex;
-      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
+      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(msg, k);
     }
   }
 
@@ -157,13 +157,13 @@ struct fft : public MeshStreamerClient<fftBuf> {
     }
   }
 
-  void process(fftBuf m) {
+  void process(fftBuf* m) {
     /*
     fftMsg *msg = new fftMsg;
-    msg->source = m.source;
-    memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
+    msg->source = m->source;
+    memcpy(msg->data, m->data, BUFSIZE*sizeof(fftw_complex));
     //CkPrintf("%d process\n",thisIndex);
-    CkSetRefNum(msg, m.iter);
+    CkSetRefNum(msg, m->iter);
     processData(msg);
     */
   }
