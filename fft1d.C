@@ -1,8 +1,8 @@
 #include <fftw3_essl.h>
 #include <limits>
 
-#define N2 100
-#define NCHARE 2
+#define N2 92160ULL
+#define NCHARE 2048ULL
 #define BUFSIZE N2*N2/NCHARE/NCHARE
 
 struct fftBuf {
