@@ -25,7 +25,7 @@ struct fftBuf {
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
-  fftw_complex data[BUFSIZE];
+  fftw_complex *data;
 };
 
 struct Main : public CBase_Main {
@@ -96,6 +96,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
   fftw_complex *in, *out;
   bool validating;
   int thisIndex;
+  MeshStreamerMessage<fftBuf> *msg1;
 
   fft() {
     __sdag_init();
@@ -144,13 +145,27 @@ struct fft : public MeshStreamerClient<fftBuf> {
     }
   }
 
+  void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg) {
+    msg1 = msg;
+    for(int i = 0; i < msg->numDataItems; i++) {
+      fftBuf *m1 = &((msg->data)[i]);
+      fftMsg *m2 = new fftMsg;
+      m2->source = m1->source;
+      m2->data = m1->data;
+      CkSetRefNum(m2, m1->iter);
+      processData(m2);
+    }
+  }
+
   void process(fftBuf m) {
+    /*
     fftMsg *msg = new fftMsg;
     msg->source = m.source;
     memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
     //CkPrintf("%d process\n",thisIndex);
     CkSetRefNum(msg, m.iter);
     processData(msg);
+    */
   }
 
   void applyTranspose(fftMsg *m) {

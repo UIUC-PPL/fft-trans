@@ -20,6 +20,7 @@ mainmodule fft1d {
 
   group fft : MeshStreamerClient<fftBuf> {
     entry fft();
+    entry void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg);
     entry void processData(fftMsg *m);
     entry void initValidation();
 
@@ -36,6 +37,10 @@ mainmodule fft1d {
           when processData[iteration] (fftMsg *m) atomic {
             applyTranspose(m);
           }
+
+        atomic "freemem" {
+          delete msg1;
+        }
 
         if (iteration < 2) atomic "compute" {
           fftw_execute(p1);
