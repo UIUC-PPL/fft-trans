@@ -92,7 +92,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
   int iteration, count;
   uint64_t n;
   fftw_plan p1;
-  fftBuf **msgs;
+  fftBuf *msg;
   fftw_complex *in, *out;
   bool validating;
   int thisIndex;
@@ -118,10 +118,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
       in[i][1] = drand48();
     }
 
-    msgs = new fftBuf*[numChares];
-    for(int i = 0; i < numChares; i++) {
-      msgs[i] = new fftBuf;
-    }
+    msg = new fftBuf;
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
@@ -135,15 +132,15 @@ struct fft : public MeshStreamerClient<fftBuf> {
       //  associated contention.
       int k = i % numChares;
       for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(msg->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
       // Tag each message with the iteration in which it was
       // generated, to prevent mis-matched messages from chares that
       // got all of their input quickly and moved to the next step.
       // Runtime system takes ownership of messages once they're sent
-      msgs[k]->iter = iteration;
-      msgs[k]->source = thisIndex;
-      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*(msgs[k]), k);
+      msg->iter = iteration;
+      msg->source = thisIndex;
+      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
     }
   }
 
@@ -166,6 +163,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
 
     // Save just-received messages to reuse for later sends, to
     // avoid reallocation
+    delete m;
     //delete msgs[k];
     //msgs[k] = m;
     //msgs[k]->source = thisIndex;
