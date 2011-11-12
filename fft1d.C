@@ -1,17 +1,31 @@
-#include "fft1d.decl.h"
 #include <fftw3.h>
 #include <limits>
+
+#define N2 100
+#define NCHARE 2
+#define BUFSIZE N2*N2/NCHARE/NCHARE
+
+struct fftBuf {
+  int iter;
+  int source;
+  fftw_complex data[BUFSIZE];
+};
+
 #include "fileio.h"
+#include "TopoManager.h"
+#include "MeshStreamer.h"
+#include "fft1d.decl.h"
 
 #define TWOPI 6.283185307179586
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
+/*readonly*/ CProxy_MeshStreamer<fftBuf> aggregator;
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
-  fftw_complex *data;
+  fftw_complex data[BUFSIZE];
 };
 
 struct Main : public CBase_Main {
@@ -19,9 +33,17 @@ struct Main : public CBase_Main {
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
-    numChares = atoi(m->argv[1]);
-    N = atol(m->argv[2]);
+    numChares = CkNumPes();
+    N = N2;
     delete m;
+
+    TopoManager tmgr;
+    //use this if you do not want to differentiate based on core ID's
+    int NUM_ROWS = tmgr.getDimNX()*tmgr.getDimNT();
+    int NUM_COLUMNS = tmgr.getDimNY();
+    int NUM_PLANES = tmgr.getDimNZ();
+    int NUM_MESSAGES_BUFFERED = numChares;
+    CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
 
     mainProxy = thisProxy;
 
@@ -29,7 +51,8 @@ struct Main : public CBase_Main {
       CkAbort("numChares not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew(numChares);
+    fftProxy = CProxy_fft::ckNew();
+    aggregator = CProxy_MeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUFFERED, NUM_ROWS, NUM_COLUMNS, NUM_PLANES, fftProxy);
   }
 
   void FFTReady() {
@@ -47,25 +70,37 @@ struct Main : public CBase_Main {
     fftProxy.initValidation();
   }
 
+  void startFlush() {
+    CkPrintf("Starting flush...\n");
+    CkStartQD(CkCallback(CkIndex_Main::doFlush(), mainProxy));
+  }
+
+  void doFlush() {
+    CkPrintf("Doing flush\n");
+    aggregator.flushDirect();
+  }
+
   void printResidual(double r) {
     CkPrintf("residual = %g\n", r);
     CkExit();
   }
 };
 
-struct fft : public CBase_fft {
+struct fft : public MeshStreamerClient<fftBuf> {
   fft_SDAG_CODE
 
   int iteration, count;
   uint64_t n;
   fftw_plan p1;
-  fftMsg **msgs;
+  fftBuf **msgs;
   fftw_complex *in, *out;
   bool validating;
+  int thisIndex;
 
   fft() {
     __sdag_init();
 
+    thisIndex = CkMyPe();
     validating = false;
 
     n = N*N/numChares;
@@ -83,10 +118,9 @@ struct fft : public CBase_fft {
       in[i][1] = drand48();
     }
 
-    msgs = new fftMsg*[numChares];
+    msgs = new fftBuf*[numChares];
     for(int i = 0; i < numChares; i++) {
-      msgs[i] = new (n/numChares) fftMsg;
-      msgs[i]->source = thisIndex;
+      msgs[i] = new fftBuf;
     }
 
     // Reduction to the mainchare to signal that initialization is complete
@@ -106,11 +140,20 @@ struct fft : public CBase_fft {
       // Tag each message with the iteration in which it was
       // generated, to prevent mis-matched messages from chares that
       // got all of their input quickly and moved to the next step.
-      CkSetRefNum(msgs[k], iteration);
-      thisProxy[k].getTranspose(msgs[k]);
       // Runtime system takes ownership of messages once they're sent
-      msgs[k] = NULL;
+      msgs[k]->iter = iteration;
+      msgs[k]->source = thisIndex;
+      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*(msgs[k]), k);
     }
+  }
+
+  void process(fftBuf m) {
+    fftMsg *msg = new fftMsg;
+    msg->source = m.source;
+    memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
+    CkPrintf("%d process\n",thisIndex);
+    CkSetRefNum(msg, m.iter);
+    processData(msg);
   }
 
   void applyTranspose(fftMsg *m) {
@@ -123,9 +166,9 @@ struct fft : public CBase_fft {
 
     // Save just-received messages to reuse for later sends, to
     // avoid reallocation
-    delete msgs[k];
-    msgs[k] = m;
-    msgs[k]->source = thisIndex;
+    //delete msgs[k];
+    //msgs[k] = m;
+    //msgs[k]->source = thisIndex;
   }
 
   void twiddle(double sign) {

@@ -3,9 +3,10 @@ mainmodule fft1d {
   readonly CProxy_Main mainProxy;
   readonly int numChares;
   readonly uint64_t N;
+  readonly CProxy_MeshStreamer<fftBuf> aggregator;
 
   message fftMsg {
-    fftw_complex data[];
+    int source;
   };
 
   mainchare Main {
@@ -13,11 +14,13 @@ mainmodule fft1d {
     entry [reductiontarget] void FFTReady();
     entry [reductiontarget] void FFTDone();
     entry [reductiontarget] void printResidual(double residual);
+    entry void startFlush();
+    entry void doFlush();
   };
 
-  array [1D] fft {
+  group fft : MeshStreamerClient<fftBuf> {
     entry fft();
-    entry void getTranspose(fftMsg *m);
+    entry void processData(fftMsg *m);
     entry void initValidation();
 
     entry void doFFT() {
@@ -26,10 +29,11 @@ mainmodule fft1d {
           if(thisIndex == 0)
             CkPrintf("TRANSPOSING\n");
           sendTranspose(iteration == 0 ? in : out);
+          contribute(CkCallback(CkIndex_Main::startFlush(), mainProxy));
         }
 
         for(count = 0; count < numChares; ++count)
-          when getTranspose[iteration] (fftMsg *m) atomic {
+          when processData[iteration] (fftMsg *m) atomic {
             applyTranspose(m);
           }
 
@@ -51,5 +55,9 @@ mainmodule fft1d {
         }
       }
     };
-  };
+   };
+
+   message MeshStreamerMessage<fftBuf>;
+   group MeshStreamerClient<fftBuf>;
+   group MeshStreamer<fftBuf>;
 };
