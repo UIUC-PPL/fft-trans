@@ -1,5 +1,5 @@
 OPTS	= -O3
-CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
+CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
 CC=mpixlcxx $(OPTS)
 
 #FFTWPATH = /soft/apps/fftw-3.1.2-double
