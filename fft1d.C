@@ -71,12 +71,12 @@ struct Main : public CBase_Main {
   }
 
   void startFlush() {
-    CkPrintf("Starting flush...\n");
+    //CkPrintf("Starting flush...\n");
     CkStartQD(CkCallback(CkIndex_Main::doFlush(), mainProxy));
   }
 
   void doFlush() {
-    CkPrintf("Doing flush\n");
+    //CkPrintf("Doing flush\n");
     aggregator.flushDirect();
   }
 
@@ -151,7 +151,7 @@ struct fft : public MeshStreamerClient<fftBuf> {
     fftMsg *msg = new fftMsg;
     msg->source = m.source;
     memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
-    CkPrintf("%d process\n",thisIndex);
+    //CkPrintf("%d process\n",thisIndex);
     CkSetRefNum(msg, m.iter);
     processData(msg);
   }
