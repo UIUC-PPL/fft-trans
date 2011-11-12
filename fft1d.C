@@ -36,6 +36,7 @@ struct Main : public CBase_Main {
   Main(CkArgMsg* m) {
     numChares = CkNumPes();
     N = N2;
+    int numbuf = atoi(m->argv[1]);
     delete m;
 
     TopoManager tmgr;
@@ -43,7 +44,7 @@ struct Main : public CBase_Main {
     int NUM_ROWS = tmgr.getDimNX()*tmgr.getDimNT();
     int NUM_COLUMNS = tmgr.getDimNY();
     int NUM_PLANES = tmgr.getDimNZ();
-    int NUM_MESSAGES_BUFFERED = numChares;
+    int NUM_MESSAGES_BUFFERED = numbuf;
     CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
 
     mainProxy = thisProxy;
