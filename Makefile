@@ -30,7 +30,7 @@ fft1d: $(OBJS)
 
 projections: fft1d.prj
 fft1d.prj: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode projections $(LIBS) -lz -o fft1d.prj $(OBJS)
+	$(CHARMC) -language charm++ -tracemode projections $(LIBS) -lz -o fft1d.prj $(OBJS) -module MeshStreamer
 
 summary: $(OBJS)
 	$(CHARMC) -language charm++ -tracemode summary $(LIBS) -o fft1d.sum $(OBJS)
