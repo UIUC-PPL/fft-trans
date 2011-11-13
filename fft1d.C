@@ -171,7 +171,6 @@ struct fft : public MeshStreamerClient<fftBuf> {
     msg->data = m->data;
     msg->memalloc = false;
     //CkPrintf("%d process\n",thisIndex);
-    CkSetRefNum(msg, m->iter);
     applyTranspose(msg);
   }
 
