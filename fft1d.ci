@@ -38,10 +38,6 @@ mainmodule fft1d {
             applyTranspose(m);
           }
 
-        atomic "freemem" {
-          delete msg1;
-        }
-
         if (iteration < 2) atomic "compute" {
           fftw_execute(p1);
           if(iteration == 0)

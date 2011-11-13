@@ -96,7 +96,6 @@ struct fft : public MeshStreamerClient<fftBuf> {
   fftw_complex *in, *out;
   bool validating;
   int thisIndex;
-  MeshStreamerMessage<fftBuf> *msg1;
 
   fft() {
     __sdag_init();
@@ -146,7 +145,6 @@ struct fft : public MeshStreamerClient<fftBuf> {
   }
 
   void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg) {
-    msg1 = msg;
     for(int i = 0; i < msg->numDataItems; i++) {
       fftBuf *m1 = &((msg->data)[i]);
       fftMsg *m2 = new fftMsg;
