@@ -33,7 +33,7 @@ mainmodule fft1d {
           contribute(CkCallback(CkIndex_Main::startFlush(), mainProxy));
         }
 
-        for(count = 0; count < numChares; ++count)
+        for(count = 0; count < numChares-1; ++count)
           when processData[iteration] (fftMsg *m) atomic {
             applyTranspose(m);
           }
