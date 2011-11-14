@@ -47,6 +47,13 @@ set_property(TARGET FftValidator APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_F
 set_property(TARGET FftValidator APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
 install(TARGETS FftValidator LIBRARY DESTINATION lib)
 
+ci_files(mesh_transpose_HEADERS src/mesh_transpose/mesh_transpose.ci)
+add_library(mesh_transpose MODULE src/mesh_transpose/mesh_transpose.cpp ${mesh_transpose_HEADERS})
+target_link_libraries(mesh_transpose transpose)
+set_property(TARGET mesh_transpose APPEND PROPERTY COMPILE_FLAGS ${Charm_COMPILE_FLAGS})
+set_property(TARGET mesh_transpose APPEND PROPERTY LINK_FLAGS ${Charm_LINK_FLAGS})
+install(TARGETS mesh_transpose LIBRARY DESTINATION lib)
+
 ci_files(p2p_transpose_HEADERS src/p2p_transpose/p2p_transpose.ci)
 add_library(p2p_transpose MODULE src/p2p_transpose/p2p_transpose.cpp ${p2p_transpose_HEADERS})
 target_link_libraries(p2p_transpose transpose)

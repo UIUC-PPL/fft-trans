@@ -4,6 +4,8 @@ mainmodule mesh_transpose {
 
   group MeshStreamer<double>;
 
+  extern module transpose;
+
   array [1D] mesh_transpose:
       MeshStreamerClient<double>
   {
@@ -14,7 +16,7 @@ mainmodule mesh_transpose {
         when receiveCombinedData[iteration] (MeshStreamerMessage<double> *m) atomic {
           applyTranspose(m, fft_obj->out);
         }
-      atomic { fft_obj->transposeDone(iteration); }
+      atomic { user->transposeDone(iteration); }
     };
     
     entry void receiveCombinedData(MeshStreamerMessage<double> *m);

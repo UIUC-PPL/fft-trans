@@ -1,25 +1,40 @@
+#include <fftw3.h>
 #include <MeshStreamer.h>
 #include <gluon/gluon.h>
 
-#include <transpose_to_fft.h>
+#include <transpose.h>
 
 #include "mesh_transpose.decl.h"
 
 struct mesh_transpose:
-		public CBase_mesh_transpose,
-		virtual public transpose_to_fft
+		public CBase_mesh_transpose
 {
+	mesh_transpose_SDAG_CODE
+	
+	//Externally configured (see bellow)
+	uint32_t numChares;
+	void size ( uint32_t size ) 
+	{
+		numChares = size;
+	}
+	
+	
 	fftw_complex *buf;
+	
 	int count;
+	
+	fftw_complex* out_buf;
+	
+	transpose_callback* user;
 	
 	mesh_transpose() {
 		__sdag_init();
 		buf = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (n/numChares+1));
 	}
 	
-	mesh_transpose_SDAG_CODE
-	
-	void sendTranspose(int iteration, fftw_complex *src_buf, fftw_complex* out, fft_to_transpose& callback) {
+	void sendTranspose( int iteration, fftw_complex *src_buf, fftw_complex* out_buf, transpose_callback* callback ) {
+		this->user = callback;
+		this->out_buf = out_buf;
 		// All-to-all transpose by constructing and sending
 		// point-to-point messages to each chare in the array.
 		for (int i = thisIndex; i < thisIndex+numChares; i++) {
