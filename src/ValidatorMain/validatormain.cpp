@@ -34,8 +34,6 @@ struct ValidatorMain:
 		
 		N = atol(argv[1]);
 
-		if (N % numChares != 0)
-		CkAbort("numChares not a factor of N\n");
 		validator.init(N);
 	}
 

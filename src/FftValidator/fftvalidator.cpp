@@ -54,6 +54,9 @@ struct FftValidator:
 		this->input_buffer = static_cast<fftw_complex*>(fftw_malloc(sizeof(fftw_complex) * n));
 		this->output_buffer = static_cast<fftw_complex*>(fftw_malloc(sizeof(fftw_complex) * n));
 		
+		if (N % numChares != 0)
+		CkAbort("numChares not a factor of N\n");
+		
 		srand48(thisIndex);
 		for (int i = 0; i < n; i++) {
 			input_buffer[i][0] = drand48();
