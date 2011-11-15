@@ -1,24 +1,46 @@
-mainmodule mesh_transpose {
-  extern module MeshStreamer;
-  include "MeshStreamer.h";
+module mesh_transpose
+{
 
-  group MeshStreamer<double>;
+extern module MeshStreamer;
+extern module transpose;
 
-  extern module transpose;
+message MeshStreamerMessage<fftBuf>;
 
-  array [1D] mesh_transpose:
-      MeshStreamerClient<double>
-  {
-    entry mesh_transpose();
-    
-    entry [local] void receive(int iteration) {
-      for(count = 0; count < numChares; ++count)
-        when receiveCombinedData[iteration] (MeshStreamerMessage<double> *m) atomic {
-          applyTranspose(m, fft_obj->out);
-        }
-      atomic { user->transposeDone(iteration); }
-    };
-    
-    entry void receiveCombinedData(MeshStreamerMessage<double> *m);
-  };
+group MeshStreamerClient<fftBuf>;
+
+group MeshStreamer<fftBuf>;
+
+message fftMsg {
+	int source;
 };
+
+array [1D] mesh_transpose:
+		MeshStreamerClient<fftBuf>
+{
+	entry mesh_transpose();
+    
+    entry void size (uint32_t size);
+	
+	entry void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg);
+	
+	entry void processData(fftMsg *m);
+    
+    entry void getTranspose(fftMsg *m);
+	
+	entry void receive(int iteration)
+	{
+		for(count = 0; count < numChares; ++count) {
+			when getTranspose[iteration] (fftMsg *m) atomic {
+				applyTranspose(m);
+			}
+		}
+		
+		atomic "freemem" {
+			delete msg1;
+		}
+		
+		atomic { user->transposeDone(iteration); }
+	};
+};
+
+}
