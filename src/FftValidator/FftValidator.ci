@@ -4,7 +4,7 @@ module FftValidator
 extern module Fft;
 extern module Validation;
 
-array [1D] FftValidator:
+group FftValidator:
 		Validation
 {
 	entry void size ( uint32_t );

@@ -31,7 +31,7 @@ struct FftValidator:
 	Fft* m_fft;
 	void fft ( CProxy_Fft fft )
 	{
-		m_fft = fft[thisIndex].ckLocal();
+		m_fft = fft[CkMyPe()].ckLocalBranch();
 	}
 
 	FftValidator()
@@ -57,7 +57,7 @@ struct FftValidator:
 		if (N % numChares != 0)
 		CkAbort("numChares not a factor of N\n");
 		
-		srand48(thisIndex);
+		srand48(CkMyPe());
 		for (int i = 0; i < n; i++) {
 			input_buffer[i][0] = drand48();
 			input_buffer[i][1] = drand48();
@@ -89,7 +89,7 @@ struct FftValidator:
 			contribute(CkCallback(CkReductionTarget(ValidationCallback, FFTDone), m_callback));
 		} else {
 // 			char filename[80];
-// 			sprintf(filename, "%d-%ld.dump%d", numChares, N, thisIndex);
+// 			sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());
 // 			writeCommFile(n, in, filename);
 			
 			double infNorm = 0.0;
@@ -114,9 +114,9 @@ struct FftValidator:
 
 #include "FftValidator.def.h"
 
-GCMP_A(FftValidator);
+GCMP_G(FftValidator);
 	G_PROPERTY2(uint32_t, size);
-	G_CHARM_APROVIDE(Validation, validator);
+	G_CHARM_GPROVIDE(Validation, validator);
 	G_CHARM_USE2(ValidationCallback, callback);
-	G_CHARM_AUSE2(Fft, fft)
+	G_CHARM_GUSE2(Fft, fft)
 GEND

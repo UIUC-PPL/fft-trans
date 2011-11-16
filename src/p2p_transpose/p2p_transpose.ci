@@ -6,7 +6,7 @@ module p2p_transpose {
     fftw_complex data[];
   };
   
-  array [1D] p2p_transpose: transpose {
+  group p2p_transpose: transpose {
     entry p2p_transpose();
     
     entry void size (uint32_t size);

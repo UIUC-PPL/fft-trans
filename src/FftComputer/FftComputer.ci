@@ -3,7 +3,7 @@ module FftComputer {
 extern module Fft;
 extern module transpose;
 
-array [1D] FftComputer:
+group FftComputer:
 		Fft
 {
 	entry void size ( uint32_t );
@@ -20,7 +20,7 @@ array [1D] FftComputer:
 	{
 		for(iteration = 0; iteration < 3; ++iteration) {
 			atomic "transpose" {
-				if(thisIndex == 0) CkPrintf("TRANSPOSING\n");
+				if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
 				m_transpose->sendTranspose(iteration, iteration == 0 ? in : out, out, this);
 			}
 			

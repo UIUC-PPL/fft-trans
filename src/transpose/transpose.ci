@@ -1,6 +1,6 @@
 module transpose {
   
-  array [1D] transpose {
+  group transpose {
   };
   
 };

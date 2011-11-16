@@ -7,22 +7,22 @@
 			<property id="argc"><systemref name="argc"/></property>
 			<property id="argv"><systemref name="argv"/></property>
 			<property id="numChares"><value type="uint32">2</value></property>
-			<property id="validator"><arrayref instance="validator" property="validator"/></property>
+			<property id="validator"><groupref instance="validator" property="validator"/></property>
 		</instance>
 	</pe>
 	
-	<array id="validator" type="FftValidator" size="2">
+	<group id="validator" type="FftValidator" >
 		<property id="size"><value type="uint32">2</value></property>
 		<property id="callback"><charmref instance="main" property="validator_callback"/></property>
-		<property id="fft"><arrayref instance="computer" property="fft"/></property>
-	</array>
+		<property id="fft"><groupref instance="computer" property="fft"/></property>
+	</group>
 	
-	<array id="computer" type="FftComputer" size="2" bound_to="validator">
+	<group id="computer" type="FftComputer" >
 		<property id="size"><value type="uint32">2</value></property>
-		<property id="transposer"><arrayref instance="transpose" property="transposer"/></property>
-	</array>
+		<property id="transposer"><groupref instance="transpose" property="transposer"/></property>
+	</group>
 	
-	<array id="transpose" type="p2p_transpose" size="2" bound_to="validator">
+	<group id="transpose" type="p2p_transpose">
 		<property id="size"><value type="uint32">2</value></property>
-	</array>
+	</group>
 </gad>

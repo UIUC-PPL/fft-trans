@@ -35,6 +35,7 @@ public:
 	
 	p2p_transpose(CkMigrateMessage *)
 	{
+		__sdag_init();
 	}
 	
 	uint64_t N;
@@ -50,7 +51,7 @@ public:
 		this->N = N;
 		for (int i = 0; i < numChares; i++) {
 			msgs[i] = new ((N*N)/(numChares*numChares)) fftMsg;
-			msgs[i]->source = thisIndex;
+			msgs[i]->source = CkMyPe();
 		}
 	}
 	
@@ -60,7 +61,7 @@ public:
 		
 		// All-to-all transpose by constructing and sending
 		// point-to-point messages to each chare in the array.
-		for (int i = thisIndex; i < thisIndex+numChares; i++) {
+		for (int i = CkMyPe(); i < CkMyPe()+numChares; i++) {
 			//  Stagger communication order to avoid hotspots and the
 			//  associated contention.
 			int k = i % numChares;
@@ -76,7 +77,7 @@ public:
 			msgs[k] = NULL;
 		}
 		
-		thisProxy[thisIndex].receive(iteration);
+		thisProxy[CkMyPe()].receive(iteration);
 	}
 	
 	void applyTranspose(fftMsg *m) {
@@ -91,13 +92,13 @@ public:
 		// avoid reallocation
 		delete msgs[k];
 		msgs[k] = m;
-		msgs[k]->source = thisIndex;
+		msgs[k]->source = CkMyPe();
 	}
 };
 
 #include "p2p_transpose.def.h"
 
-GCMP_A(p2p_transpose)
+GCMP_G(p2p_transpose)
 	G_PROPERTY2(uint32_t, size);
-	G_CHARM_APROVIDE(transpose, transposer);
+	G_CHARM_GPROVIDE(transpose, transposer);
 GEND

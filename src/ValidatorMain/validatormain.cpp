@@ -68,5 +68,5 @@ GCMP(ValidatorMain)
 	G_PROPERTY(uint32_t, numChares);
 	G_CHARM_PROVIDE(ValidationCallback, validator_callback);
 	G_CPP_PROVIDE(llcmcpp::Go, go);
-	G_CHARM_AUSE(Validation, validator);
+	G_CHARM_GUSE(Validation, validator);
 GEND

@@ -28,7 +28,7 @@ struct FftComputer:
 	transpose* m_transpose;
 	void transposer ( CProxy_transpose transposer )
 	{
-		m_transpose = transposer[thisIndex].ckLocal();
+		m_transpose = transposer[CkMyPe()].ckLocalBranch();
 	}
 	
 	
@@ -72,7 +72,7 @@ struct FftComputer:
 	{
 		double a, c, s, re, im;
 		
-		int k = thisIndex;
+		int k = CkMyPe();
 		for (int i = 0; i < N/numChares; i++)
 		for (int j = 0; j < N; j++) {
 			a = sign * (TWOPI*(i+k*N/numChares)*j)/(N*N);
@@ -91,8 +91,8 @@ struct FftComputer:
 
 #include "FftComputer.def.h"
 
-GCMP_A(FftComputer);
+GCMP_G(FftComputer);
 	G_PROPERTY2(uint32_t, size);
-	G_CHARM_APROVIDE(Fft, fft);
-	G_CHARM_AUSE2(transpose, transposer)
+	G_CHARM_GPROVIDE(Fft, fft);
+	G_CHARM_GUSE2(transpose, transposer)
 GEND

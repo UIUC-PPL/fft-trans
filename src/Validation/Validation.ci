@@ -6,7 +6,7 @@ chare ValidationCallback {
 	entry [reductiontarget] void validationDone ( double residual );
 };
 
-array [1D] Validation
+group Validation
 {
 	entry void init ( uint64_t N );
 	entry void doFFT ();
