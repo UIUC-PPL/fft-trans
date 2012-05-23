@@ -1,18 +1,16 @@
-OPTS	= -O3
-CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
-CC=mpixlcxx $(OPTS)
+OPTS	= -O3 -qsmp -qhot# ‐qhot=level=0 ­‐qsimd=auto
+CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
+CC=mpicxx $(OPTS)
 
 #FFTWPATH = /soft/apps/fftw-3.1.2-double
-ESSLPATH = /soft/apps/ESSL-4.4
+ESSLPATH = /soft/libraries/essl/5.1.1-0.beta/essl/5.1
 WRAPPATH = $(HOME)/esslfftw
 #INC = -I$(FFTWPATH)/include
 #LIBS = -L$(FFTWPATH)/lib -lfftw3 -lm -lz
 INC = -I$(WRAPPATH)/include -I$(ESSLPATH)/include
-BGP_LIBS = -L$(ESSLPATH)/lib \
-           -L$(WRAPPATH)/lib \
-           -L/bgsys/ibm_compilers/sles10/prod/opt/ibmcmp/xlf/bg/11.1/bglib/ \
-           -L/soft/apps/ibmcmp/xlsmp/bg/1.7/bglib \
-           -L/soft/apps/ibmcmp/xlf/bg/11.1/bglib
+BGP_LIBS = -L$(ESSLPATH)/lib64 \
+           -L$(WRAPPATH)/lib64 \
+           -L/soft/compilers/ibmcmp-feb2012/xlf/bg/14.1/lib64
 LIBS = $(BGP_LIBS) -lfftw3_esslbg -lesslbg -lmass -lxlfmath -lxlf90_r -lxlsmp -lxlomp_ser -lpthread
 
 OBJS = fft1d.o
