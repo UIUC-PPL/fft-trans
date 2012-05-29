@@ -62,6 +62,8 @@ struct fft : public CBase_fft {
   fftMsg **msgs;
   fftw_complex *in, *out;
   bool validating;
+  double start;
+  double time[6];
 
   fft() {
     __sdag_init();

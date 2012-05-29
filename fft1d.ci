@@ -23,14 +23,19 @@ mainmodule fft1d {
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
         atomic "transpose" {
-          if(thisIndex == 0)
+          if(thisIndex == 0) {
             CkPrintf("TRANSPOSING\n");
+	    if(iteration == 0)
+	      start = CkWallTimer();
+          }
           sendTranspose(iteration == 0 ? in : out);
         }
 
         for(count = 0; count < numChares; ++count)
           when getTranspose[iteration] (fftMsg *m) atomic {
             applyTranspose(m);
+	    if(thisIndex == 0)
+              time[iteration*2] = CkWallTimer() - start;
           }
 
         if (iteration < 2) atomic "compute" {
@@ -38,9 +43,20 @@ mainmodule fft1d {
           if(iteration == 0)
             twiddle(validating ? 1 : -1);
         }
+
+	atomic {
+	  if(thisIndex == 0)
+            time[iteration*2+1] = CkWallTimer() - start;
+	}
       }
 
       atomic {
+
+	if(thisIndex == 0) {
+          for(int i = 0; i < 6; i++)
+            CkPrintf("time[%d] = %f sec\n",i,time[i]);
+	}
+
         if(!validating)
           contribute(CkCallback(CkIndex_Main::doneFFT(), mainProxy));
         else {
