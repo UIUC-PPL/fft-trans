@@ -25,7 +25,6 @@ struct fftBuf {
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
-  bool memalloc;
   fftw_complex *data;
 };
 
@@ -150,26 +149,16 @@ struct fft : public MeshStreamerClient<fftBuf> {
       fftBuf *m1 = &((msg->data)[i]);
       fftMsg *m2 = new fftMsg;
       m2->source = m1->source;
-      if(m1->iter == iteration) {
-        m2->memalloc = false;
-        m2->data = m1->data;
-      }
-      else {
-        m2->memalloc = true;
-        m2->data = new fftw_complex[BUFSIZE];
-        memcpy(m2->data, m1->data, sizeof(fftw_complex)*BUFSIZE);
-      }
+      m2->data = m1->data;
       CkSetRefNum(m2, m1->iter);
       processData(m2);
     }
-    delete msg;
   }
 
   void process(fftBuf* m) {
     fftMsg *msg = new fftMsg;
     msg->source = m->source;
     msg->data = m->data;
-    msg->memalloc = false;
     //CkPrintf("%d process\n",thisIndex);
     applyTranspose(msg);
   }
@@ -184,8 +173,6 @@ struct fft : public MeshStreamerClient<fftBuf> {
 
     // Save just-received messages to reuse for later sends, to
     // avoid reallocation
-    if(m->memalloc)
-      delete m->data;
     delete m;
     //delete msgs[k];
     //msgs[k] = m;
