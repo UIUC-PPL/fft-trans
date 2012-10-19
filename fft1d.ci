@@ -3,45 +3,36 @@ mainmodule fft1d {
   readonly CProxy_Main mainProxy;
   readonly int numChares;
   readonly uint64_t N;
-  readonly CProxy_MeshStreamer<fftBuf> aggregator;
-
-  message fftMsg {
-    int source;
-  };
+  readonly CProxy_GroupMeshStreamer<fftBuf> aggregator;
 
   mainchare Main {
     entry Main(CkArgMsg *m);
     entry [reductiontarget] void FFTReady();
     entry [reductiontarget] void FFTDone();
     entry [reductiontarget] void printResidual(double residual);
-    entry void startFlush();
-    entry void doFlush();
   };
 
-  group fft : MeshStreamerClient<fftBuf> {
+  group fft : MeshStreamerGroupClient<fftBuf> {
     entry fft();
-    entry void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg);
-    entry void processData(fftMsg *m);
     entry void initValidation();
+    entry void sendTranspose();
+    entry void transposeDone();
 
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
         atomic "transpose" {
           if(thisIndex == 0)
             CkPrintf("TRANSPOSING\n");
-          sendTranspose(iteration == 0 ? in : out);
-          contribute(CkCallback(CkIndex_Main::startFlush(), mainProxy));
+          src = iteration == 0 ? in : out;
+          ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::sendTranspose(), thisProxy), CkCallback(CkIndex_fft::transposeDone(), thisProxy), std::numeric_limits<int>::min(), false);
         }
 
-        for(count = 0; count < numChares-1; ++count)
-          when processData[iteration] (fftMsg *m) atomic {
-            applyTranspose(m);
+        when transposeDone () atomic "compute" {
+          if (iteration < 2) {
+            fftw_execute(p1);
+            if(iteration == 0)
+              twiddle(validating ? 1 : -1);
           }
-
-        if (iteration < 2) atomic "compute" {
-          fftw_execute(p1);
-          if(iteration == 0)
-            twiddle(validating ? 1 : -1);
         }
       }
 
@@ -59,6 +50,7 @@ mainmodule fft1d {
    };
 
    message MeshStreamerMessage<fftBuf>;
-   group MeshStreamerClient<fftBuf>;
+   group MeshStreamerGroupClient<fftBuf>;
+   group GroupMeshStreamer<fftBuf>;
    group MeshStreamer<fftBuf>;
 };

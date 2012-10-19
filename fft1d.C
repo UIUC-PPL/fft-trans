@@ -6,14 +6,13 @@
 #define BUFSIZE N2*N2/NCHARE/NCHARE
 
 struct fftBuf {
-  int iter;
   int source;
   fftw_complex data[BUFSIZE];
 };
 
 #include "fileio.h"
 #include "TopoManager.h"
-#include "MeshStreamer.h"
+#include "NDMeshStreamer.h"
 #include "fft1d.decl.h"
 
 #define TWOPI 6.283185307179586
@@ -21,12 +20,7 @@ struct fftBuf {
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
-/*readonly*/ CProxy_MeshStreamer<fftBuf> aggregator;
-
-struct fftMsg : public CMessage_fftMsg {
-  int source;
-  fftw_complex *data;
-};
+/*readonly*/ CProxy_GroupMeshStreamer<fftBuf> aggregator;
 
 struct Main : public CBase_Main {
   double start;
@@ -44,6 +38,7 @@ struct Main : public CBase_Main {
     int NUM_PLANES = tmgr.getDimNZ();
     int NUM_MESSAGES_BUFFERED = numChares;
     CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
+    int dims[3] = {NUM_ROWS, NUM_COLUMNS, NUM_PLANES};
 
     mainProxy = thisProxy;
 
@@ -52,7 +47,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_MeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUFFERED, NUM_ROWS, NUM_COLUMNS, NUM_PLANES, fftProxy);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUFFERED, 3, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -70,30 +65,20 @@ struct Main : public CBase_Main {
     fftProxy.initValidation();
   }
 
-  void startFlush() {
-    //CkPrintf("Starting flush...\n");
-    CkStartQD(CkCallback(CkIndex_Main::doFlush(), mainProxy));
-  }
-
-  void doFlush() {
-    //CkPrintf("Doing flush\n");
-    aggregator.flushDirect();
-  }
-
   void printResidual(double r) {
     CkPrintf("residual = %g\n", r);
     CkExit();
   }
 };
 
-struct fft : public MeshStreamerClient<fftBuf> {
+struct fft : public MeshStreamerGroupClient<fftBuf> {
   fft_SDAG_CODE
 
   int iteration, count;
   uint64_t n;
   fftw_plan p1;
-  fftBuf *msg;
-  fftw_complex *in, *out;
+  fftBuf **msgs;
+  fftw_complex *in, *out, *src;
   bool validating;
   int thisIndex;
 
@@ -118,65 +103,32 @@ struct fft : public MeshStreamerClient<fftBuf> {
       in[i][1] = drand48();
     }
 
-    msg = new fftBuf;
+    msgs = new fftBuf*[numChares];
+    for(int i = 0; i<numChares; i++) msgs[i] = new fftBuf;
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
-  void sendTranspose(fftw_complex *src_buf) {
-    // All-to-all transpose by constructing and sending
-    // point-to-point messages to each chare in the array.
-    for(int i = thisIndex; i < thisIndex+numChares; i++) {
-      //  Stagger communication order to avoid hotspots and the
-      //  associated contention.
-      int k = i % numChares;
+  void sendTranspose() {
+    for(int i = 0; i < numChares; i++) {
       for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(msg->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(msgs[i]->data[(l++)*N/numChares], src[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      // Tag each message with the iteration in which it was
-      // generated, to prevent mis-matched messages from chares that
-      // got all of their input quickly and moved to the next step.
-      // Runtime system takes ownership of messages once they're sent
-      msg->iter = iteration;
-      msg->source = thisIndex;
-      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(msg, k);
+      msgs[i]->source = thisIndex;
+      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msgs[i], i);
     }
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
 
-  void receiveCombinedData(MeshStreamerMessage<fftBuf> *msg) {
-    for(int i = 0; i < msg->numDataItems; i++) {
-      fftBuf *m1 = &((msg->data)[i]);
-      fftMsg *m2 = new fftMsg;
-      m2->source = m1->source;
-      m2->data = m1->data;
-      CkSetRefNum(m2, m1->iter);
-      processData(m2);
-    }
-  }
-
-  void process(fftBuf* m) {
-    fftMsg *msg = new fftMsg;
-    msg->source = m->source;
-    msg->data = m->data;
-    //CkPrintf("%d process\n",thisIndex);
-    applyTranspose(msg);
-  }
-
-  void applyTranspose(fftMsg *m) {
-    int k = m->source;
+  //perform the local transpose
+  void process(const fftBuf &m) {
+    int k = m.source;
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++) {
-        out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-        out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+        out[k*N/numChares+(i*N+j)][0] = m.data[l][0];
+        out[k*N/numChares+(i*N+j)][1] = m.data[l++][1];
       }
-
-    // Save just-received messages to reuse for later sends, to
-    // avoid reallocation
-    delete m;
-    //delete msgs[k];
-    //msgs[k] = m;
-    //msgs[k]->source = thisIndex;
   }
 
   void twiddle(double sign) {
