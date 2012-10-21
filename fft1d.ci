@@ -20,13 +20,13 @@ mainmodule fft1d {
 
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
-        atomic "transpose" {
+        serial "transpose" {
           if(thisIndex == 0)
             CkPrintf("TRANSPOSING\n");
           sendTranspose(iteration == 0 ? in : out);
         }
 
-        when transposeDone () atomic "compute" {
+        when transposeDone () serial "compute" {
           if (iteration < 2) {
             fftw_execute(p1);
             if(iteration == 0)
@@ -35,7 +35,7 @@ mainmodule fft1d {
         }
       }
 
-      atomic {
+      serial {
         if(!validating)
           contribute(CkCallback(CkReductionTarget(Main,FFTDone), mainProxy));
         else {
