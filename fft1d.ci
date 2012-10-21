@@ -15,7 +15,7 @@ mainmodule fft1d {
   group fft : MeshStreamerGroupClient<fftBuf> {
     entry fft();
     entry void initValidation();
-    entry void sendTranspose();
+    entry void sendData();
     entry void transposeDone();
 
     entry void doFFT() {
@@ -23,8 +23,7 @@ mainmodule fft1d {
         atomic "transpose" {
           if(thisIndex == 0)
             CkPrintf("TRANSPOSING\n");
-          src = iteration == 0 ? in : out;
-          ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::sendTranspose(), thisProxy), CkCallback(CkIndex_fft::transposeDone(), thisProxy), std::numeric_limits<int>::min(), false);
+          sendTranspose(iteration == 0 ? in : out);
         }
 
         when transposeDone () atomic "compute" {

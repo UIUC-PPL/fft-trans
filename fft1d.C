@@ -78,7 +78,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   uint64_t n;
   fftw_plan p1;
   fftBuf **msgs;
-  fftw_complex *in, *out, *src;
+  fftw_complex *in, *out;
   bool validating;
   int thisIndex;
 
@@ -110,14 +110,18 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
-  void sendTranspose() {
+  void sendTranspose(fftw_complex *src) {
     for(int i = 0; i < numChares; i++) {
+      msgs[i]->source = thisIndex;
       for(int j = 0, l = 0; j < N/numChares; j++)
         memcpy(msgs[i]->data[(l++)*N/numChares], src[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
-
-      msgs[i]->source = thisIndex;
-      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msgs[i], i);
     }
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::sendData(), thisProxy), CkCallback(CkIndex_fft::transposeDone(), thisProxy), std::numeric_limits<int>::min(), false);
+  }
+
+  void sendData() {
+   for(int i = 0; i < numChares; i++)
+      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msgs[i], i);
     ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
 
