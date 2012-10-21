@@ -21,8 +21,7 @@ mainmodule fft1d {
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
         serial "transpose" {
-          if(thisIndex == 0)
-            CkPrintf("TRANSPOSING\n");
+          if(thisIndex == 0) CkPrintf("TRANSPOSING\n");
           sendTranspose(iteration == 0 ? in : out);
         }
 

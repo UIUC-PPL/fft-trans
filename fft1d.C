@@ -31,23 +31,17 @@ struct Main : public CBase_Main {
     N = N2;
     delete m;
 
-    TopoManager tmgr;
-    //use this if you do not want to differentiate based on core ID's
-    int NUM_ROWS = tmgr.getDimNX()*tmgr.getDimNT();
-    int NUM_COLUMNS = tmgr.getDimNY();
-    int NUM_PLANES = tmgr.getDimNZ();
-    int NUM_MESSAGES_BUFFERED = numChares;
-    CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
-    int dims[3] = {NUM_ROWS, NUM_COLUMNS, NUM_PLANES};
-
     mainProxy = thisProxy;
+    TopoManager tmgr; // get dimensions for software routing
+    int dims[3] = {tmgr.getDimNX()*tmgr.getDimNT(), tmgr.getDimNY(), tmgr.getDimNZ()};
+    CkPrintf("Running on NX %d NY %d NZ %d\n", dims[0], dims[1], dims[2]);
 
     if (N % numChares != 0)
       CkAbort("numChares not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUFFERED, 3, dims, fftProxy);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(numChares, 3, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -74,13 +68,12 @@ struct Main : public CBase_Main {
 struct fft : public MeshStreamerGroupClient<fftBuf> {
   fft_SDAG_CODE
 
-  int iteration, count;
+  int iteration, count, thisIndex;
   uint64_t n;
   fftw_plan p1;
   fftBuf **msgs;
   fftw_complex *in, *out;
   bool validating;
-  int thisIndex;
 
   fft() {
     thisIndex = CkMyPe();
