@@ -83,8 +83,6 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   int thisIndex;
 
   fft() {
-    __sdag_init();
-
     thisIndex = CkMyPe();
     validating = false;
 
