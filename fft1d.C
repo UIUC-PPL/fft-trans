@@ -4,6 +4,7 @@
 #define N2 100
 #define NCHARE 2
 #define BUFSIZE N2*N2/NCHARE/NCHARE
+#define TOTALBUFSIZE 16384
 
 struct fftBuf {
   int iter;
@@ -48,7 +49,11 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(3, dims, fftProxy, numChares);
+
+    CkPrintf("BUFSIZE = %d KB\nTOTALBUFSIZE = %d KB\n", BUFSIZE*16/1024, TOTALBUFSIZE);
+    int NUM_MESSAGES_BUF = TOTALBUFSIZE/4/(BUFSIZE*16/1024);
+    CkPrintf("NUM_MESSAGES_BUF = %d\nTotal Buf Size = %d KB\n", NUM_MESSAGES_BUF, NUM_MESSAGES_BUF*BUFSIZE*16/1024*4);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUF, 3, dims, fftProxy);
   }
 
   void FFTReady() {
