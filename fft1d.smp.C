@@ -5,17 +5,26 @@
 
 #define TWOPI 6.283185307179586
 
+#if CMK_SMP
+static CmiNodeLock fftw_plan_lock;
+#define fftw_createlock     if ( CmiMyRank() == 0 ) { fftw_plan_lock = CmiCreateLock(); } 
+#define fftw_lock CmiLock(fftw_plan_lock);
+#define fftw_unlock CmiUnlock(fftw_plan_lock);
+#define fftw_destroylock    if ( CmiMyRank() == 0 ) { CmiDestroyLock(fftw_plan_lock); }
+#else
+#define fftw_createlock
+#define fftw_lock 
+#define fftw_unlock
+#define fftw_destroylock
+#endif
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
 
-static CmiNodeLock fft_plan_lock;
-
-void initplanlock ()
+void  prepare(void)
 {
-      fft_plan_lock=CmiCreateLock();
+    fftw_createlock
 }
-
 struct fftMsg : public CMessage_fftMsg {
   int source;
   fftw_complex *data;
@@ -81,11 +90,13 @@ struct fft : public CBase_fft {
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
     int length[] = {N};
-    CmiLock(fft_plan_lock);
+
+    fftw_lock
+
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_unlock
 
-    CmiUnlock(fft_plan_lock);
     srand48(thisIndex);
     for(int i = 0; i < n; i++) {
       in[i][0] = drand48();
@@ -160,18 +171,16 @@ struct fft : public CBase_fft {
     memcpy(in, out, sizeof(fftw_complex) * n);
 
     validating = true;
-    CmiLock(fft_plan_lock);
+    fftw_lock
     fftw_destroy_plan(p1);
+    fftw_unlock
     int length[] = {N};
+    fftw_lock
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_unlock
 
-<<<<<<< HEAD
-    CmiUnlock(fft_plan_lock);
-    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
-=======
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
->>>>>>> 99de9e5a88206ac254aee4079989f409229cc36d
   }
 
   void calcResidual() {

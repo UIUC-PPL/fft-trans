@@ -4,7 +4,7 @@ mainmodule fft1d {
   readonly int numChares;
   readonly uint64_t N;
 
-  initnode void initplanlock();
+  initnode void  prepare();
   message fftMsg {
     fftw_complex data[];
   };
