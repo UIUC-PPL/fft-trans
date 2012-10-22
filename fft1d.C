@@ -111,7 +111,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   }
 
   void initStreamer() {
-    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkCallback::ignore), std::numeric_limits<int>::min(), false);
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
