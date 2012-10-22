@@ -14,7 +14,7 @@ fft_bench.o: fft_bench.cpp
 	${CC} -c fft_bench.cpp $(INC)
 
 fft1d: $(OBJS)
-	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS) -module MeshStreamer
+	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS) -module NDMeshStreamer -module completion
 
 projections: fft1d.prj
 fft1d.prj: $(OBJS)

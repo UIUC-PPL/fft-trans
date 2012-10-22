@@ -3,7 +3,7 @@ mainmodule fft1d {
   readonly CProxy_Main mainProxy;
   readonly int numChares;
   readonly uint64_t N;
-  readonly CProxy_MeshStreamer<fftBuf> aggregator;
+  readonly CProxy_GroupMeshStreamer<fftBuf> aggregator;
 
   message fftMsg {
     int source;
@@ -14,12 +14,11 @@ mainmodule fft1d {
     entry [reductiontarget] void FFTReady();
     entry [reductiontarget] void FFTDone();
     entry [reductiontarget] void printResidual(double residual);
-    entry void startFlush();
-    entry void doFlush();
   };
 
-  group fft : MeshStreamerClient<fftBuf> {
+  group fft : MeshStreamerGroupClient<fftBuf> {
     entry fft();
+    entry void startTranspose();
     entry void processData(fftMsg *m);
     entry void initValidation();
 
@@ -28,8 +27,11 @@ mainmodule fft1d {
         atomic "transpose" {
           if(thisIndex == 0)
             CkPrintf("TRANSPOSING\n");
+          initStreamer();
+        }
+
+        when startTranspose() atomic {
           sendTranspose(iteration == 0 ? in : out);
-          contribute(CkCallback(CkIndex_Main::startFlush(), mainProxy));
         }
 
         for(count = 0; count < numChares; ++count)
@@ -58,6 +60,7 @@ mainmodule fft1d {
    };
 
    message MeshStreamerMessage<fftBuf>;
-   group MeshStreamerClient<fftBuf>;
+   group MeshStreamerGroupClient<fftBuf>;
+   group GroupMeshStreamer<fftBuf>;
    group MeshStreamer<fftBuf>;
 };

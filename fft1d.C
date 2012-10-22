@@ -13,7 +13,7 @@ struct fftBuf {
 
 #include "fileio.h"
 #include "TopoManager.h"
-#include "MeshStreamer.h"
+#include "NDMeshStreamer.h"
 #include "fft1d.decl.h"
 
 #define TWOPI 6.283185307179586
@@ -21,7 +21,7 @@ struct fftBuf {
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
-/*readonly*/ CProxy_MeshStreamer<fftBuf> aggregator;
+/*readonly*/ CProxy_GroupMeshStreamer<fftBuf> aggregator;
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
@@ -37,13 +37,9 @@ struct Main : public CBase_Main {
     N = N2;
     delete m;
 
-    TopoManager tmgr;
-    //use this if you do not want to differentiate based on core ID's
-    int NUM_ROWS = tmgr.getDimNX()*tmgr.getDimNT();
-    int NUM_COLUMNS = tmgr.getDimNY();
-    int NUM_PLANES = tmgr.getDimNZ();
-    int NUM_MESSAGES_BUFFERED = numChares;
-    CkPrintf("Running on NX %d NY %d NZ %d\n",NUM_ROWS,NUM_COLUMNS,NUM_PLANES);
+    TopoManager tmgr; // get dimensions for software routing
+    int dims[3] = {tmgr.getDimNX()*tmgr.getDimNT(), tmgr.getDimNY(), tmgr.getDimNZ()};
+    CkPrintf("Running on NX %d NY %d NZ %d\n", dims[0], dims[1], dims[2]);
 
     mainProxy = thisProxy;
 
@@ -52,7 +48,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_MeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUFFERED, NUM_ROWS, NUM_COLUMNS, NUM_PLANES, fftProxy);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(3, dims, fftProxy, numChares);
   }
 
   void FFTReady() {
@@ -70,23 +66,13 @@ struct Main : public CBase_Main {
     fftProxy.initValidation();
   }
 
-  void startFlush() {
-    //CkPrintf("Starting flush...\n");
-    CkStartQD(CkCallback(CkIndex_Main::doFlush(), mainProxy));
-  }
-
-  void doFlush() {
-    //CkPrintf("Doing flush\n");
-    aggregator.flushDirect();
-  }
-
   void printResidual(double r) {
     CkPrintf("residual = %g\n", r);
     CkExit();
   }
 };
 
-struct fft : public MeshStreamerClient<fftBuf> {
+struct fft : public MeshStreamerGroupClient<fftBuf> {
   fft_SDAG_CODE
 
   int iteration, count;
@@ -124,7 +110,12 @@ struct fft : public MeshStreamerClient<fftBuf> {
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
+  void initStreamer() {
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkCallback::ignore), std::numeric_limits<int>::min(), false);
+  }
+
   void sendTranspose(fftw_complex *src_buf) {
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkCallback::ignore), CkCallback(CkCallback::ignore), std::numeric_limits<int>::min(), false);
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
     for(int i = thisIndex; i < thisIndex+numChares; i++) {
@@ -140,11 +131,12 @@ struct fft : public MeshStreamerClient<fftBuf> {
       // Runtime system takes ownership of messages once they're sent
       msg->iter = iteration;
       msg->source = thisIndex;
-      ((MeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
+      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
     }
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
 
-  void process(fftBuf m) {
+  void process(const fftBuf &m) {
     fftMsg *msg = new fftMsg;
     msg->source = m.source;
     memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
