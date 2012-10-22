@@ -41,7 +41,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(numChares, 3, dims, fftProxy);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(3, dims, fftProxy, numChares);
   }
 
   void FFTReady() {
