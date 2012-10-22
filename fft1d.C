@@ -166,12 +166,8 @@ struct fft : public CBase_fft {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
-<<<<<<< HEAD
     CmiUnlock(fft_plan_lock);
-    contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
-=======
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
->>>>>>> 99de9e5a88206ac254aee4079989f409229cc36d
   }
 
   void calcResidual() {
