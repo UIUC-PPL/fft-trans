@@ -9,6 +9,13 @@
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
 
+static CmiNodeLock fft_plan_lock;
+
+void initplanlock ()
+{
+      fft_plan_lock=CmiCreateLock();
+}
+
 struct fftMsg : public CMessage_fftMsg {
   int source;
   fftw_complex *data;
@@ -74,9 +81,11 @@ struct fft : public CBase_fft {
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
     int length[] = {N};
+    CmiLock(fft_plan_lock);
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
+    CmiUnlock(fft_plan_lock);
     srand48(thisIndex);
     for(int i = 0; i < n; i++) {
       in[i][0] = drand48();
@@ -151,11 +160,13 @@ struct fft : public CBase_fft {
     memcpy(in, out, sizeof(fftw_complex) * n);
 
     validating = true;
+    CmiLock(fft_plan_lock);
     fftw_destroy_plan(p1);
     int length[] = {N};
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
+    CmiUnlock(fft_plan_lock);
     contribute(CkCallback(CkIndex_Main::startFFT(), mainProxy));
   }
 
