@@ -115,7 +115,6 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   }
 
   void sendTranspose(fftw_complex *src_buf) {
-    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkCallback::ignore), CkCallback(CkCallback::ignore), std::numeric_limits<int>::min(), false);
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
     for(int i = thisIndex; i < thisIndex+numChares; i++) {
