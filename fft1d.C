@@ -3,7 +3,7 @@
 
 #define N2 100
 #define NCHARE 2
-#define BUFSIZE N2*N2/NCHARE/NCHARE
+#define BUFSIZE N2/NCHARE*N2/NCHARE
 #define TOTALBUFSIZE 16384
 
 struct fftBuf {
