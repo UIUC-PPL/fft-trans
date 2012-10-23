@@ -40,5 +40,5 @@ cleanproj:
 clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft_bench charmrun fft_ref *~
 
-fft1d.o: fft1d.C fft1d.decl.h
-	$(CHARMC) -c fft1d.C
+fft1d.o: fft1d.cc fft1d.decl.h
+	$(CHARMC) -c fft1d.cc
