@@ -1,4 +1,4 @@
-OPTS	= -O3
+OPTS	= -std=c++0x -O3
 CHARMC	?= $(HOME)/charm-debug/bin/charmc $(OPTS)
 CC=mpicxx
 LIBS = -lfftw3 -lm

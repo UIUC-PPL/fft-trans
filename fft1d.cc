@@ -91,7 +91,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
-    int length[] = {N};
+    int length[] = {(int)N};
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 

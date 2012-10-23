@@ -3,7 +3,7 @@ void fft::initValidation() {
 
   validating = true;
   fftw_destroy_plan(p1);
-  int length[] = {N};
+  int length[] = {(int)N};
   p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                           out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
