@@ -21,19 +21,19 @@ mainmodule fft1d {
 
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
-        atomic "transpose" {
+        serial "transpose" {
           if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
           initStreamer();
         }
 
-        when startTranspose() atomic {
+        when startTranspose() serial {
           sendTranspose(iteration == 0 ? in : out);
         }
 
         for(count = 0; count < numChares; ++count)
-          when process(const fftBuf& m) atomic {applyTranspose(m);}
+          when process(const fftBuf& m) serial {applyTranspose(m);}
 
-        if (iteration < 2) atomic "compute" {
+        if (iteration < 2) serial "compute" {
           fftw_execute(p1);
           if(iteration == 0) twiddle(validating ? 1 : -1);
         }
@@ -41,7 +41,7 @@ mainmodule fft1d {
         when doneStreaming() {}
       }
 
-      atomic {
+      serial {
         if(!validating)
           contribute(CkCallback(CkReductionTarget(Main,FFTDone), mainProxy));
         else {
