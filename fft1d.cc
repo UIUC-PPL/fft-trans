@@ -144,8 +144,6 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
 
   void initValidation();
   void calcResidual();
-
-  ~fft() {}
 };
 
 #include "verify.cc"
