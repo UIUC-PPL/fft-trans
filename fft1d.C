@@ -87,11 +87,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   fftw_complex *in, *out;
   bool validating;
 
-  fft() {
-    validating = false;
-
-    n = N*N/numChares;
-
+  fft() : validating(false), n(N*N/numChares) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
