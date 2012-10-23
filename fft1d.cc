@@ -77,6 +77,8 @@ struct Main : public CBase_Main {
   }
 };
 
+#define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
+
 struct fft : public MeshStreamerGroupClient<fftBuf> {
   fft_SDAG_CODE
 
@@ -96,7 +98,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
     srand48(CkMyPe());
-    for(int i = 0; i < n; i++) in[i] = {drand48(), drand48()};
+    for(int i = 0; i < n; i++) SET_VALUES(in[i], drand48(), drand48());
 
     buf = new fftBuf();
     buf->source = CkMyPe();
@@ -122,7 +124,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void applyTranspose(fftBuf &m) {
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++)
-        out[m.source*N/numChares+(i*N+j)] = {m.data[l][0], m.data[l++][1]};
+        SET_VALUES(out[m.source*N/numChares+(i*N+j)], m.data[l][0], m.data[l++][1]);
   }
 
   void twiddle(double sign) {
@@ -138,7 +140,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
 
         re = c*out[idx][0] - s*out[idx][1];
         im = s*out[idx][0] + c*out[idx][1];
-        out[idx] = {re, im};
+        SET_VALUES(out[idx], re, im);
       }
   }
 
