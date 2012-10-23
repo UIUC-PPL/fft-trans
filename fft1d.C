@@ -86,12 +86,10 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   fftBuf *msg;
   fftw_complex *in, *out;
   bool validating;
-  int thisIndex;
 
   fft() {
     __sdag_init();
 
-    thisIndex = CkMyPe();
     validating = false;
 
     n = N*N/numChares;
@@ -103,7 +101,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
-    srand48(thisIndex);
+    srand48(CkMyPe());
     for(int i = 0; i < n; i++) {
       in[i][0] = drand48();
       in[i][1] = drand48();
@@ -122,7 +120,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void sendTranspose(fftw_complex *src_buf) {
     // All-to-all transpose by constructing and sending
     // point-to-point messages to each chare in the array.
-    for(int i = thisIndex; i < thisIndex+numChares; i++) {
+    for(int i = CkMyPe(); i < CkMyPe()+numChares; i++) {
       //  Stagger communication order to avoid hotspots and the
       //  associated contention.
       int k = i % numChares;
@@ -134,7 +132,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
       // got all of their input quickly and moved to the next step.
       // Runtime system takes ownership of messages once they're sent
       msg->iter = iteration;
-      msg->source = thisIndex;
+      msg->source = CkMyPe();
       ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
     }
     ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
@@ -168,7 +166,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void twiddle(double sign) {
     double a, c, s, re, im;
 
-    int k = thisIndex;
+    int k = CkMyPe();
     for(int i = 0; i < N/numChares; i++)
       for(int j = 0; j < N; j++) {
         a = sign * (TWOPI*(i+k*N/numChares)*j)/(N*N);
@@ -199,7 +197,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void calcResidual() {
     double infNorm = 0.0;
 
-    srand48(thisIndex);
+    srand48(CkMyPe());
     for(int i = 0; i < n; i++) {
       out[i][0] = out[i][0]/(N*N) - drand48();
       out[i][1] = out[i][1]/(N*N) - drand48();

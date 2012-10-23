@@ -26,7 +26,7 @@ mainmodule fft1d {
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
         atomic "transpose" {
-          if(thisIndex == 0)
+          if(CkMyPe() == 0)
             CkPrintf("TRANSPOSING\n");
           initStreamer();
         }
@@ -54,7 +54,7 @@ mainmodule fft1d {
           contribute(CkCallback(CkReductionTarget(Main,FFTDone), mainProxy));
         else {
           char filename[80];
-          sprintf(filename, "%d-%ld.dump%d", numChares, N, thisIndex);
+          sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());
           writeCommFile(n, in, filename);
           calcResidual();
         }
