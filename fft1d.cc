@@ -2,8 +2,8 @@
 #include <limits>
 #include "charm++.h"
 
-#define N2 100
-#define NCHARE 2
+#define N2 65536ULL
+#define NCHARE 1024ULL
 #define BUFSIZE N2/NCHARE*N2/NCHARE
 #define TOTALBUFSIZE 16384
 
