@@ -102,12 +102,10 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
     srand48(CkMyPe());
-    for(int i = 0; i < n; i++) {
-      in[i][0] = drand48();
-      in[i][1] = drand48();
-    }
+    for(int i = 0; i < n; i++) in[i] = {drand48(), drand48()};
 
     msg = new fftBuf;
+    msg->source = CkMyPe();
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
@@ -118,42 +116,27 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   }
 
   void sendTranspose(fftw_complex *src_buf) {
-    // All-to-all transpose by constructing and sending
-    // point-to-point messages to each chare in the array.
-    for(int i = CkMyPe(); i < CkMyPe()+numChares; i++) {
-      //  Stagger communication order to avoid hotspots and the
-      //  associated contention.
-      int k = i % numChares;
+    for(int i = 0; i < numChares; i++) {
       for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(msg->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(msg->data[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      // Tag each message with the iteration in which it was
-      // generated, to prevent mis-matched messages from chares that
-      // got all of their input quickly and moved to the next step.
-      // Runtime system takes ownership of messages once they're sent
-      msg->iter = iteration;
-      msg->source = CkMyPe();
-      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, k);
+      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, i);
     }
     ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
 
   void applyTranspose(fftBuf &m) {
-    int k = m.source;
     for(int j = 0, l = 0; j < N/numChares; j++)
-      for(int i = 0; i < N/numChares; i++) {
-        out[k*N/numChares+(i*N+j)][0] = m.data[l][0];
-        out[k*N/numChares+(i*N+j)][1] = m.data[l++][1];
-      }
+      for(int i = 0; i < N/numChares; i++)
+        out[m.source*N/numChares+(i*N+j)] = {m.data[l][0], m.data[l++][1]};
   }
 
   void twiddle(double sign) {
     double a, c, s, re, im;
 
-    int k = CkMyPe();
     for(int i = 0; i < N/numChares; i++)
       for(int j = 0; j < N; j++) {
-        a = sign * (TWOPI*(i+k*N/numChares)*j)/(N*N);
+        a = sign * (TWOPI*(i+CkMyPe()*N/numChares)*j)/(N*N);
         c = cos(a);
         s = sin(a);
 
@@ -161,8 +144,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
 
         re = c*out[idx][0] - s*out[idx][1];
         im = s*out[idx][0] + c*out[idx][1];
-        out[idx][0] = re;
-        out[idx][1] = im;
+        out[idx] = {re, im};
       }
   }
 
