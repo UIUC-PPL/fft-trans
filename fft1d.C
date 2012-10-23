@@ -88,8 +88,6 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   bool validating;
 
   fft() {
-    __sdag_init();
-
     validating = false;
 
     n = N*N/numChares;
