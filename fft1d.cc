@@ -145,7 +145,6 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void initValidation();
   void calcResidual();
 
-  fft(CkMigrateMessage* m) {}
   ~fft() {}
 };
 
