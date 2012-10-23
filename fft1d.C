@@ -39,8 +39,8 @@ struct Main : public CBase_Main {
     delete m;
 
     TopoManager tmgr; // get dimensions for software routing
-    int dims[3] = {tmgr.getDimNX()*tmgr.getDimNT(), tmgr.getDimNY(), tmgr.getDimNZ()};
-    CkPrintf("Running on NX %d NY %d NZ %d\n", dims[0], dims[1], dims[2]);
+    int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
+    CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
     mainProxy = thisProxy;
 
@@ -53,7 +53,7 @@ struct Main : public CBase_Main {
     CkPrintf("BUFSIZE = %d KB\nTOTALBUFSIZE = %d KB\n", BUFSIZE*16/1024, TOTALBUFSIZE);
     int NUM_MESSAGES_BUF = TOTALBUFSIZE/4/(BUFSIZE*16/1024);
     CkPrintf("NUM_MESSAGES_BUF = %d\nTotal Buf Size = %d KB\n", NUM_MESSAGES_BUF, NUM_MESSAGES_BUF*BUFSIZE*16/1024*4);
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUF, 3, dims, fftProxy);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUF, 4, dims, fftProxy);
   }
 
   void FFTReady() {
