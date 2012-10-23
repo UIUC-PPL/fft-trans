@@ -1,5 +1,6 @@
 #include <fftw3.h>
 #include <limits>
+#include "charm++.h"
 
 #define N2 100
 #define NCHARE 2
@@ -10,6 +11,12 @@ struct fftBuf {
   int iter;
   int source;
   fftw_complex data[BUFSIZE];
+
+  void pup(PUP::er &p) {
+    p | iter;
+    p | source;
+    PUParray(p,(double*)data,BUFSIZE*2);
+  }
 };
 
 #include "fileio.h"
@@ -23,11 +30,6 @@ struct fftBuf {
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
 /*readonly*/ CProxy_GroupMeshStreamer<fftBuf> aggregator;
-
-struct fftMsg : public CMessage_fftMsg {
-  int source;
-  fftw_complex data[BUFSIZE];
-};
 
 struct Main : public CBase_Main {
   double start;
@@ -136,29 +138,13 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
 
-  void process(const fftBuf &m) {
-    fftMsg *msg = new fftMsg;
-    msg->source = m.source;
-    memcpy(msg->data, m.data, BUFSIZE*sizeof(fftw_complex));
-    //CkPrintf("%d process\n",thisIndex);
-    CkSetRefNum(msg, m.iter);
-    processData(msg);
-  }
-
-  void applyTranspose(fftMsg *m) {
-    int k = m->source;
+  void applyTranspose(fftBuf &m) {
+    int k = m.source;
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++) {
-        out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
-        out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
+        out[k*N/numChares+(i*N+j)][0] = m.data[l][0];
+        out[k*N/numChares+(i*N+j)][1] = m.data[l++][1];
       }
-
-    // Save just-received messages to reuse for later sends, to
-    // avoid reallocation
-    delete m;
-    //delete msgs[k];
-    //msgs[k] = m;
-    //msgs[k]->source = thisIndex;
   }
 
   void twiddle(double sign) {

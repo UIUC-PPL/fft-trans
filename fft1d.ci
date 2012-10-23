@@ -5,10 +5,6 @@ mainmodule fft1d {
   readonly uint64_t N;
   readonly CProxy_GroupMeshStreamer<fftBuf> aggregator;
 
-  message fftMsg {
-    int source;
-  };
-
   mainchare Main {
     entry Main(CkArgMsg *m);
     entry [reductiontarget] void FFTReady();
@@ -19,7 +15,7 @@ mainmodule fft1d {
   group fft : MeshStreamerGroupClient<fftBuf> {
     entry fft();
     entry void startTranspose();
-    entry void processData(fftMsg *m);
+    entry void process(const fftBuf& m);
     entry void initValidation();
     entry void doneStreaming();
 
@@ -36,7 +32,7 @@ mainmodule fft1d {
         }
 
         for(count = 0; count < numChares; ++count)
-          when processData[iteration] (fftMsg *m) atomic {
+          when process(const fftBuf& m) atomic {
             applyTranspose(m);
           }
 
