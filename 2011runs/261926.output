@@ -1,0 +1,380 @@
+On N = 1, 1 elements, Elapsed time is 0.000008 with 0.000000 Gflop/s
+With N = 1, residual = nan
+On N = 2, 4 elements, Elapsed time is 0.000009 with 0.004663 Gflop/s
+With N = 2, residual = 0.000000
+On N = 3, 9 elements, Elapsed time is 0.000014 with 0.010036 Gflop/s
+With N = 3, residual = 0.113780
+On N = 4, 16 elements, Elapsed time is 0.000009 with 0.036132 Gflop/s
+With N = 4, residual = 0.000000
+On N = 5, 25 elements, Elapsed time is 0.000014 with 0.042491 Gflop/s
+With N = 5, residual = 0.313085
+On N = 6, 36 elements, Elapsed time is 0.000009 with 0.100432 Gflop/s
+With N = 6, residual = 0.139528
+On N = 7, 49 elements, Elapsed time is 0.000016 with 0.088675 Gflop/s
+With N = 7, residual = 0.192712
+On N = 8, 64 elements, Elapsed time is 0.000010 with 0.198106 Gflop/s
+With N = 8, residual = 0.170023
+On N = 9, 81 elements, Elapsed time is 0.000014 with 0.186315 Gflop/s
+With N = 9, residual = 0.254420
+On N = 10, 100 elements, Elapsed time is 0.000011 with 0.305192 Gflop/s
+With N = 10, residual = 0.217571
+On N = 11, 121 elements, Elapsed time is 0.000015 with 0.280646 Gflop/s
+With N = 11, residual = 0.442330
+On N = 12, 144 elements, Elapsed time is 0.000011 with 0.458516 Gflop/s
+With N = 12, residual = 0.142280
+On N = 13, 169 elements, Elapsed time is 0.000015 with 0.405406 Gflop/s
+With N = 13, residual = 1.287131
+On N = 14, 196 elements, Elapsed time is 0.000011 with 0.687072 Gflop/s
+With N = 14, residual = 0.195293
+On N = 15, 225 elements, Elapsed time is 0.000016 with 0.565113 Gflop/s
+With N = 15, residual = 0.184635
+On N = 16, 256 elements, Elapsed time is 0.000013 with 0.767007 Gflop/s
+With N = 16, residual = 0.100811
+On N = 17, 289 elements, Elapsed time is 0.000162 with 0.072889 Gflop/s
+With N = 17, residual = 3.000127
+On N = 18, 324 elements, Elapsed time is 0.000013 with 1.024989 Gflop/s
+With N = 18, residual = 0.174334
+On N = 19, 361 elements, Elapsed time is 0.000199 with 0.076894 Gflop/s
+With N = 19, residual = 3.067204
+On N = 20, 400 elements, Elapsed time is 0.000014 with 1.247416 Gflop/s
+With N = 20, residual = 0.166904
+On N = 21, 441 elements, Elapsed time is 0.000021 with 0.938047 Gflop/s
+With N = 21, residual = 0.232255
+On N = 22, 484 elements, Elapsed time is 0.000017 with 1.280795 Gflop/s
+With N = 22, residual = 0.166736
+On N = 23, 529 elements, Elapsed time is 0.000228 with 0.104734 Gflop/s
+With N = 23, residual = 4.786758
+On N = 24, 576 elements, Elapsed time is 0.000016 with 1.692654 Gflop/s
+With N = 24, residual = 0.117997
+On N = 25, 625 elements, Elapsed time is 0.000077 with 0.375576 Gflop/s
+With N = 25, residual = 0.303299
+On N = 26, 676 elements, Elapsed time is 0.000026 with 1.213439 Gflop/s
+With N = 26, residual = 1.032322
+On N = 27, 729 elements, Elapsed time is 0.000077 with 0.448458 Gflop/s
+With N = 27, residual = 0.204241
+On N = 28, 784 elements, Elapsed time is 0.000021 with 1.825217 Gflop/s
+With N = 28, residual = 0.120099
+On N = 29, 841 elements, Elapsed time is 0.000324 with 0.125912 Gflop/s
+With N = 29, residual = 6.830432
+On N = 30, 900 elements, Elapsed time is 0.000035 with 1.257208 Gflop/s
+With N = 30, residual = 0.180981
+On N = 31, 961 elements, Elapsed time is 0.000341 with 0.139439 Gflop/s
+With N = 31, residual = 4.287889
+On N = 32, 1024 elements, Elapsed time is 0.000025 with 2.037930 Gflop/s
+With N = 32, residual = 0.144270
+On N = 33, 1089 elements, Elapsed time is 0.000046 with 1.184752 Gflop/s
+With N = 33, residual = 0.404465
+On N = 34, 1156 elements, Elapsed time is 0.000403 with 0.146053 Gflop/s
+With N = 34, residual = 7.288022
+On N = 35, 1225 elements, Elapsed time is 0.000047 with 1.340175 Gflop/s
+With N = 35, residual = 0.222361
+On N = 36, 1296 elements, Elapsed time is 0.000047 with 1.420247 Gflop/s
+With N = 36, residual = 0.152737
+On N = 37, 1369 elements, Elapsed time is 0.000452 with 0.157928 Gflop/s
+With N = 37, residual = 8.218587
+On N = 38, 1444 elements, Elapsed time is 0.000466 with 0.162599 Gflop/s
+With N = 38, residual = 7.390139
+On N = 39, 1521 elements, Elapsed time is 0.000068 with 1.175468 Gflop/s
+With N = 39, residual = 0.889736
+On N = 40, 1600 elements, Elapsed time is 0.000052 with 1.635518 Gflop/s
+With N = 40, residual = 0.169428
+On N = 41, 1681 elements, Elapsed time is 0.000528 with 0.170711 Gflop/s
+With N = 41, residual = 6.081628
+On N = 42, 1764 elements, Elapsed time is 0.000065 with 1.474655 Gflop/s
+With N = 42, residual = 0.261201
+On N = 43, 1849 elements, Elapsed time is 0.000600 with 0.167287 Gflop/s
+With N = 43, residual = 6.736031
+On N = 44, 1936 elements, Elapsed time is 0.000076 with 1.383437 Gflop/s
+With N = 44, residual = 0.344866
+On N = 45, 2025 elements, Elapsed time is 0.000066 with 1.686203 Gflop/s
+With N = 45, residual = 0.167437
+On N = 46, 2116 elements, Elapsed time is 0.000659 with 0.177477 Gflop/s
+With N = 46, residual = 8.191951
+On N = 47, 2209 elements, Elapsed time is 0.000697 with 0.176112 Gflop/s
+With N = 47, residual = 7.628196
+On N = 48, 2304 elements, Elapsed time is 0.000077 with 1.664423 Gflop/s
+With N = 48, residual = 0.193738
+On N = 49, 2401 elements, Elapsed time is 0.000202 with 0.666588 Gflop/s
+With N = 49, residual = 0.274422
+On N = 50, 2500 elements, Elapsed time is 0.000241 with 0.585960 Gflop/s
+With N = 50, residual = 0.271128
+On N = 51, 2601 elements, Elapsed time is 0.000866 with 0.170276 Gflop/s
+With N = 51, residual = 8.644533
+On N = 52, 2704 elements, Elapsed time is 0.000098 with 1.575693 Gflop/s
+With N = 52, residual = 0.851227
+On N = 53, 2809 elements, Elapsed time is 0.000777 with 0.207088 Gflop/s
+With N = 53, residual = 9.015597
+On N = 54, 2916 elements, Elapsed time is 0.000220 with 0.762760 Gflop/s
+With N = 54, residual = 0.280280
+On N = 55, 3025 elements, Elapsed time is 0.000096 with 1.813906 Gflop/s
+With N = 55, residual = 0.399463
+On N = 56, 3136 elements, Elapsed time is 0.000105 with 1.736214 Gflop/s
+With N = 56, residual = 0.173593
+On N = 57, 3249 elements, Elapsed time is 0.000923 with 0.205369 Gflop/s
+With N = 57, residual = 10.202280
+On N = 58, 3364 elements, Elapsed time is 0.000942 with 0.209191 Gflop/s
+With N = 58, residual = 12.143430
+On N = 59, 3481 elements, Elapsed time is 0.000964 with 0.212323 Gflop/s
+With N = 59, residual = 11.777837
+On N = 60, 3600 elements, Elapsed time is 0.000100 with 2.120891 Gflop/s
+With N = 60, residual = 0.136534
+On N = 61, 3721 elements, Elapsed time is 0.001073 with 0.205654 Gflop/s
+With N = 61, residual = 13.897769
+On N = 62, 3844 elements, Elapsed time is 0.001089 with 0.210148 Gflop/s
+With N = 62, residual = 9.924560
+On N = 63, 3969 elements, Elapsed time is 0.000115 with 2.068188 Gflop/s
+With N = 63, residual = 0.241363
+On N = 64, 4096 elements, Elapsed time is 0.000191 with 1.287907 Gflop/s
+With N = 64, residual = 0.180337
+On N = 65, 4225 elements, Elapsed time is 0.000157 with 1.621617 Gflop/s
+With N = 65, residual = 0.904291
+On N = 66, 4356 elements, Elapsed time is 0.000153 with 1.725864 Gflop/s
+With N = 66, residual = 0.304263
+On N = 67, 4489 elements, Elapsed time is 0.001180 with 0.230755 Gflop/s
+With N = 67, residual = 10.280672
+On N = 68, 4624 elements, Elapsed time is 0.001196 with 0.235307 Gflop/s
+With N = 68, residual = 13.914354
+On N = 69, 4761 elements, Elapsed time is 0.001219 with 0.238573 Gflop/s
+With N = 69, residual = 12.878747
+On N = 70, 4900 elements, Elapsed time is 0.000147 with 2.047453 Gflop/s
+With N = 70, residual = 0.212166
+On N = 71, 5041 elements, Elapsed time is 0.001373 with 0.225773 Gflop/s
+With N = 71, residual = 12.464714
+On N = 72, 5184 elements, Elapsed time is 0.000140 with 2.289522 Gflop/s
+With N = 72, residual = 0.158003
+On N = 73, 5329 elements, Elapsed time is 0.001528 with 0.215832 Gflop/s
+With N = 73, residual = 8.285859
+On N = 74, 5476 elements, Elapsed time is 0.001542 with 0.220492 Gflop/s
+With N = 74, residual = 15.581951
+On N = 75, 5625 elements, Elapsed time is 0.000362 with 0.968190 Gflop/s
+With N = 75, residual = 0.295254
+On N = 76, 5776 elements, Elapsed time is 0.001601 with 0.225453 Gflop/s
+With N = 76, residual = 12.920426
+On N = 77, 5929 elements, Elapsed time is 0.000176 with 2.111011 Gflop/s
+With N = 77, residual = 0.368520
+On N = 78, 6084 elements, Elapsed time is 0.000207 with 1.848034 Gflop/s
+With N = 78, residual = 0.811515
+On N = 79, 6241 elements, Elapsed time is 0.001604 with 0.245343 Gflop/s
+With N = 79, residual = 11.927744
+On N = 80, 6400 elements, Elapsed time is 0.000172 with 2.355019 Gflop/s
+With N = 80, residual = 0.171154
+On N = 81, 6561 elements, Elapsed time is 0.000449 with 0.926307 Gflop/s
+With N = 81, residual = 0.284450
+On N = 82, 6724 elements, Elapsed time is 0.001692 with 0.252582 Gflop/s
+With N = 82, residual = 10.968654
+On N = 83, 6889 elements, Elapsed time is 0.001737 with 0.252840 Gflop/s
+With N = 83, residual = 14.098762
+On N = 84, 7056 elements, Elapsed time is 0.000226 with 1.995678 Gflop/s
+With N = 84, residual = 0.197764
+On N = 85, 7225 elements, Elapsed time is 0.001929 with 0.240035 Gflop/s
+With N = 85, residual = 14.898271
+On N = 86, 7396 elements, Elapsed time is 0.001969 with 0.241328 Gflop/s
+With N = 86, residual = 12.307634
+On N = 87, 7569 elements, Elapsed time is 0.001995 with 0.244441 Gflop/s
+With N = 87, residual = 18.884071
+On N = 88, 7744 elements, Elapsed time is 0.000280 with 1.789532 Gflop/s
+With N = 88, residual = 0.324551
+On N = 89, 7921 elements, Elapsed time is 0.002001 with 0.256350 Gflop/s
+With N = 89, residual = 19.438693
+On N = 90, 8100 elements, Elapsed time is 0.000221 with 2.379418 Gflop/s
+With N = 90, residual = 0.222232
+On N = 91, 8281 elements, Elapsed time is 0.000298 with 1.809010 Gflop/s
+With N = 91, residual = 0.815002
+On N = 92, 8464 elements, Elapsed time is 0.002519 with 0.219223 Gflop/s
+With N = 92, residual = 12.844660
+On N = 93, 8649 elements, Elapsed time is 0.002542 with 0.222505 Gflop/s
+With N = 93, residual = 13.776312
+On N = 94, 8836 elements, Elapsed time is 0.002548 with 0.227336 Gflop/s
+With N = 94, residual = 16.463484
+On N = 95, 9025 elements, Elapsed time is 0.002606 with 0.227564 Gflop/s
+With N = 95, residual = 18.722023
+On N = 96, 9216 elements, Elapsed time is 0.000297 with 2.042962 Gflop/s
+With N = 96, residual = 0.173205
+On N = 97, 9409 elements, Elapsed time is 0.002450 with 0.253505 Gflop/s
+With N = 97, residual = 30.648492
+On N = 98, 9604 elements, Elapsed time is 0.000739 with 0.860120 Gflop/s
+With N = 98, residual = 0.317939
+On N = 99, 9801 elements, Elapsed time is 0.000292 with 2.224431 Gflop/s
+With N = 99, residual = 0.348365
+On N = 100, 10000 elements, Elapsed time is 0.000761 with 0.873127 Gflop/s
+With N = 100, residual = 0.271434
+On N = 101, 10201 elements, Elapsed time is 0.002959 with 0.229563 Gflop/s
+With N = 101, residual = 21.481027
+On N = 102, 10404 elements, Elapsed time is 0.003022 with 0.229695 Gflop/s
+With N = 102, residual = 19.115392
+On N = 103, 10609 elements, Elapsed time is 0.003047 with 0.232799 Gflop/s
+With N = 103, residual = 21.586767
+On N = 104, 10816 elements, Elapsed time is 0.000391 with 1.852299 Gflop/s
+With N = 104, residual = 0.780511
+On N = 105, 11025 elements, Elapsed time is 0.000393 with 1.882269 Gflop/s
+With N = 105, residual = 0.268924
+On N = 106, 11236 elements, Elapsed time is 0.002967 with 0.254776 Gflop/s
+With N = 106, residual = 14.705895
+On N = 107, 11449 elements, Elapsed time is 0.003020 with 0.255571 Gflop/s
+With N = 107, residual = 23.095876
+On N = 108, 11664 elements, Elapsed time is 0.000844 with 0.933566 Gflop/s
+With N = 108, residual = 0.276883
+On N = 109, 11881 elements, Elapsed time is 0.003076 with 0.261406 Gflop/s
+With N = 109, residual = 22.873093
+On N = 110, 12100 elements, Elapsed time is 0.000426 with 1.927737 Gflop/s
+With N = 110, residual = 0.339924
+On N = 111, 12321 elements, Elapsed time is 0.003034 with 0.275909 Gflop/s
+With N = 111, residual = 20.764558
+On N = 112, 12544 elements, Elapsed time is 0.000414 with 2.062525 Gflop/s
+With N = 112, residual = 0.180162
+On N = 113, 12769 elements, Elapsed time is 0.003189 with 0.273067 Gflop/s
+With N = 113, residual = 17.042079
+On N = 114, 12996 elements, Elapsed time is 0.003217 with 0.276028 Gflop/s
+With N = 114, residual = 17.431586
+On N = 115, 13225 elements, Elapsed time is 0.003178 with 0.284864 Gflop/s
+With N = 115, residual = 22.820110
+On N = 116, 13456 elements, Elapsed time is 0.003211 with 0.287421 Gflop/s
+With N = 116, residual = 20.250761
+On N = 117, 13689 elements, Elapsed time is 0.000480 with 1.957500 Gflop/s
+With N = 117, residual = 0.780424
+On N = 118, 13924 elements, Elapsed time is 0.003270 with 0.293045 Gflop/s
+With N = 118, residual = 25.228731
+On N = 119, 14161 elements, Elapsed time is 0.003308 with 0.295195 Gflop/s
+With N = 119, residual = 25.319102
+On N = 120, 14400 elements, Elapsed time is 0.000404 with 2.460916 Gflop/s
+With N = 120, residual = 0.147699
+On N = 121, 14641 elements, Elapsed time is 0.001039 with 0.975013 Gflop/s
+With N = 121, residual = 0.417236
+On N = 122, 14884 elements, Elapsed time is 0.003992 with 0.258433 Gflop/s
+With N = 122, residual = 21.515781
+On N = 123, 15129 elements, Elapsed time is 0.004049 with 0.259396 Gflop/s
+With N = 123, residual = 22.714435
+On N = 124, 15376 elements, Elapsed time is 0.004136 with 0.258524 Gflop/s
+With N = 124, residual = 18.650830
+On N = 125, 15625 elements, Elapsed time is 0.001653 with 0.658476 Gflop/s
+With N = 125, residual = 0.318721
+On N = 126, 15876 elements, Elapsed time is 0.000511 with 2.168045 Gflop/s
+With N = 126, residual = 0.228634
+On N = 127, 16129 elements, Elapsed time is 0.005340 with 0.211105 Gflop/s
+With N = 127, residual = 18.391268
+On N = 128, 16384 elements, Elapsed time is 0.000676 with 1.697182 Gflop/s
+With N = 128, residual = 0.164960
+On N = 129, 16641 elements, Elapsed time is 0.004257 with 0.274101 Gflop/s
+With N = 129, residual = 24.570263
+On N = 130, 16900 elements, Elapsed time is 0.000593 with 2.002826 Gflop/s
+With N = 130, residual = 0.726350
+On N = 131, 17161 elements, Elapsed time is 0.004297 with 0.280903 Gflop/s
+With N = 131, residual = 22.475819
+On N = 132, 17424 elements, Elapsed time is 0.000649 with 1.890446 Gflop/s
+With N = 132, residual = 0.362039
+On N = 133, 17689 elements, Elapsed time is 0.004895 with 0.254935 Gflop/s
+With N = 133, residual = 19.221826
+On N = 134, 17956 elements, Elapsed time is 0.004773 with 0.265842 Gflop/s
+With N = 134, residual = 21.016469
+On N = 135, 18225 elements, Elapsed time is 0.001210 with 1.065540 Gflop/s
+With N = 135, residual = 0.254828
+On N = 136, 18496 elements, Elapsed time is 0.004949 with 0.264874 Gflop/s
+With N = 136, residual = 24.449349
+On N = 137, 18769 elements, Elapsed time is 0.005047 with 0.263965 Gflop/s
+With N = 137, residual = 22.220249
+On N = 138, 19044 elements, Elapsed time is 0.004939 with 0.274095 Gflop/s
+With N = 138, residual = 22.416770
+On N = 139, 19321 elements, Elapsed time is 0.004941 with 0.278353 Gflop/s
+With N = 139, residual = 19.515838
+On N = 140, 19600 elements, Elapsed time is 0.000673 with 2.077374 Gflop/s
+With N = 140, residual = 0.182407
+On N = 141, 19881 elements, Elapsed time is 0.006416 with 0.221218 Gflop/s
+With N = 141, residual = 22.953136
+On N = 142, 20164 elements, Elapsed time is 0.006433 with 0.224099 Gflop/s
+With N = 142, residual = 28.138419
+On N = 143, 20449 elements, Elapsed time is 0.000783 with 1.869832 Gflop/s
+With N = 143, residual = 0.806801
+On N = 144, 20736 elements, Elapsed time is 0.000589 with 2.522772 Gflop/s
+With N = 144, residual = 0.207407
+On N = 145, 21025 elements, Elapsed time is 0.005892 with 0.256217 Gflop/s
+With N = 145, residual = 22.367011
+On N = 146, 21316 elements, Elapsed time is 0.005978 with 0.256360 Gflop/s
+With N = 146, residual = 19.400263
+On N = 147, 21609 elements, Elapsed time is 0.001540 with 1.010097 Gflop/s
+With N = 147, residual = 0.309826
+On N = 148, 21904 elements, Elapsed time is 0.005877 with 0.268698 Gflop/s
+With N = 148, residual = 25.510363
+On N = 149, 22201 elements, Elapsed time is 0.006335 with 0.252988 Gflop/s
+With N = 149, residual = 23.762754
+On N = 150, 22500 elements, Elapsed time is 0.001584 with 1.027018 Gflop/s
+With N = 150, residual = 0.273565
+On N = 151, 22801 elements, Elapsed time is 0.006532 with 0.252651 Gflop/s
+With N = 151, residual = 23.147841
+On N = 152, 23104 elements, Elapsed time is 0.006200 with 0.270075 Gflop/s
+With N = 152, residual = 29.320933
+On N = 153, 23409 elements, Elapsed time is 0.006621 with 0.256581 Gflop/s
+With N = 153, residual = 32.558979
+On N = 154, 23716 elements, Elapsed time is 0.000916 with 1.880934 Gflop/s
+With N = 154, residual = 0.344986
+On N = 155, 24025 elements, Elapsed time is 0.007527 with 0.232247 Gflop/s
+With N = 155, residual = 30.117737
+On N = 156, 24336 elements, Elapsed time is 0.000876 with 2.023287 Gflop/s
+With N = 156, residual = 0.735965
+On N = 157, 24649 elements, Elapsed time is 0.006674 with 0.269396 Gflop/s
+With N = 157, residual = 24.874350
+On N = 158, 24964 elements, Elapsed time is 0.006773 with 0.269201 Gflop/s
+With N = 158, residual = 22.592533
+On N = 159, 25281 elements, Elapsed time is 0.008022 with 0.230455 Gflop/s
+With N = 159, residual = 24.045634
+On N = 160, 25600 elements, Elapsed time is 0.000775 with 2.419149 Gflop/s
+With N = 160, residual = 0.152326
+On N = 161, 25921 elements, Elapsed time is 0.007670 with 0.247739 Gflop/s
+With N = 161, residual = 21.158787
+On N = 162, 26244 elements, Elapsed time is 0.001872 with 1.028974 Gflop/s
+With N = 162, residual = 0.317093
+On N = 163, 26569 elements, Elapsed time is 0.007790 with 0.250647 Gflop/s
+With N = 163, residual = 27.389685
+On N = 164, 26896 elements, Elapsed time is 0.007746 with 0.255479 Gflop/s
+With N = 164, residual = 21.350118
+On N = 165, 27225 elements, Elapsed time is 0.001025 with 1.956055 Gflop/s
+With N = 165, residual = 0.418336
+On N = 166, 27556 elements, Elapsed time is 0.007886 with 0.257700 Gflop/s
+With N = 166, residual = 27.886336
+On N = 167, 27889 elements, Elapsed time is 0.007818 with 0.263411 Gflop/s
+With N = 167, residual = 37.706324
+On N = 168, 28224 elements, Elapsed time is 0.001015 with 2.054931 Gflop/s
+With N = 168, residual = 0.175916
+On N = 169, 28561 elements, Elapsed time is 0.002061 with 1.025414 Gflop/s
+With N = 169, residual = 1.182802
+On N = 170, 28900 elements, Elapsed time is 0.008946 with 0.239362 Gflop/s
+With N = 170, residual = 27.444341
+On N = 171, 29241 elements, Elapsed time is 0.008998 with 0.241054 Gflop/s
+With N = 171, residual = 20.843673
+On N = 172, 29584 elements, Elapsed time is 0.009006 with 0.243938 Gflop/s
+With N = 172, residual = 25.430464
+On N = 173, 29929 elements, Elapsed time is 0.009194 with 0.242025 Gflop/s
+With N = 173, residual = 24.373363
+On N = 174, 30276 elements, Elapsed time is 0.009152 with 0.246225 Gflop/s
+With N = 174, residual = 32.858033
+On N = 175, 30625 elements, Elapsed time is 0.002095 with 1.089203 Gflop/s
+With N = 175, residual = 0.337371
+On N = 176, 30976 elements, Elapsed time is 0.001210 with 1.909640 Gflop/s
+With N = 176, residual = 0.342109
+On N = 177, 31329 elements, Elapsed time is 0.008454 with 0.276746 Gflop/s
+With N = 177, residual = 30.242890
+On N = 178, 31684 elements, Elapsed time is 0.008544 with 0.277218 Gflop/s
+With N = 178, residual = 32.034112
+On N = 179, 32041 elements, Elapsed time is 0.008594 with 0.279020 Gflop/s
+With N = 179, residual = 35.435578
+On N = 180, 32400 elements, Elapsed time is 0.001032 with 2.351461 Gflop/s
+With N = 180, residual = 0.152239
+On N = 181, 32761 elements, Elapsed time is 0.009716 with 0.252893 Gflop/s
+With N = 181, residual = 32.752377
+On N = 182, 33124 elements, Elapsed time is 0.001268 with 1.960583 Gflop/s
+With N = 182, residual = 0.782033
+On N = 183, 33489 elements, Elapsed time is 0.011529 with 0.218306 Gflop/s
+With N = 183, residual = 26.492962
+On N = 184, 33856 elements, Elapsed time is 0.011569 with 0.220167 Gflop/s
+With N = 184, residual = 32.668606
+On N = 185, 34225 elements, Elapsed time is 0.011573 with 0.222719 Gflop/s
+With N = 185, residual = 34.491522
+On N = 186, 34596 elements, Elapsed time is 0.011925 with 0.218716 Gflop/s
+With N = 186, residual = 25.868956
+On N = 187, 34969 elements, Elapsed time is 0.011893 with 0.221904 Gflop/s
+With N = 187, residual = 42.714028
+On N = 188, 35344 elements, Elapsed time is 0.011847 with 0.225374 Gflop/s
+With N = 188, residual = 28.741882
+On N = 189, 35721 elements, Elapsed time is 0.002203 with 1.226029 Gflop/s
+With N = 189, residual = 0.271089
+On N = 190, 36100 elements, Elapsed time is 0.011985 with 0.228010 Gflop/s
+With N = 190, residual = 32.380534

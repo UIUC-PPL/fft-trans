@@ -1,0 +1,813 @@
+<Nov 12 03:12:06.047193> SCHED_IF (Info) : scheduler library loaded
+<Nov 12 03:12:06.503854> SCHED_IF (Info) : job information record created: id=9524
+<Nov 12 03:12:06.902565> SCHED_IF (Info) : scheduler job id is 447055
+<Nov 12 03:12:06.929181> FE_MPI (Info) : Scheduler interface library loaded
+<Nov 12 03:12:06.929254> FE_MPI (Info) : Collecting arguments from external scheduler
+<Nov 12 03:12:07.059234> FE_MPI (Info) : Scheduler interface library loaded from 'no description provided'
+<Nov 12 03:12:07.059695> FE_MPI (Info) : initialize() - using jobname '' provided by scheduler interface
+<Nov 12 03:12:07.060065> FE_MPI (Info) : Invoking mpirun backend
+<Nov 12 03:12:07.084305> FE_MPI (Info) : connectToServer() - Handshake successful
+<Nov 12 03:12:07.294781> BRIDGE (Info) : rm_set_serial() - The machine serial number (alias) is BGP
+<Nov 12 03:12:07.332601> FE_MPI (Info) : Preparing partition
+<Nov 12 03:12:07.372632> BE_MPI (Info) : Examining specified partition
+<Nov 12 03:12:09.034916> BE_MPI (Info) : Checking partition CHR-R00-M1-N10-64 initial state ...
+<Nov 12 03:12:09.034989> BE_MPI (Info) : Partition CHR-R00-M1-N10-64 initial state = FREE ('F')
+<Nov 12 03:12:09.035018> BE_MPI (Info) : Checking partition owner...
+<Nov 12 03:12:09.036583> BE_MPI (Info) : Setting new owner
+<Nov 12 03:12:09.084016> BE_MPI (Info) : Initiating boot of the partition
+<Nov 12 03:12:09.370440> BE_MPI (Info) : Waiting for partition CHR-R00-M1-N10-64 to boot...
+<Nov 12 03:13:34.549055> BE_MPI (Info) : Partition is ready
+<Nov 12 03:13:34.549188> BE_MPI (Info) : Done preparing partition
+<Nov 12 03:13:34.593564> FE_MPI (Info) : Adding job
+<Nov 12 03:13:34.594443> BE_MPI (Info) : Adding job to database...
+<Nov 12 03:13:34.669034> FE_MPI (Info) : Job added with the following id: 5935
+<Nov 12 03:13:34.669425> FE_MPI (Info) : Starting job 5935
+<Nov 12 03:13:34.772958> FE_MPI (Info) : Waiting for job to terminate
+<Nov 12 03:13:35.696647> BE_MPI (Info) : IO - Threads initialized
+<Nov 12 03:13:35.706192> BE_MPI (Info) : I/O input runner thread terminated
+------------- Processor 67 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 0 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.601MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 192 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.573MB)
+------------- Processor 128 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.573MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 3 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 131 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.573MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 195 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.573MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 64 Exiting: Called CmiAbort ------------
+{snd:2,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 7 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 71 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 199 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 135 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 196 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 68 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 1 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.639MB)
+------------- Processor 132 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 66 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 4 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 193 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 129 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 63 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.576MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 124 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 252 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 188 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 163 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 171 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 235 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 151 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 43 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 187 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 51 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 2 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 243 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 115 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 251 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 231 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 79 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 103 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 179 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 15 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 130 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 65 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 183 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 194 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 167 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 95 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 239 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 111 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 175 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 39 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 99 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 123 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 223 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 107 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 59 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 19 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 11 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 60 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 191 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 227 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 172 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 248 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 189 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 127 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 247 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 255 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 75 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 228 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 164 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 47 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 253 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 119 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 125 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 159 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 35 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 216 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 55 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 148 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 83 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 76 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 16 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 62 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 84 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 72 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 56 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 155 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 220 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 144 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 208 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 10 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+------------- Processor 12 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 8 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 6 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+------------- Processor 160 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 203 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 180 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 92 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 200 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 244 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 100 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 201 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 27 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 240 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 168 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 120 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 108 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 232 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 176 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 184 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 236 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 112 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 207 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 215 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 147 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 91 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 116 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 48 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 74 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 143 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 52 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 36 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 96 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 40 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 44 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+------------- Processor 80 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 139 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 156 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 104 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+------------- Processor 20 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 31 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 23 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 204 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 224 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 140 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 152 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 212 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 136 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 205 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 141 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 32 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 190 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 88 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 137 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 211 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 219 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.574MB)
+------------- Processor 82 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 24 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.577MB)
+------------- Processor 186 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 87 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.575MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 133 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 242 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 254 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 154 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 28 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 479.578MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 182 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 238 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 198 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 61 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 114 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 50 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 234 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 162 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 126 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 178 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 214 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 102 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 90 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 58 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 122 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 110 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 217 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 106 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 42 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 246 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 209 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 38 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 98 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 85 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 34 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+------------- Processor 170 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 73 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 30 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 21 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 118 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 46 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 226 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 26 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+------------- Processor 94 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 78 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 54 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 145 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 197 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 77 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 173 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 69 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 70 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 14 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 150 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 93 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 149 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 249 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 229 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 9 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 5 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 161 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 165 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 101 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 13 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 169 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 146 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 233 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 17 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 230 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 134 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 22 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 221 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 157 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 185 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 37 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.639MB)
+------------- Processor 97 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 41 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 237 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 81 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 250 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 174 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 241 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 158 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 225 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 177 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 166 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 49 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 202 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 18 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 213 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 113 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 245 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 109 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 181 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 153 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 89 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 57 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+------------- Processor 206 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 222 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 142 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+------------- Processor 210 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 105 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 45 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 218 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 86 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 117 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+------------- Processor 121 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.638MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 53 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 138 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.637MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 25 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 33 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.640MB)
+------------- Processor 29 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 491.641MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+<Nov 12 03:13:55.746770> BE_MPI (Info) : I/O output runner thread terminated
+<Nov 12 03:13:55.767076> BE_MPI (Info) : Job 5935 switched to state TERMINATED ('T')
+<Nov 12 03:13:55.767137> BE_MPI (Info) : Job successfully terminated - TERMINATED ('T')
+<Nov 12 03:13:55.813154> FE_MPI (Info) : Job terminated normally
+<Nov 12 03:13:55.813243> FE_MPI (Info) : exit status = (134)
+<Nov 12 03:13:55.813491> BE_MPI (Info) : Starting cleanup sequence
+<Nov 12 03:13:55.813543> BE_MPI (Info) : cleanupDatabase() - job already terminated / hasn't been added
+<Nov 12 03:13:55.827610> BE_MPI (ERROR): The error message in the job record is as follows:
+<Nov 12 03:13:55.827661> BE_MPI (ERROR):   "killed with signal 6"
+<Nov 12 03:13:55.831068> BE_MPI (Info) : Destroying partition CHR-R00-M1-N10-64
+<Nov 12 03:14:25.898308> BE_MPI (Info) : Partition CHR-R00-M1-N10-64 switched to state FREE ('F')
+<Nov 12 03:14:26.244197> FE_MPI (Info) : ==   FE completed   ==
+<Nov 12 03:14:26.244272> FE_MPI (Info) : == Exit status:   0 ==
+<Nov 12 03:14:26.244366> SCHED_IF (Info) : mpirun result code: 0
+<Nov 12 03:14:26.246043> SCHED_IF (Info) : job result code: 134
+<Nov 12 03:14:26.246999> SCHED_IF (Info) : boot failure: False
+<Nov 12 03:14:26.257593> SCHED_IF (Info) : resources associated with partition CHR-R00-M1-N10-64 have been released
+<Nov 12 03:14:26.258563> SCHED_IF (Info) : scheduler library unloaded

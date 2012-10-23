@@ -1,0 +1,73 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-631-gd27dc40
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 1 unique compute nodes (4-way SMP).
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+FFT on 4096 elements with 64 chares took 4.414581 time at 0.456049 GFlop/s
+[0] copy/compute = 0.155972 copytime = 0.024427 computetime = 0.156612 sendtime = 0.000603
+[1] copy/compute = 0.158414 copytime = 0.024348 computetime = 0.153702 sendtime = 0.000612
+[32] copy/compute = 0.132050 copytime = 0.025234 computetime = 0.191091 sendtime = 0.000610
+[2] copy/compute = 0.158671 copytime = 0.024230 computetime = 0.152705 sendtime = 0.000601
+[16] copy/compute = 0.141647 copytime = 0.025435 computetime = 0.179567 sendtime = 0.000608
+[48] copy/compute = 0.120625 copytime = 0.025109 computetime = 0.208159 sendtime = 0.000592
+[33] copy/compute = 0.126028 copytime = 0.025145 computetime = 0.199518 sendtime = 0.000596
+[3] copy/compute = 0.135745 copytime = 0.021303 computetime = 0.156933 sendtime = 0.000538
+[17] copy/compute = 0.143039 copytime = 0.024842 computetime = 0.173670 sendtime = 0.000596
+[34] copy/compute = 0.130994 copytime = 0.026888 computetime = 0.205263 sendtime = 0.000706
+[49] copy/compute = 0.117928 copytime = 0.024113 computetime = 0.204472 sendtime = 0.000632
+[4] copy/compute = 0.145775 copytime = 0.021997 computetime = 0.150900 sendtime = 0.000539
+[18] copy/compute = 0.140803 copytime = 0.024204 computetime = 0.171900 sendtime = 0.000577
+[35] copy/compute = 0.116309 copytime = 0.021540 computetime = 0.185193 sendtime = 0.000539
+[5] copy/compute = 0.141322 copytime = 0.021442 computetime = 0.151722 sendtime = 0.000540
+[50] copy/compute = 0.102692 copytime = 0.021672 computetime = 0.211036 sendtime = 0.000568
+[19] copy/compute = 0.121757 copytime = 0.021471 computetime = 0.176347 sendtime = 0.000577
+[36] copy/compute = 0.116375 copytime = 0.021718 computetime = 0.186619 sendtime = 0.000582
+[6] copy/compute = 0.143415 copytime = 0.021853 computetime = 0.152374 sendtime = 0.000557
+[51] copy/compute = 0.122675 copytime = 0.024241 computetime = 0.197601 sendtime = 0.000602
+[20] copy/compute = 0.129187 copytime = 0.021717 computetime = 0.168109 sendtime = 0.000585
+[37] copy/compute = 0.114985 copytime = 0.021487 computetime = 0.186870 sendtime = 0.000531
+[7] copy/compute = 0.142853 copytime = 0.021832 computetime = 0.152828 sendtime = 0.000535
+[52] copy/compute = 0.111620 copytime = 0.021793 computetime = 0.195238 sendtime = 0.000554
+[21] copy/compute = 0.127464 copytime = 0.021537 computetime = 0.168967 sendtime = 0.000566
+[8] copy/compute = 0.140714 copytime = 0.021641 computetime = 0.153797 sendtime = 0.000535
+[38] copy/compute = 0.114401 copytime = 0.021501 computetime = 0.187944 sendtime = 0.000537
+[22] copy/compute = 0.127671 copytime = 0.021596 computetime = 0.169157 sendtime = 0.000604
+[53] copy/compute = 0.111340 copytime = 0.021759 computetime = 0.195424 sendtime = 0.000545
+[9] copy/compute = 0.138154 copytime = 0.021514 computetime = 0.155728 sendtime = 0.000528
+[39] copy/compute = 0.115689 copytime = 0.021909 computetime = 0.189375 sendtime = 0.000546
+[23] copy/compute = 0.127230 copytime = 0.021700 computetime = 0.170554 sendtime = 0.000543
+[54] copy/compute = 0.111426 copytime = 0.021845 computetime = 0.196045 sendtime = 0.000549
+[10] copy/compute = 0.135899 copytime = 0.021527 computetime = 0.158402 sendtime = 0.000555
+[40] copy/compute = 0.113847 copytime = 0.021634 computetime = 0.190026 sendtime = 0.000538
+[24] copy/compute = 0.128355 copytime = 0.021793 computetime = 0.169784 sendtime = 0.000574
+[55] copy/compute = 0.111873 copytime = 0.022036 computetime = 0.196971 sendtime = 0.000540
+[11] copy/compute = 0.135325 copytime = 0.021675 computetime = 0.160169 sendtime = 0.000554
+[41] copy/compute = 0.112558 copytime = 0.021462 computetime = 0.190671 sendtime = 0.000544
+[25] copy/compute = 0.125839 copytime = 0.021555 computetime = 0.171290 sendtime = 0.000567
+[56] copy/compute = 0.111643 copytime = 0.021999 computetime = 0.197045 sendtime = 0.000563
+[12] copy/compute = 0.134646 copytime = 0.021584 computetime = 0.160302 sendtime = 0.000547
+[26] copy/compute = 0.123088 copytime = 0.021550 computetime = 0.175081 sendtime = 0.000531
+[42] copy/compute = 0.111848 copytime = 0.021403 computetime = 0.191362 sendtime = 0.000526
+[57] copy/compute = 0.110134 copytime = 0.021727 computetime = 0.197276 sendtime = 0.000552
+[13] copy/compute = 0.135163 copytime = 0.021731 computetime = 0.160773 sendtime = 0.000552
+[27] copy/compute = 0.122300 copytime = 0.021543 computetime = 0.176149 sendtime = 0.000533
+[43] copy/compute = 0.111974 copytime = 0.021496 computetime = 0.191973 sendtime = 0.000533
+[14] copy/compute = 0.120043 copytime = 0.021630 computetime = 0.180186 sendtime = 0.000535
+[58] copy/compute = 0.112172 copytime = 0.022144 computetime = 0.197412 sendtime = 0.000554
+[28] copy/compute = 0.121899 copytime = 0.021645 computetime = 0.177566 sendtime = 0.000571
+[44] copy/compute = 0.112952 copytime = 0.021709 computetime = 0.192196 sendtime = 0.000547
+[15] copy/compute = 0.130876 copytime = 0.021626 computetime = 0.165243 sendtime = 0.000559
+[59] copy/compute = 0.110294 copytime = 0.021783 computetime = 0.197501 sendtime = 0.000539
+[29] copy/compute = 0.122887 copytime = 0.021727 computetime = 0.176807 sendtime = 0.000560
+[45] copy/compute = 0.128576 copytime = 0.026082 computetime = 0.202856 sendtime = 0.000635
+[60] copy/compute = 0.125586 copytime = 0.027660 computetime = 0.220244 sendtime = 0.000713
+[30] copy/compute = 0.107823 copytime = 0.021650 computetime = 0.200791 sendtime = 0.000555
+[46] copy/compute = 0.112061 copytime = 0.021611 computetime = 0.192851 sendtime = 0.000533
+[61] copy/compute = 0.131684 copytime = 0.027703 computetime = 0.210373 sendtime = 0.000735
+[31] copy/compute = 0.125721 copytime = 0.025440 computetime = 0.202355 sendtime = 0.000625
+[47] copy/compute = 0.110949 copytime = 0.023913 computetime = 0.215529 sendtime = 0.000671
+[62] copy/compute = 0.111410 copytime = 0.024173 computetime = 0.216973 sendtime = 0.000676
+[63] copy/compute = 0.130091 copytime = 0.029976 computetime = 0.230427 sendtime = 0.000788
+End of program

@@ -1,0 +1,20 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-759-g9f2833e
+Trace: traceroot: /intrepid-fs0/PEACEndStation/arya/traces/fft-trans/512//fft1d.prj2k
+Charm++: Tracemode Projections enabled.
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 512 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 2048
+cores: 2048
+size: 8493465600
+time: 9.235870 sec
+rate: 151.661929 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.602072
+End of program

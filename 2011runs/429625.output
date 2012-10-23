@@ -1,0 +1,18 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-758-g63da836
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 16384 unique compute nodes (4-way SMP).
+Running on NX 64 NY 32 NZ 32
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 65536
+cores: 65536
+size: 274877906944
+time: 21.383246 sec
+rate: 2442.416967 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.569485
+End of program

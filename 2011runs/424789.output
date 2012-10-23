@@ -1,0 +1,24 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-631-gd27dc40
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+TRANSPOSING
+TRANSPOSING
+
+
+DCFTD : 2538-2400
+An internal buffer allocation has failed due to insufficient memory.
+DCFTD : 2538-2400
+An internal buffer allocation has failed due to insufficient memory.
+
+DCFTD : 2538-2604
+Execution terminating due to error count for error number 2400.
+
+DCFTD : 2538-2604
+Execution terminating due to error count for error number 2400.
+
+DCFTD : 2538-2605
+
+DCFTD : 2538-2605
+Message summary:      2400     - 1
+Message summary:      2400     - 1

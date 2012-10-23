@@ -1,0 +1,73 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-631-gd27dc40
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 1 unique compute nodes (4-way SMP).
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+FFT on 4096 elements with 64 chares took 4.407249 time at 0.456808 GFlop/s
+[0] copy/comp = 0.159188 copy = 0.024507 compute = 0.153952 twid = 0.082777 send = 0.000588
+[1] copy/comp = 0.164286 copy = 0.024529 compute = 0.149305 twid = 0.083573 send = 0.000632
+[2] copy/comp = 0.159993 copy = 0.024286 compute = 0.151791 twid = 0.084033 send = 0.000603
+[16] copy/comp = 0.141571 copy = 0.025398 compute = 0.179397 twid = 0.107753 send = 0.000634
+[32] copy/comp = 0.118706 copy = 0.025578 compute = 0.215478 twid = 0.141014 send = 0.000638
+[48] copy/comp = 0.116674 copy = 0.025079 compute = 0.214946 twid = 0.155128 send = 0.000640
+[3] copy/comp = 0.140031 copy = 0.021507 compute = 0.153585 twid = 0.088820 send = 0.000530
+[17] copy/comp = 0.128923 copy = 0.025039 compute = 0.194215 twid = 0.121270 send = 0.000694
+[33] copy/comp = 0.129654 copy = 0.025097 compute = 0.193571 twid = 0.125310 send = 0.000612
+[49] copy/comp = 0.109494 copy = 0.022379 compute = 0.204389 twid = 0.137236 send = 0.000616
+[4] copy/comp = 0.143329 copy = 0.021473 compute = 0.149818 twid = 0.090636 send = 0.000529
+[18] copy/comp = 0.144760 copy = 0.025347 compute = 0.175096 twid = 0.107405 send = 0.000618
+[34] copy/comp = 0.124140 copy = 0.024638 compute = 0.198468 twid = 0.126934 send = 0.000664
+[5] copy/comp = 0.143814 copy = 0.021474 compute = 0.149320 twid = 0.089493 send = 0.000552
+[50] copy/comp = 0.115258 copy = 0.024320 compute = 0.211008 twid = 0.150432 send = 0.000675
+[19] copy/comp = 0.124780 copy = 0.021585 compute = 0.172983 twid = 0.108318 send = 0.000544
+[6] copy/comp = 0.143073 copy = 0.021461 compute = 0.150003 twid = 0.090268 send = 0.000535
+[35] copy/comp = 0.121774 copy = 0.023983 compute = 0.196946 twid = 0.138077 send = 0.000553
+[20] copy/comp = 0.128483 copy = 0.021635 compute = 0.168392 twid = 0.109108 send = 0.000554
+[51] copy/comp = 0.104023 copy = 0.021745 compute = 0.209039 twid = 0.142055 send = 0.000603
+[7] copy/comp = 0.143374 copy = 0.021468 compute = 0.149737 twid = 0.090839 send = 0.000541
+[36] copy/comp = 0.116274 copy = 0.021804 compute = 0.187527 twid = 0.127765 send = 0.000527
+[21] copy/comp = 0.128061 copy = 0.021665 compute = 0.169177 twid = 0.109863 send = 0.000547
+[8] copy/comp = 0.140538 copy = 0.021554 compute = 0.153366 twid = 0.093816 send = 0.000530
+[37] copy/comp = 0.114940 copy = 0.021805 compute = 0.189706 twid = 0.128419 send = 0.000523
+[52] copy/comp = 0.123653 copy = 0.024417 compute = 0.197467 twid = 0.137701 send = 0.000588
+[22] copy/comp = 0.126996 copy = 0.021636 compute = 0.170364 twid = 0.110495 send = 0.000542
+[9] copy/comp = 0.141182 copy = 0.021663 compute = 0.153437 twid = 0.094048 send = 0.000540
+[38] copy/comp = 0.115607 copy = 0.021819 compute = 0.188734 twid = 0.129391 send = 0.000538
+[23] copy/comp = 0.126541 copy = 0.021573 compute = 0.170481 twid = 0.111025 send = 0.000558
+[53] copy/comp = 0.112689 copy = 0.022183 compute = 0.196851 twid = 0.137277 send = 0.000538
+[10] copy/comp = 0.136471 copy = 0.021590 compute = 0.158200 twid = 0.098849 send = 0.000518
+[39] copy/comp = 0.115898 copy = 0.021934 compute = 0.189256 twid = 0.130161 send = 0.000538
+[24] copy/comp = 0.127302 copy = 0.021836 compute = 0.171526 twid = 0.111613 send = 0.000582
+[54] copy/comp = 0.110999 copy = 0.021797 compute = 0.196374 twid = 0.137242 send = 0.000537
+[11] copy/comp = 0.135670 copy = 0.021729 compute = 0.160165 twid = 0.101037 send = 0.000529
+[40] copy/comp = 0.114689 copy = 0.021803 compute = 0.190103 twid = 0.131107 send = 0.000528
+[25] copy/comp = 0.125928 copy = 0.021751 compute = 0.172729 twid = 0.113604 send = 0.000550
+[55] copy/comp = 0.110994 copy = 0.021872 compute = 0.197052 twid = 0.138166 send = 0.000544
+[12] copy/comp = 0.132740 copy = 0.021490 compute = 0.161899 twid = 0.102887 send = 0.000547
+[41] copy/comp = 0.115038 copy = 0.022072 compute = 0.191865 twid = 0.132056 send = 0.000542
+[26] copy/comp = 0.124121 copy = 0.021686 compute = 0.174720 twid = 0.115243 send = 0.000542
+[56] copy/comp = 0.111010 copy = 0.021882 compute = 0.197117 twid = 0.138395 send = 0.000506
+[13] copy/comp = 0.132794 copy = 0.021493 compute = 0.161854 twid = 0.102957 send = 0.000550
+[42] copy/comp = 0.113080 copy = 0.021753 compute = 0.192369 twid = 0.132424 send = 0.000528
+[27] copy/comp = 0.122477 copy = 0.021635 compute = 0.176646 twid = 0.117061 send = 0.000559
+[57] copy/comp = 0.112902 copy = 0.022418 compute = 0.198566 twid = 0.138899 send = 0.000601
+[14] copy/comp = 0.122232 copy = 0.021465 compute = 0.175606 twid = 0.104403 send = 0.000531
+[43] copy/comp = 0.113718 copy = 0.021947 compute = 0.192991 twid = 0.132998 send = 0.000543
+[28] copy/comp = 0.121214 copy = 0.021580 compute = 0.178032 twid = 0.118857 send = 0.000567
+[58] copy/comp = 0.110407 copy = 0.021935 compute = 0.198672 twid = 0.138920 send = 0.000533
+[15] copy/comp = 0.131013 copy = 0.021525 compute = 0.164294 twid = 0.104909 send = 0.000532
+[44] copy/comp = 0.113171 copy = 0.021803 compute = 0.192657 twid = 0.133537 send = 0.000560
+[29] copy/comp = 0.120538 copy = 0.021607 compute = 0.179252 twid = 0.119633 send = 0.000546
+[59] copy/comp = 0.109084 copy = 0.021693 compute = 0.198867 twid = 0.139153 send = 0.000535
+[45] copy/comp = 0.111912 copy = 0.021626 compute = 0.193245 twid = 0.134127 send = 0.000552
+[30] copy/comp = 0.120293 copy = 0.021579 compute = 0.179384 twid = 0.120654 send = 0.000565
+[60] copy/comp = 0.135305 copy = 0.028157 compute = 0.208102 twid = 0.139323 send = 0.000737
+[46] copy/comp = 0.111665 copy = 0.021693 compute = 0.194273 twid = 0.134533 send = 0.000532
+[31] copy/comp = 0.108935 copy = 0.022449 compute = 0.206073 twid = 0.122511 send = 0.000670
+[61] copy/comp = 0.120002 copy = 0.026577 compute = 0.221469 twid = 0.139622 send = 0.000779
+[47] copy/comp = 0.135468 copy = 0.027265 compute = 0.201265 twid = 0.134844 send = 0.000782
+[62] copy/comp = 0.125198 copy = 0.027698 compute = 0.221238 twid = 0.139816 send = 0.000605
+[63] copy/comp = 0.116937 copy = 0.025718 compute = 0.219934 twid = 0.139889 send = 0.000745
+End of program

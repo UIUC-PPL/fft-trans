@@ -1,0 +1,75 @@
+<Nov 12 04:07:52.739570> SCHED_IF (Info) : scheduler library loaded
+<Nov 12 04:07:53.222692> SCHED_IF (Info) : job information record created: id=9536
+<Nov 12 04:07:53.633926> SCHED_IF (Info) : scheduler job id is 447061
+<Nov 12 04:07:53.641752> FE_MPI (Info) : Scheduler interface library loaded
+<Nov 12 04:07:53.641833> FE_MPI (Info) : Collecting arguments from external scheduler
+<Nov 12 04:07:53.762989> FE_MPI (Info) : Scheduler interface library loaded from 'no description provided'
+<Nov 12 04:07:53.763442> FE_MPI (Info) : initialize() - using jobname '' provided by scheduler interface
+<Nov 12 04:07:53.768163> FE_MPI (Info) : Invoking mpirun backend
+<Nov 12 04:07:53.789874> FE_MPI (Info) : connectToServer() - Handshake successful
+<Nov 12 04:07:53.983466> BRIDGE (Info) : rm_set_serial() - The machine serial number (alias) is BGP
+<Nov 12 04:07:54.027445> FE_MPI (Info) : Preparing partition
+<Nov 12 04:07:54.066884> BE_MPI (Info) : Examining specified partition
+<Nov 12 04:07:55.789985> BE_MPI (Info) : Checking partition CHR-R00-M1-N04-64 initial state ...
+<Nov 12 04:07:55.790076> BE_MPI (Info) : Partition CHR-R00-M1-N04-64 initial state = FREE ('F')
+<Nov 12 04:07:55.790106> BE_MPI (Info) : Checking partition owner...
+<Nov 12 04:07:55.791951> BE_MPI (Info) : Setting new owner
+<Nov 12 04:07:55.841027> BE_MPI (Info) : Initiating boot of the partition
+<Nov 12 04:07:56.130239> BE_MPI (Info) : Waiting for partition CHR-R00-M1-N04-64 to boot...
+<Nov 12 04:09:21.321045> BE_MPI (Info) : Partition is ready
+<Nov 12 04:09:21.321188> BE_MPI (Info) : Done preparing partition
+<Nov 12 04:09:21.357772> FE_MPI (Info) : Adding job
+<Nov 12 04:09:21.358612> BE_MPI (Info) : Adding job to database...
+<Nov 12 04:09:21.423951> FE_MPI (Info) : Job added with the following id: 5947
+<Nov 12 04:09:21.424280> FE_MPI (Info) : Starting job 5947
+<Nov 12 04:09:21.527846> FE_MPI (Info) : Waiting for job to terminate
+<Nov 12 04:09:24.132611> BE_MPI (Info) : IO - Threads initialized
+<Nov 12 04:09:24.152229> BE_MPI (Info) : I/O input runner thread terminated
+------------- Processor 169 Exiting: Called CmiAbort ------------
+{snd:7,rcv:2} Reason: Could not malloc()--are we out of memory? (used: 504.767MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 165 Exiting: Called CmiAbort ------------
+{snd:7,rcv:2} Reason: Could not malloc()--are we out of memory? (used: 507.389MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 0 Exiting: Called CmiAbort ------------
+{snd:3,rcv:5} Reason: Could not malloc()--are we out of memory? (used: 497.460MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 1 Exiting: Called CmiAbort ------------
+{snd:3,rcv:7} Reason: Could not malloc()--are we out of memory? (used: 512.928MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 3 Exiting: Called CmiAbort ------------
+{snd:3,rcv:6} Reason: Could not malloc()--are we out of memory? (used: 496.393MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 2 Exiting: Called CmiAbort ------------
+{snd:3,rcv:7} Reason: Could not malloc()--are we out of memory? (used: 512.141MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 68 Exiting: Called CmiAbort ------------
+{snd:7,rcv:5} Reason: Could not malloc()--are we out of memory? (used: 486.688MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 128 Exiting: Called CmiAbort ------------
+{snd:1,rcv:1} Reason: Could not malloc()--are we out of memory? (used: 489.852MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 64 Exiting: Called CmiAbort ------------
+{snd:1,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 478.041MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+------------- Processor 65 Exiting: Called CmiAbort ------------
+{snd:3,rcv:0} Reason: Could not malloc()--are we out of memory? (used: 485.376MB)
+fft1d256: machine.c:889: CmiAbort: Assertion `0' failed.
+<Nov 12 04:09:44.200949> BE_MPI (Info) : I/O output runner thread terminated
+<Nov 12 04:09:44.220750> BE_MPI (Info) : Job 5947 switched to state TERMINATED ('T')
+<Nov 12 04:09:44.220823> BE_MPI (Info) : Job successfully terminated - TERMINATED ('T')
+<Nov 12 04:09:44.267312> FE_MPI (Info) : Job terminated normally
+<Nov 12 04:09:44.267401> FE_MPI (Info) : exit status = (134)
+<Nov 12 04:09:44.267697> BE_MPI (Info) : Starting cleanup sequence
+<Nov 12 04:09:44.267765> BE_MPI (Info) : cleanupDatabase() - job already terminated / hasn't been added
+<Nov 12 04:09:44.270291> BE_MPI (ERROR): The error message in the job record is as follows:
+<Nov 12 04:09:44.270334> BE_MPI (ERROR):   "killed with signal 6"
+<Nov 12 04:09:44.273600> BE_MPI (Info) : Destroying partition CHR-R00-M1-N04-64
+<Nov 12 04:10:14.363745> BE_MPI (Info) : Partition CHR-R00-M1-N04-64 switched to state FREE ('F')
+<Nov 12 04:10:14.709659> FE_MPI (Info) : ==   FE completed   ==
+<Nov 12 04:10:14.709781> FE_MPI (Info) : == Exit status:   0 ==
+<Nov 12 04:10:14.709873> SCHED_IF (Info) : mpirun result code: 0
+<Nov 12 04:10:14.711666> SCHED_IF (Info) : job result code: 134
+<Nov 12 04:10:14.712790> SCHED_IF (Info) : boot failure: False
+<Nov 12 04:10:14.724878> SCHED_IF (Info) : resources associated with partition CHR-R00-M1-N04-64 have been released
+<Nov 12 04:10:14.726045> SCHED_IF (Info) : scheduler library unloaded

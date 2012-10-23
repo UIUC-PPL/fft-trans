@@ -1,0 +1,50 @@
+<Oct 24 03:16:07.069229> SCHED_IF (Info) : scheduler library loaded
+<Oct 24 03:16:07.356547> SCHED_IF (Info) : job information record created: id=289983
+<Oct 24 03:16:07.584064> SCHED_IF (Info) : scheduler job id is 424789
+<Oct 24 03:16:07.592041> FE_MPI (Info) : Scheduler interface library loaded
+<Oct 24 03:16:07.592090> FE_MPI (Info) : Collecting arguments from external scheduler
+<Oct 24 03:16:07.664441> FE_MPI (Info) : Scheduler interface library loaded from 'no description provided'
+<Oct 24 03:16:07.664813> FE_MPI (Info) : initialize() - using jobname '' provided by scheduler interface
+<Oct 24 03:16:07.665143> FE_MPI (Info) : Invoking mpirun backend
+<Oct 24 03:16:07.689208> FE_MPI (Info) : connectToServer() - Handshake successful
+<Oct 24 03:16:07.869043> BRIDGE (Info) : rm_set_serial() - The machine serial number (alias) is BGP
+<Oct 24 03:16:07.909607> FE_MPI (Info) : Preparing partition
+<Oct 24 03:16:07.954303> BE_MPI (Info) : Examining specified partition
+<Oct 24 03:16:09.122023> BE_MPI (Info) : Checking partition ANL-R36-R37-2048 initial state ...
+<Oct 24 03:16:09.122093> BE_MPI (Info) : Partition ANL-R36-R37-2048 initial state = FREE ('F')
+<Oct 24 03:16:09.122116> BE_MPI (Info) : Checking partition owner...
+<Oct 24 03:16:09.131578> BE_MPI (Info) : Setting new owner
+<Oct 24 03:16:09.148009> BE_MPI (Info) : Initiating boot of the partition
+<Oct 24 03:16:09.511188> BE_MPI (Info) : Waiting for partition ANL-R36-R37-2048 to boot...
+<Oct 24 03:18:49.984023> BE_MPI (Info) : Partition is ready
+<Oct 24 03:18:49.984162> BE_MPI (Info) : Done preparing partition
+<Oct 24 03:18:50.021246> FE_MPI (Info) : Adding job
+<Oct 24 03:18:50.022270> BE_MPI (Info) : Adding job to database...
+<Oct 24 03:18:50.098931> FE_MPI (Info) : Job added with the following id: 2268741
+<Oct 24 03:18:50.099225> FE_MPI (Info) : Starting job 2268741
+<Oct 24 03:18:50.211398> FE_MPI (Info) : Waiting for job to terminate
+<Oct 24 03:18:52.664844> BE_MPI (Info) : IO - Threads initialized
+<Oct 24 03:18:52.682371> BE_MPI (Info) : I/O input runner thread terminated
+STOP 1
+STOP 1
+<Oct 24 03:19:27.913215> BE_MPI (Info) : I/O output runner thread terminated
+<Oct 24 03:19:27.956109> BE_MPI (Info) : Job 2268741 switched to state TERMINATED ('T')
+<Oct 24 03:19:27.956156> BE_MPI (Info) : Job successfully terminated - TERMINATED ('T')
+<Oct 24 03:19:28.002415> FE_MPI (Info) : Job terminated normally
+<Oct 24 03:19:28.002524> FE_MPI (Info) : exit status = (1)
+<Oct 24 03:19:28.002707> BE_MPI (Info) : Starting cleanup sequence
+<Oct 24 03:19:28.002828> BE_MPI (Info) : cleanupDatabase() - job already terminated / hasn't been added
+<Oct 24 03:19:28.015492> BE_MPI (ERROR): The error message in the job record is as follows:
+<Oct 24 03:19:28.015537> BE_MPI (ERROR):   "killed by exit(1) on node 3059"
+<Oct 24 03:19:28.038228> BE_MPI (ERROR): print_job_errtext() - Job 2268741 had 1 RAS event
+<Oct 24 03:19:28.038272> BE_MPI (ERROR): print_job_errtext() - last event: APPL_0A2B  A DMA unit reception FIFO is full.  Automatic recovery occurs for this event, but performance might be improved by increasing the FIFO size (via environment variable DCMF_RECFIFO=size-in-bytes) or by checking the DMA FIFOs more often.  Additional details:  1) torus location is (0,7,21).  2) Packet PID is 3.  3) rFIFO bit mask is 0b00000100.  4) Current fifo size is 8388608 bytes.
+<Oct 24 03:19:28.038349> BE_MPI (ERROR): print_job_errtext() - Check the Navigator's job history for complete details
+<Oct 24 03:19:28.038385> BE_MPI (Info) : Destroying partition ANL-R36-R37-2048
+<Oct 24 03:20:03.236072> BE_MPI (Info) : Partition ANL-R36-R37-2048 switched to state FREE ('F')
+<Oct 24 03:20:03.480001> FE_MPI (Info) : ==   FE completed   ==
+<Oct 24 03:20:03.480117> FE_MPI (Info) : == Exit status:   0 ==
+<Oct 24 03:20:03.480195> SCHED_IF (Info) : mpirun result code: 0
+<Oct 24 03:20:03.482084> SCHED_IF (Info) : job result code: 1
+<Oct 24 03:20:03.483193> SCHED_IF (Info) : boot failure: False
+<Oct 24 03:20:03.495699> SCHED_IF (Info) : resources associated with partition ANL-R36-R37-2048 have been released
+<Oct 24 03:20:03.497776> SCHED_IF (Info) : scheduler library unloaded

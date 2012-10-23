@@ -1,0 +1,13 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-631-gd27dc40
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 1 unique compute nodes (4-way SMP).
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+FFT on 4096 elements with 4 chares took 7.983270 time at 0.252186 GFlop/s
+[0] copy/comp = 0.104412 copy = 0.288141 compute = 2.759663 twid = 1.502252 send = 0.000118
+[1] copy/comp = 0.089168 copy = 0.288037 compute = 3.230288 twid = 1.883281 send = 0.000099
+[2] copy/comp = 0.098129 copy = 0.349476 compute = 3.561383 twid = 2.280527 send = 0.000149
+[3] copy/comp = 0.406240 copy = 1.412813 compute = 3.477780 twid = 2.440458 send = 0.000145
+End of program

@@ -1,0 +1,25 @@
+Charm++> Running on Non-smp mode
+Converse/Charm++ Commit ID: v6.3.0-631-gd27dc40
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+Charm++> Running on 1 unique compute nodes (4-way SMP).
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+FFT on 4096 elements with 16 chares took 8.091223 time at 0.248821 GFlop/s
+[0] copy/comp = 0.148456 copy = 0.163681 compute = 1.102556 twid = 0.346679 send = 0.000287
+[1] copy/comp = 0.096500 copy = 0.076314 compute = 0.790821 twid = 0.419468 send = 0.000172
+[4] copy/comp = 0.142963 copy = 0.161900 compute = 1.132467 twid = 0.429722 send = 0.000240
+[2] copy/comp = 0.108513 copy = 0.076716 compute = 0.706978 twid = 0.438961 send = 0.000169
+[8] copy/comp = 0.073148 copy = 0.076285 compute = 1.042885 twid = 0.514958 send = 0.000172
+[12] copy/comp = 0.125672 copy = 0.104510 compute = 0.831613 twid = 0.565443 send = 0.000173
+[5] copy/comp = 0.091495 copy = 0.076851 compute = 0.839943 twid = 0.491645 send = 0.000173
+[3] copy/comp = 0.105259 copy = 0.076955 compute = 0.731102 twid = 0.457239 send = 0.000171
+[9] copy/comp = 0.095484 copy = 0.077237 compute = 0.808898 twid = 0.539485 send = 0.000175
+[6] copy/comp = 0.102431 copy = 0.077256 compute = 0.754231 twid = 0.488195 send = 0.000169
+[13] copy/comp = 0.091366 copy = 0.077050 compute = 0.843314 twid = 0.576283 send = 0.000170
+[10] copy/comp = 0.206937 copy = 0.216464 compute = 1.046036 twid = 0.544954 send = 0.000249
+[7] copy/comp = 0.200461 copy = 0.188694 compute = 0.941300 twid = 0.676593 send = 0.000579
+[14] copy/comp = 0.338337 copy = 0.320663 compute = 0.947764 twid = 0.592864 send = 0.000612
+[11] copy/comp = 0.098232 copy = 0.127622 compute = 1.299194 twid = 0.936738 send = 0.000212
+[15] copy/comp = 0.153984 copy = 0.275763 compute = 1.790861 twid = 0.903214 send = 0.000374
+End of program
