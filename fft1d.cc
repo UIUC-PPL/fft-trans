@@ -27,7 +27,7 @@ struct fftBuf {
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ uint64_t N;
-/*readonly*/ CProxy_GroupMeshStreamer<fftBuf> aggregator;
+/*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
 struct Main : public CBase_Main {
   double start;
@@ -53,7 +53,7 @@ struct Main : public CBase_Main {
     CkPrintf("BUFSIZE = %d KB\nTOTALBUFSIZE = %d KB\n", BUFSIZE*16/1024, TOTALBUFSIZE);
     int NUM_MESSAGES_BUF = TOTALBUFSIZE/4/(BUFSIZE*16/1024);
     CkPrintf("NUM_MESSAGES_BUF = %d\nTotal Buf Size = %d KB\n", NUM_MESSAGES_BUF, NUM_MESSAGES_BUF*BUFSIZE*16/1024*4);
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUF, 4, dims, fftProxy);
+    aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(NUM_MESSAGES_BUF, 4, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -79,13 +79,13 @@ struct Main : public CBase_Main {
 
 #define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
 
-struct fft : public MeshStreamerGroupClient<fftBuf> {
+struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
 
   int iteration, count;
   uint64_t n;
   fftw_plan p1;
-  fftBuf *buf;
+  fftw_complex *buf;
   fftw_complex *in, *out;
   bool validating;
 
@@ -100,31 +100,33 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     srand48(CkMyPe());
     for(int i = 0; i < n; i++) SET_VALUES(in[i], drand48(), drand48());
 
-    buf = new fftBuf();
-    buf->source = CkMyPe();
+    buf = new fftw_complex[BUFSIZE];
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
   void initStreamer() {
-    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
+    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
     for(int i = 0; i < numChares; i++) {
       for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(buf->data[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(buf[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*buf, i);
+      ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->insertData(buf, BUFSIZE, i);
     }
-    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
+    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->done();
   }
 
-  void applyTranspose(fftBuf &m) {
+  void process(const fftw_complex &m) {}
+
+  void applyTranspose(fftw_complex *data, int numItems, int src) {
+    CkAssert(numItems==BUFSIZE);
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++)
-        SET_VALUES(out[m.source*N/numChares+(i*N+j)], m.data[l][0], m.data[l++][1]);
+        SET_VALUES(out[src*N/numChares+(i*N+j)], data[l][0], data[l++][1]);
   }
 
   void twiddle(double sign) {
