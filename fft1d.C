@@ -3,7 +3,7 @@
 
 #define N2 100
 #define NCHARE 2
-#define BUFSIZE N2*N2/NCHARE/NCHARE
+#define BUFSIZE N2/NCHARE*N2/NCHARE
 
 struct fftBuf {
   int iter;
@@ -38,8 +38,8 @@ struct Main : public CBase_Main {
     delete m;
 
     TopoManager tmgr; // get dimensions for software routing
-    int dims[3] = {tmgr.getDimNX()*tmgr.getDimNT(), tmgr.getDimNY(), tmgr.getDimNZ()};
-    CkPrintf("Running on NX %d NY %d NZ %d\n", dims[0], dims[1], dims[2]);
+    int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
+    CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
     mainProxy = thisProxy;
 
@@ -48,7 +48,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(3, dims, fftProxy, numChares);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(64, 4, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -111,7 +111,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   }
 
   void initStreamer() {
-    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkCallback::ignore), std::numeric_limits<int>::min(), false);
+    ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStream(), thisProxy), std::numeric_limits<int>::min(), false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {

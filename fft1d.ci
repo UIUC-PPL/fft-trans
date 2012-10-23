@@ -21,6 +21,7 @@ mainmodule fft1d {
     entry void startTranspose();
     entry void processData(fftMsg *m);
     entry void initValidation();
+    entry void doneStream();
 
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
@@ -44,6 +45,8 @@ mainmodule fft1d {
           if(iteration == 0)
             twiddle(validating ? 1 : -1);
         }
+
+	when doneStream() {}
       }
 
       atomic {
