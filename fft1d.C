@@ -83,7 +83,7 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   int iteration, count;
   uint64_t n;
   fftw_plan p1;
-  fftBuf *msg;
+  fftBuf *buf;
   fftw_complex *in, *out;
   bool validating;
 
@@ -102,8 +102,8 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
     srand48(CkMyPe());
     for(int i = 0; i < n; i++) in[i] = {drand48(), drand48()};
 
-    msg = new fftBuf;
-    msg->source = CkMyPe();
+    buf = new fftBuf();
+    buf->source = CkMyPe();
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
@@ -116,9 +116,9 @@ struct fft : public MeshStreamerGroupClient<fftBuf> {
   void sendTranspose(fftw_complex *src_buf) {
     for(int i = 0; i < numChares; i++) {
       for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(msg->data[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+        memcpy(buf->data[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*msg, i);
+      ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->insertData(*buf, i);
     }
     ((GroupMeshStreamer<fftBuf> *)CkLocalBranch(aggregator))->done();
   }
