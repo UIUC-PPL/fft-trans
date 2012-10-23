@@ -8,12 +8,10 @@
 #define TOTALBUFSIZE 16384
 
 struct fftBuf {
-  int iter;
   int source;
   fftw_complex data[BUFSIZE];
 
   void pup(PUP::er &p) {
-    p | iter;
     p | source;
     PUParray(p,(double*)data,BUFSIZE*2);
   }
