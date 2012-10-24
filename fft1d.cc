@@ -61,9 +61,8 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
 
-    int length[] = {(int)N};
-    p1 = fftw_plan_many_dft(1, length, n, out, length, 1, N,
-                            out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
+    p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
+                            out, (int*)&N, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
     srand48(CkMyPe());
     for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());

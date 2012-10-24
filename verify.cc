@@ -5,9 +5,8 @@ void fft::initValidation() {
 
   validating = true;
   fftw_destroy_plan(p1);
-  int length[] = {(int)N};
-  p1 = fftw_plan_many_dft(1, length, n, out, length, 1, N,
-                          out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+  p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
+                          out, (int*)&N, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
   doFFT(CkCallback(CkCallback::ignore));
 }
