@@ -42,10 +42,10 @@ mainmodule fft1d {
 
       serial { contribute(doneCB); }
     };
-   };
+  };
 
-   message MeshStreamerMessage<ChunkDataItem>;
-   group MeshStreamerGroupClient<fftw_complex>;
-   group GroupChunkMeshStreamer<fftw_complex>;
-   group MeshStreamer<ChunkDataItem>;
+  message MeshStreamerMessage<ChunkDataItem>;
+  group MeshStreamerGroupClient<fftw_complex>;
+  group GroupChunkMeshStreamer<fftw_complex>;
+  group MeshStreamer<ChunkDataItem>;
 };
