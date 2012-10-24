@@ -26,7 +26,8 @@ struct Main : public CBase_Main {
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+    CProxy_fftData data = CProxy_fftData::ckNew(N);
+    fftProxy = CProxy_fft::ckNew(N, data, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
     streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
@@ -56,7 +57,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
 
-  fft(uint64_t N, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
+  fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
 
@@ -112,6 +113,21 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   void initValidation();
   void calcResidual();
   void printResidual(double residual);
+};
+
+struct fftData : public CBase_fftData {
+  fftw_complex *in, *out;
+
+  fftData(uint64_t N) {
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N*N/CkNumPes());
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N*N/CkNumPes());
+    srand48(CkMyPe());
+    for(int i = 0; i < N*N/CkNumPes(); i++) SET_VALUES(in[i], drand48(), drand48());
+  }
+
+  fftw_complex* getIn(int size) { return in; }
+  fftw_complex* getOut(int size) { return out; }
+  void swap() { fftw_complex *tmp; tmp = in; in = out; out = tmp; };
 };
 
 #include "verify.cc"
