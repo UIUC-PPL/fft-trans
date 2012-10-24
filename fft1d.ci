@@ -21,21 +21,19 @@ mainmodule fft1d {
 
     entry void doFFT() {
       for(iteration = 0; iteration < 3; ++iteration) {
-        serial "transpose" {
+        serial {
           if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
           initStreamer();
         }
 
-        when streamerReady() serial {
-          sendTranspose(iteration == 0 ? in : out);
-        }
+        when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }
 
         for(count = 0; count < numChares; ++count)
-          when receiveArray(fftw_complex data[numItems], int numItems, int src) {
-            serial {applyTranspose(data, numItems, src);}
+          when receiveArray(fftw_complex data[numItems], int numItems, int src) serial {
+            applyTranspose(data, numItems, src);
           }
 
-        if (iteration < 2) serial "compute" {
+        if (iteration < 2) serial {
           fftw_execute(p1);
           if(iteration == 0) twiddle(validating ? 1 : -1);
         }
