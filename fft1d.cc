@@ -8,7 +8,6 @@ PUPbytes(fftw_complex);
 #define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
 
-/*readonly*/ int numChares;
 /*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
 struct Main : public CBase_Main {
@@ -17,7 +16,6 @@ struct Main : public CBase_Main {
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
-    numChares = CkNumPes();
     N = atol(m->argv[1]);
     delete m;
 
@@ -25,8 +23,8 @@ struct Main : public CBase_Main {
     int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
     CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
-    if (N % numChares != 0)
-      CkAbort("numChares not a factor of N\n");
+    if (N % CkNumPes() != 0)
+      CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew(N, thisProxy);
@@ -42,8 +40,8 @@ struct Main : public CBase_Main {
   void FFTDone() {
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
-    CkPrintf("chares: %d\ncores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
-             numChares, CkNumPes(), N*N, time, gflops);
+    CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
+             CkNumPes(), N*N, time, gflops);
 
     fftProxy.initValidation();
   }
@@ -82,7 +80,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   }
 
   void sendTranspose(fftw_complex *src_buf) {
-    for(int i = 0; i < numChares; i++) {
+    for(int i = 0; i < CkNumPes(); i++) {
       for(int j = 0, l = 0; j < n; j++)
         memcpy(buf[(l++)*n], src_buf[i*n+j*N], sizeof(fftw_complex)*n);
 

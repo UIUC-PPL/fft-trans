@@ -1,6 +1,5 @@
 mainmodule fft1d {
 
-  readonly int numChares;
   readonly CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
   mainchare Main {
@@ -26,7 +25,7 @@ mainmodule fft1d {
 
         when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }
 
-        for(count = 0; count < numChares; ++count)
+        for(count = 0; count < CkNumPes(); ++count)
           when receiveArray(fftw_complex data[numItems], int numItems, int src) serial {
             applyTranspose(data, numItems, src);
           }
@@ -44,7 +43,7 @@ mainmodule fft1d {
           contribute(doneCB);
         else {
           char filename[80];
-          sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());
+          sprintf(filename, "%d-%ld.dump%d", CkNumPes(), N, CkMyPe());
           writeCommFile(n*N, in, filename);
           calcResidual();
         }
