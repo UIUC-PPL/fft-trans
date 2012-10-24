@@ -26,7 +26,7 @@ struct Main : public CBase_Main {
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, thisProxy);
+    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,FFTReady), thisProxy));
     streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
@@ -56,7 +56,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
 
-  fft(uint64_t N, int sign, CProxy_Main mainProxy) : n(N/CkNumPes()), N(N), sign(sign) {
+  fft(uint64_t N, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
 
@@ -68,8 +68,8 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
 
     buf = new fftw_complex[n*n];
 
-    // Reduction to the mainchare to signal that initialization is complete
-    contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
+    // Reduction to signal that initialization is complete
+    contribute(startCB);
   }
 
   void initStreamer() {
