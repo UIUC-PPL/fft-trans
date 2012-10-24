@@ -88,7 +88,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   }
 
   void initStreamer() {
-    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
+    aggregator.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
@@ -96,9 +96,9 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
       for(int j = 0, l = 0; j < N/numChares; j++)
         memcpy(buf[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->insertData(buf, n/numChares, i);
+      aggregator.ckLocalBranch()->insertData(buf, n/numChares, i);
     }
-    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->done();
+    aggregator.ckLocalBranch()->done();
   }
 
   void process(const fftw_complex &m) {}
