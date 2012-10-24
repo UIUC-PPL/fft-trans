@@ -104,7 +104,6 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   void process(const fftw_complex &m) {}
 
   void applyTranspose(fftw_complex *data, int numItems, int src) {
-    CkAssert(numItems==BUFSIZE);
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++)
         SET_VALUES(out[src*N/numChares+(i*N+j)], data[l][0], data[l++][1]);
