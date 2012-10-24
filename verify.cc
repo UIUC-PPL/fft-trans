@@ -1,3 +1,5 @@
+#include <limits>
+
 void fft::initValidation() {
   memcpy(in, out, sizeof(fftw_complex) * n);
 
@@ -7,7 +9,7 @@ void fft::initValidation() {
   p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                           out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
-  contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
+  doFFT(CkCallback(CkCallback::ignore));
 }
 
 void fft::calcResidual() {
@@ -24,7 +26,11 @@ void fft::calcResidual() {
 
   double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
 
-  CkCallback cb(CkReductionTarget(Main, printResidual), mainProxy);
+  CkCallback cb(CkReductionTarget(fft, printResidual), thisProxy[0]);
   contribute(sizeof(double), &r, CkReduction::max_double, cb);
 }
 
+void fft::printResidual(double r) {
+  CkPrintf("residual = %g\n", r);
+  CkExit();
+}

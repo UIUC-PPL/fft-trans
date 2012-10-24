@@ -1,55 +1,44 @@
 #include <fftw3_essl.h>
-#include <limits>
-#include "charm++.h"
-
-#define N2 65536ULL
-#define NCHARE 1024ULL
-#define BUFSIZE N2/NCHARE*N2/NCHARE
-
-PUPbytes(fftw_complex);
-
 #include "fileio.h"
 #include "TopoManager.h"
 #include "NDMeshStreamer.h"
 #include "fft1d.decl.h"
+PUPbytes(fftw_complex);
 
+#define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
 
-/*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
-/*readonly*/ uint64_t N;
 /*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
 struct Main : public CBase_Main {
   double start;
+  uint64_t N;
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
     numChares = CkNumPes();
-    N = N2;
-    int NUM_BUF = atoi(m->argv[1]);
+    N = atol(m->argv[1]);
+    int NUM_BUF = atoi(m->argv[2]);
     delete m;
 
     TopoManager tmgr; // get dimensions for software routing
     int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
     CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
-    mainProxy = thisProxy;
-
     if (N % numChares != 0)
       CkAbort("numChares not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew();
-
     CkPrintf("NUMBUF = %d\n", NUM_BUF);
+    fftProxy = CProxy_fft::ckNew(N, thisProxy);
     aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(4, dims, fftProxy, NUM_BUF);
   }
 
   void FFTReady() {
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
-    fftProxy.doFFT();
+    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,FFTDone), thisProxy));
   }
 
   void FFTDone() {
@@ -60,11 +49,6 @@ struct Main : public CBase_Main {
 
     fftProxy.initValidation();
   }
-
-  void printResidual(double r) {
-    CkPrintf("residual = %g\n", r);
-    CkExit();
-  }
 };
 
 #define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
@@ -73,13 +57,12 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
 
   int iteration, count;
-  uint64_t n;
+  uint64_t n, N;
   fftw_plan p1;
-  fftw_complex *buf;
-  fftw_complex *in, *out;
+  fftw_complex *in, *out, *buf;
   bool validating;
 
-  fft() : validating(false), n(N*N/numChares) {
+  fft(uint64_t N, CProxy_Main mainProxy) : validating(false), n(N*N/CkNumPes()), N(N) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
@@ -90,14 +73,14 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     srand48(CkMyPe());
     for(int i = 0; i < n; i++) SET_VALUES(in[i], drand48(), drand48());
 
-    buf = new fftw_complex[BUFSIZE];
+    buf = new fftw_complex[n/numChares];
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
   }
 
   void initStreamer() {
-    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), std::numeric_limits<int>::min(), false);
+    aggregator.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
@@ -105,15 +88,12 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
       for(int j = 0, l = 0; j < N/numChares; j++)
         memcpy(buf[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->insertData(buf, BUFSIZE, i);
+      aggregator.ckLocalBranch()->insertData(buf, n/numChares, i);
     }
-    ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->done();
+    aggregator.ckLocalBranch()->done();
   }
 
-  void process(const fftw_complex &m) {}
-
   void applyTranspose(fftw_complex *data, int numItems, int src) {
-    CkAssert(numItems==BUFSIZE);
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++)
         SET_VALUES(out[src*N/numChares+(i*N+j)], data[l][0], data[l++][1]);
@@ -138,6 +118,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
 
   void initValidation();
   void calcResidual();
+  void printResidual(double residual);
 };
 
 #include "verify.cc"
