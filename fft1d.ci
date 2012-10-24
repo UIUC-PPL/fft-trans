@@ -12,9 +12,11 @@ mainmodule fft1d {
     entry fft(uint64_t N, int sign, CProxy_Main mainProxy);
     entry void streamerReady();
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
+    entry void doneStreaming();
+
     entry void initValidation();
     entry [reductiontarget] void printResidual(double residual);
-    entry void doneStreaming();
+    entry void calcResidual();
 
     entry void doFFT(CkCallback doneCB) {
       for(iteration = 0; iteration < 3; ++iteration) {
@@ -38,7 +40,7 @@ mainmodule fft1d {
         when doneStreaming() {}
       }
 
-      serial { validating ? calcResidual() : contribute(doneCB); }
+      serial { contribute(doneCB); }
     };
    };
 

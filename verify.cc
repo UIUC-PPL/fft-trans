@@ -8,7 +8,7 @@ void fft::initValidation() {
   p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
                           out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
 
-  doFFT(CkCallback(CkCallback::ignore));
+  doFFT(CkCallback(CkIndex_fft::calcResidual(), thisProxy));
 }
 
 void fft::calcResidual() {
