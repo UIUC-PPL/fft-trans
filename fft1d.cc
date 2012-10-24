@@ -99,8 +99,6 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     aggregator.ckLocalBranch()->done();
   }
 
-  void process(const fftw_complex &m) {}
-
   void applyTranspose(fftw_complex *data, int numItems, int src) {
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++)
