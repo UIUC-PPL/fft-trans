@@ -26,17 +26,17 @@ struct Main : public CBase_Main {
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,FFTReady), thisProxy));
+    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
     streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
-  void FFTReady() {
+  void startTimer() {
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
-    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,FFTDone), thisProxy));
+    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy));
   }
 
-  void FFTDone() {
+  void stopTimer() {
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
     CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
