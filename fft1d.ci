@@ -38,16 +38,7 @@ mainmodule fft1d {
         when doneStreaming() {}
       }
 
-      serial {
-        if(!validating)
-          contribute(doneCB);
-        else {
-          char filename[80];
-          sprintf(filename, "%d-%ld.dump%d", CkNumPes(), N, CkMyPe());
-          writeCommFile(n*N, in, filename);
-          calcResidual();
-        }
-      }
+      serial { validating ? calcResidual() : contribute(doneCB); }
     };
    };
 
