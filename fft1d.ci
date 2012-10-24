@@ -1,8 +1,6 @@
 mainmodule fft1d {
 
-  readonly CProxy_Main mainProxy;
   readonly int numChares;
-  readonly uint64_t N;
   readonly CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
   mainchare Main {
@@ -12,14 +10,14 @@ mainmodule fft1d {
   };
 
   group fft : MeshStreamerGroupClient<fftw_complex> {
-    entry fft();
+    entry fft(uint64_t N, CProxy_Main mainProxy);
     entry void streamerReady();
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void initValidation();
     entry [reductiontarget] void printResidual(double residual);
     entry void doneStreaming();
 
-    entry void doFFT() {
+    entry void doFFT(CkCallback doneCB) {
       for(iteration = 0; iteration < 3; ++iteration) {
         serial {
           if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
@@ -43,7 +41,7 @@ mainmodule fft1d {
 
       serial {
         if(!validating)
-          contribute(CkCallback(CkReductionTarget(Main,FFTDone), mainProxy));
+          contribute(doneCB);
         else {
           char filename[80];
           sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());

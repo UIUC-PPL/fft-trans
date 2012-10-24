@@ -9,7 +9,7 @@ void fft::initValidation() {
   p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                           out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
-  contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
+  doFFT(CkCallback(CkCallback::ignore));
 }
 
 void fft::calcResidual() {

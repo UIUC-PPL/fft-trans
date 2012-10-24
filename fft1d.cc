@@ -8,13 +8,12 @@ PUPbytes(fftw_complex);
 #define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
 
-/*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
-/*readonly*/ uint64_t N;
 /*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
 struct Main : public CBase_Main {
   double start;
+  uint64_t N;
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
@@ -26,20 +25,18 @@ struct Main : public CBase_Main {
     int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
     CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
-    mainProxy = thisProxy;
-
     if (N % numChares != 0)
       CkAbort("numChares not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew();
+    fftProxy = CProxy_fft::ckNew(N, thisProxy);
     aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
   void FFTReady() {
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
-    fftProxy.doFFT();
+    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,FFTDone), thisProxy));
   }
 
   void FFTDone() {
@@ -58,12 +55,12 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
 
   int iteration, count;
-  uint64_t n;
+  uint64_t n, N;
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
   bool validating;
 
-  fft() : validating(false), n(N*N/numChares) {
+  fft(uint64_t N, CProxy_Main mainProxy) : validating(false), n(N*N/CkNumPes()), N(N) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
 
