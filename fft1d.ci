@@ -57,8 +57,7 @@ mainmodule fft1d {
    };
 
    message MeshStreamerMessage<ChunkDataItem>;
-   group MeshStreamerGroupClient<ChunkDataItem>;
-   group GroupMeshStreamer<ChunkDataItem>;
+   group MeshStreamerGroupClient<fftw_complex>;
    group GroupChunkMeshStreamer<fftw_complex>;
    group MeshStreamer<ChunkDataItem>;
 };

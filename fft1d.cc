@@ -7,15 +7,7 @@
 #define BUFSIZE N2/NCHARE*N2/NCHARE
 #define TOTALBUFSIZE 16384
 
-struct fftBuf {
-  int source;
-  fftw_complex data[BUFSIZE];
-
-  void pup(PUP::er &p) {
-    p | source;
-    PUParray(p,(double*)data,BUFSIZE*2);
-  }
-};
+PUPbytes(fftw_complex);
 
 #include "fileio.h"
 #include "TopoManager.h"
