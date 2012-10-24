@@ -26,7 +26,7 @@ struct Main : public CBase_Main {
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    fftProxy = CProxy_fft::ckNew(N, thisProxy);
+    fftProxy = CProxy_fft::ckNew(N, FFTW_FORWARD, thisProxy);
     streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
@@ -51,18 +51,17 @@ struct Main : public CBase_Main {
 struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
 
-  int iteration, count;
+  int iteration, count, sign;
   uint64_t n, N;
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
-  bool validating;
 
-  fft(uint64_t N, CProxy_Main mainProxy) : validating(false), n(N/CkNumPes()), N(N) {
+  fft(uint64_t N, int sign, CProxy_Main mainProxy) : n(N/CkNumPes()), N(N), sign(sign) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
 
     p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
-                            out, (int*)&N, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
+                            out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
 
     srand48(CkMyPe());
     for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());

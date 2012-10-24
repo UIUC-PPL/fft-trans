@@ -3,10 +3,10 @@
 void fft::initValidation() {
   memcpy(in, out, sizeof(fftw_complex) * n*N);
 
-  validating = true;
+  sign = (sign == FFTW_FORWARD) ? FFTW_BACKWARD : FFTW_FORWARD;
   fftw_destroy_plan(p1);
   p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
-                          out, (int*)&N, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
+                          out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
 
   doFFT(CkCallback(CkCallback::ignore));
 }
