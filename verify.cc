@@ -1,3 +1,5 @@
+#include <limits>
+
 void fft::initValidation() {
   memcpy(in, out, sizeof(fftw_complex) * n);
 
