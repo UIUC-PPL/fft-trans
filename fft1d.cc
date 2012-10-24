@@ -60,18 +60,18 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fftw_complex *in, *out, *buf;
   bool validating;
 
-  fft(uint64_t N, CProxy_Main mainProxy) : validating(false), n(N*N/CkNumPes()), N(N) {
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n);
+  fft(uint64_t N, CProxy_Main mainProxy) : validating(false), n(N/CkNumPes()), N(N) {
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
 
     int length[] = {(int)N};
-    p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+    p1 = fftw_plan_many_dft(1, length, n, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 
     srand48(CkMyPe());
-    for(int i = 0; i < n; i++) SET_VALUES(in[i], drand48(), drand48());
+    for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());
 
-    buf = new fftw_complex[n/numChares];
+    buf = new fftw_complex[n*n];
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
@@ -83,26 +83,26 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
 
   void sendTranspose(fftw_complex *src_buf) {
     for(int i = 0; i < numChares; i++) {
-      for(int j = 0, l = 0; j < N/numChares; j++)
-        memcpy(buf[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+      for(int j = 0, l = 0; j < n; j++)
+        memcpy(buf[(l++)*n], src_buf[i*n+j*N], sizeof(fftw_complex)*n);
 
-      aggregator.ckLocalBranch()->insertData(buf, n/numChares, i);
+      aggregator.ckLocalBranch()->insertData(buf, n*n, i);
     }
     aggregator.ckLocalBranch()->done();
   }
 
   void applyTranspose(fftw_complex *data, int numItems, int src) {
-    for(int j = 0, l = 0; j < N/numChares; j++)
-      for(int i = 0; i < N/numChares; i++)
-        SET_VALUES(out[src*N/numChares+(i*N+j)], data[l][0], data[l++][1]);
+    for(int j = 0, l = 0; j < n; j++)
+      for(int i = 0; i < n; i++)
+        SET_VALUES(out[src*n+(i*N+j)], data[l][0], data[l++][1]);
   }
 
   void twiddle(double sign) {
     double a, c, s, re, im;
 
-    for(int i = 0; i < N/numChares; i++)
+    for(int i = 0; i < n; i++)
       for(int j = 0; j < N; j++) {
-        a = sign * (TWOPI*(i+CkMyPe()*N/numChares)*j)/(N*N);
+        a = sign * (TWOPI*(i+CkMyPe()*n)*j)/(N*N);
         c = cos(a);
         s = sin(a);
 

@@ -1,12 +1,12 @@
 #include <limits>
 
 void fft::initValidation() {
-  memcpy(in, out, sizeof(fftw_complex) * n);
+  memcpy(in, out, sizeof(fftw_complex) * n*N);
 
   validating = true;
   fftw_destroy_plan(p1);
   int length[] = {(int)N};
-  p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
+  p1 = fftw_plan_many_dft(1, length, n, out, length, 1, N,
                           out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 
   doFFT(CkCallback(CkCallback::ignore));
@@ -16,7 +16,7 @@ void fft::calcResidual() {
   double infNorm = 0.0;
 
   srand48(CkMyPe());
-  for(int i = 0; i < n; i++) {
+  for(int i = 0; i < n*N; i++) {
     out[i][0] = out[i][0]/(N*N) - drand48();
     out[i][1] = out[i][1]/(N*N) - drand48();
 
