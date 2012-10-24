@@ -14,7 +14,7 @@ mainmodule fft1d {
 
   group fft : MeshStreamerGroupClient<fftw_complex> {
     entry fft();
-    entry void startTranspose();
+    entry void streamerReady();
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void initValidation();
     entry void doneStreaming();
@@ -26,7 +26,7 @@ mainmodule fft1d {
           initStreamer();
         }
 
-        when startTranspose() serial {
+        when streamerReady() serial {
           sendTranspose(iteration == 0 ? in : out);
         }
 

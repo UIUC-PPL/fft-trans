@@ -86,7 +86,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   }
 
   void initStreamer() {
-    aggregator.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::startTranspose(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
+    aggregator.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
