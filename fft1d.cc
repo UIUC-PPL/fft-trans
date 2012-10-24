@@ -1,19 +1,12 @@
 #include <fftw3.h>
 #include <limits>
-#include "charm++.h"
-
-#define N2 100
-#define NCHARE 2
-#define BUFSIZE N2/NCHARE*N2/NCHARE
-#define TOTALBUFSIZE 16384
-
-PUPbytes(fftw_complex);
-
 #include "fileio.h"
 #include "TopoManager.h"
 #include "NDMeshStreamer.h"
 #include "fft1d.decl.h"
+PUPbytes(fftw_complex);
 
+#define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
 
 /*readonly*/ CProxy_Main mainProxy;
@@ -27,7 +20,7 @@ struct Main : public CBase_Main {
 
   Main(CkArgMsg* m) {
     numChares = CkNumPes();
-    N = N2;
+    N = atol(m->argv[1]);
     delete m;
 
     TopoManager tmgr; // get dimensions for software routing
@@ -41,11 +34,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
-
-    CkPrintf("BUFSIZE = %d KB\nTOTALBUFSIZE = %d KB\n", BUFSIZE*16/1024, TOTALBUFSIZE);
-    int NUM_MESSAGES_BUF = TOTALBUFSIZE/4/(BUFSIZE*16/1024);
-    CkPrintf("NUM_MESSAGES_BUF = %d\nTotal Buf Size = %d KB\n", NUM_MESSAGES_BUF, NUM_MESSAGES_BUF*BUFSIZE*16/1024*4);
-    aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(NUM_MESSAGES_BUF, 4, dims, fftProxy);
+    aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -92,7 +81,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     srand48(CkMyPe());
     for(int i = 0; i < n; i++) SET_VALUES(in[i], drand48(), drand48());
 
-    buf = new fftw_complex[BUFSIZE];
+    buf = new fftw_complex[n/numChares];
 
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main,FFTReady), mainProxy));
@@ -107,7 +96,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
       for(int j = 0, l = 0; j < N/numChares; j++)
         memcpy(buf[(l++)*N/numChares], src_buf[i*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
 
-      ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->insertData(buf, BUFSIZE, i);
+      ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->insertData(buf, n/numChares, i);
     }
     ((GroupChunkMeshStreamer<fftw_complex> *)CkLocalBranch(aggregator))->done();
   }
