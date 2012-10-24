@@ -50,11 +50,6 @@ struct Main : public CBase_Main {
 
     fftProxy.initValidation();
   }
-
-  void printResidual(double r) {
-    CkPrintf("residual = %g\n", r);
-    CkExit();
-  }
 };
 
 #define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
@@ -124,6 +119,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
 
   void initValidation();
   void calcResidual();
+  void printResidual(double residual);
 };
 
 #include "verify.cc"

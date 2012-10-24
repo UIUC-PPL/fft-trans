@@ -9,7 +9,6 @@ mainmodule fft1d {
     entry Main(CkArgMsg *m);
     entry [reductiontarget] void FFTReady();
     entry [reductiontarget] void FFTDone();
-    entry [reductiontarget] void printResidual(double residual);
   };
 
   group fft : MeshStreamerGroupClient<fftw_complex> {
@@ -17,6 +16,7 @@ mainmodule fft1d {
     entry void streamerReady();
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void initValidation();
+    entry [reductiontarget] void printResidual(double residual);
     entry void doneStreaming();
 
     entry void doFFT() {

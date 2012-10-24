@@ -26,7 +26,11 @@ void fft::calcResidual() {
 
   double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
 
-  CkCallback cb(CkReductionTarget(Main, printResidual), mainProxy);
+  CkCallback cb(CkReductionTarget(fft, printResidual), thisProxy[0]);
   contribute(sizeof(double), &r, CkReduction::max_double, cb);
 }
 
+void fft::printResidual(double r) {
+  CkPrintf("residual = %g\n", r);
+  CkExit();
+}
