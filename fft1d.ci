@@ -1,6 +1,6 @@
 mainmodule fft1d {
 
-  readonly CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
+  readonly CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
 
   mainchare Main {
     entry Main(CkArgMsg *m);

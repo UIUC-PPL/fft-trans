@@ -7,7 +7,7 @@ PUPbytes(fftw_complex);
 #define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
 
-/*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
+/*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
 
 struct Main : public CBase_Main {
   double start;
@@ -27,7 +27,7 @@ struct Main : public CBase_Main {
 
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew(N, thisProxy);
-    aggregator = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
+    streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
   void FFTReady() {
@@ -75,7 +75,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   }
 
   void initStreamer() {
-    aggregator.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
+    streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
@@ -83,9 +83,9 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
       for(int j = 0, l = 0; j < n; j++)
         memcpy(buf[(l++)*n], src_buf[i*n+j*N], sizeof(fftw_complex)*n);
 
-      aggregator.ckLocalBranch()->insertData(buf, n*n, i);
+      streamer.ckLocalBranch()->insertData(buf, n*n, i);
     }
-    aggregator.ckLocalBranch()->done();
+    streamer.ckLocalBranch()->done();
   }
 
   void applyTranspose(fftw_complex *data, int numItems, int src) {
