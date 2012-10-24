@@ -3,7 +3,7 @@ mainmodule fft1d {
   readonly CProxy_Main mainProxy;
   readonly int numChares;
   readonly uint64_t N;
-  readonly CProxy_GroupMeshStreamer<fftBuf> aggregator;
+  readonly CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
 
   mainchare Main {
     entry Main(CkArgMsg *m);
@@ -12,10 +12,10 @@ mainmodule fft1d {
     entry [reductiontarget] void printResidual(double residual);
   };
 
-  group fft : MeshStreamerGroupClient<fftBuf> {
+  group fft : MeshStreamerGroupClient<fftw_complex> {
     entry fft();
     entry void startTranspose();
-    entry void process(const fftBuf& m);
+    entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void initValidation();
     entry void doneStreaming();
 
@@ -31,7 +31,9 @@ mainmodule fft1d {
         }
 
         for(count = 0; count < numChares; ++count)
-          when process(const fftBuf& m) serial {applyTranspose(m);}
+          when receiveArray(fftw_complex data[numItems], int numItems, int src) {
+            serial {applyTranspose(data, numItems, src);}
+          }
 
         if (iteration < 2) serial "compute" {
           fftw_execute(p1);
@@ -54,8 +56,8 @@ mainmodule fft1d {
     };
    };
 
-   message MeshStreamerMessage<fftBuf>;
-   group MeshStreamerGroupClient<fftBuf>;
-   group GroupMeshStreamer<fftBuf>;
-   group MeshStreamer<fftBuf>;
+   message MeshStreamerMessage<ChunkDataItem>;
+   group MeshStreamerGroupClient<fftw_complex>;
+   group GroupChunkMeshStreamer<fftw_complex>;
+   group MeshStreamer<ChunkDataItem>;
 };
