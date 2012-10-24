@@ -5,7 +5,6 @@
 #define N2 65536ULL
 #define NCHARE 1024ULL
 #define BUFSIZE N2/NCHARE*N2/NCHARE
-#define TOTALBUFSIZE 16384
 
 struct fftBuf {
   int source;
@@ -36,6 +35,7 @@ struct Main : public CBase_Main {
   Main(CkArgMsg* m) {
     numChares = CkNumPes();
     N = N2;
+    int NUM_BUF = atoi(m->argv[1]);
     delete m;
 
     TopoManager tmgr; // get dimensions for software routing
@@ -50,10 +50,8 @@ struct Main : public CBase_Main {
     // Construct an array of fft chares to do the calculation
     fftProxy = CProxy_fft::ckNew();
 
-    CkPrintf("BUFSIZE = %d KB\nTOTALBUFSIZE = %d KB\n", BUFSIZE*16/1024, TOTALBUFSIZE);
-    int NUM_MESSAGES_BUF = TOTALBUFSIZE/4/(BUFSIZE*16/1024);
-    CkPrintf("NUM_MESSAGES_BUF = %d\nTotal Buf Size = %d KB\n", NUM_MESSAGES_BUF, NUM_MESSAGES_BUF*BUFSIZE*16/1024*4);
-    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(NUM_MESSAGES_BUF, 4, dims, fftProxy);
+    CkPrintf("NUMBUF = %d\n", NUM_BUF);
+    aggregator = CProxy_GroupMeshStreamer<fftBuf>::ckNew(4, dims, fftProxy, NUM_BUF);
   }
 
   void FFTReady() {
