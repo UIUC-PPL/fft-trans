@@ -19,7 +19,7 @@ struct Main : public CBase_Main {
   double start;
   uint64_t N;
   CProxy_fft fftProxy;
-  CProxy_fftData data;
+  CProxy_fftData dataProxy;
   streamer_t streamer;
 
   Main(CkArgMsg* m) {
@@ -37,7 +37,7 @@ struct Main : public CBase_Main {
     int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
     CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
 
-    fftProxy = CProxy_fft::ckNew(N, data, sign, cb);
+    fftProxy = CProxy_fft::ckNew(N, dataProxy, sign, cb);
     streamer = streamer_t::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 };
