@@ -1,17 +1,6 @@
 #include <limits>
 
-void fft::initValidation() {
-  memcpy(in, out, sizeof(fftw_complex) * n*N);
-
-  sign = (sign == FFTW_FORWARD) ? FFTW_BACKWARD : FFTW_FORWARD;
-  fftw_destroy_plan(p1);
-  p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
-                          out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
-
-  doFFT(CkCallback(CkIndex_fft::calcResidual(), thisProxy));
-}
-
-void fft::calcResidual() {
+void fftData::calcResidual(CkCallback cb) {
   double infNorm = 0.0;
 
   srand48(CkMyPe());
@@ -25,11 +14,5 @@ void fft::calcResidual() {
 
   double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
 
-  CkCallback cb(CkReductionTarget(fft, printResidual), thisProxy[0]);
   contribute(sizeof(double), &r, CkReduction::max_double, cb);
-}
-
-void fft::printResidual(double r) {
-  CkPrintf("residual = %g\n", r);
-  CkExit();
 }

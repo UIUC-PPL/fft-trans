@@ -1,15 +1,39 @@
 mainmodule fft1d {
 
-  readonly CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
-
   mainchare Main {
     entry Main(CkArgMsg *m);
     entry [reductiontarget] void startTimer();
     entry [reductiontarget] void stopTimer();
+    entry [reductiontarget] void startValidate();
+    entry [reductiontarget] void validateDone();
+    entry [reductiontarget] void doneSwap();
+    entry [reductiontarget] void printResidual(double r);
+
+    entry void validate() {
+      serial {
+        data.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy));
+        fftProxy = CProxy_fft::ckNew(N, data, FFTW_BACKWARD, CkCallback(CkReductionTarget(Main,startValidate), thisProxy));
+        TopoManager tmgr; // get dimensions for software routing
+        int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
+        streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
+      }
+
+      when doneSwap(), startValidate() serial {
+        fftProxy.doFFT(CkCallback(CkReductionTarget(Main,validateDone), thisProxy), streamer);
+      }
+
+      when validateDone() serial {
+        data.calcResidual(CkCallback(CkReductionTarget(Main,printResidual), thisProxy));
+      }
+
+      when printResidual(double r) serial { CkPrintf("residual = %g\n", r); CkExit(); }
+    };
   };
 
   group fftData {
     entry fftData(uint64_t N);
+    entry void swap(CkCallback cb);
+    entry void calcResidual(CkCallback cb);
   };
 
   group fft : MeshStreamerGroupClient<fftw_complex> {
@@ -18,15 +42,11 @@ mainmodule fft1d {
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void doneStreaming();
 
-    entry void initValidation();
-    entry [reductiontarget] void printResidual(double residual);
-    entry void calcResidual();
-
-    entry void doFFT(CkCallback doneCB) {
+    entry void doFFT(CkCallback doneCB, CProxy_GroupChunkMeshStreamer<fftw_complex> streamer) {
       for(iteration = 0; iteration < 3; ++iteration) {
         serial {
           if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
-          initStreamer();
+          initStreamer(streamer);
         }
 
         when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }

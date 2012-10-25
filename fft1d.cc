@@ -6,13 +6,34 @@ PUPbytes(fftw_complex);
 
 #define BUFSIZE 8192 //tunable parameter per machine
 #define TWOPI 6.283185307179586
+#define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
 
-/*readonly*/ CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
+struct fftData : public CBase_fftData {
+  fftw_complex *in, *out;
+  uint64_t n, N;
+
+  fftData(uint64_t N) : n(N/CkNumPes()), N(N) {
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
+    srand48(CkMyPe());
+    for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());
+  }
+
+  fftw_complex* getIn() { return in; }
+  fftw_complex* getOut() { return out; }
+  void swap(CkCallback cb) { memcpy(in, out, sizeof(fftw_complex) * n*N); contribute(cb); }
+  void initValidation(CkCallback cb);
+  void calcResidual(CkCallback cb);
+};
 
 struct Main : public CBase_Main {
+  Main_SDAG_CODE
+
   double start;
   uint64_t N;
   CProxy_fft fftProxy;
+  CProxy_fftData data;
+  CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
 
   Main(CkArgMsg* m) {
     N = atol(m->argv[1]);
@@ -26,7 +47,7 @@ struct Main : public CBase_Main {
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
-    CProxy_fftData data = CProxy_fftData::ckNew(N);
+    data = CProxy_fftData::ckNew(N);
     fftProxy = CProxy_fft::ckNew(N, data, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
     streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
@@ -34,7 +55,7 @@ struct Main : public CBase_Main {
   void startTimer() {
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
-    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy));
+    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy), streamer);
   }
 
   void stopTimer() {
@@ -42,12 +63,9 @@ struct Main : public CBase_Main {
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
     CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
              CkNumPes(), N*N, time, gflops);
-
-    fftProxy.initValidation();
+    validate();
   }
 };
-
-#define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
 
 struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
@@ -56,16 +74,14 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   uint64_t n, N;
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
+  CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
 
   fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
+    in = data.ckLocalBranch()->getIn();
+    out = data.ckLocalBranch()->getOut();
 
     p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
                             out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
-
-    srand48(CkMyPe());
-    for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());
 
     buf = new fftw_complex[n*n];
 
@@ -73,7 +89,8 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     contribute(startCB);
   }
 
-  void initStreamer() {
+  void initStreamer(CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_) {
+    streamer = streamer_;
     streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
 
@@ -109,25 +126,6 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
         SET_VALUES(out[idx], re, im);
       }
   }
-
-  void initValidation();
-  void calcResidual();
-  void printResidual(double residual);
-};
-
-struct fftData : public CBase_fftData {
-  fftw_complex *in, *out;
-
-  fftData(uint64_t N) {
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N*N/CkNumPes());
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N*N/CkNumPes());
-    srand48(CkMyPe());
-    for(int i = 0; i < N*N/CkNumPes(); i++) SET_VALUES(in[i], drand48(), drand48());
-  }
-
-  fftw_complex* getIn(int size) { return in; }
-  fftw_complex* getOut(int size) { return out; }
-  void swap() { fftw_complex *tmp; tmp = in; in = out; out = tmp; };
 };
 
 #include "verify.cc"
