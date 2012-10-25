@@ -2,6 +2,8 @@
 #include "NDMeshStreamer.h"
 #include "fft.decl.h"
 
+typedef CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_t;
+
 #define TWOPI 6.283185307179586
 #define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
 

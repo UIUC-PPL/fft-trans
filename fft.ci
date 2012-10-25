@@ -7,7 +7,7 @@ module fft {
     entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
     entry void doneStreaming();
 
-    entry void doFFT(CkCallback doneCB, streamer_t streamer) {
+    entry void doFFT(CkCallback doneCB, CProxy_GroupChunkMeshStreamer<fftw_complex> streamer) {
       for(iteration = 0; iteration < 3; ++iteration) {
         serial {
           if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
