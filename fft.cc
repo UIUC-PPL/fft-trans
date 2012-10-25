@@ -1,10 +1,9 @@
 #include <fftw3.h>
 #include "NDMeshStreamer.h"
+#include "fft.decl.h"
 
 #define TWOPI 6.283185307179586
 #define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
-
-#include "fft.decl.h"
 
 struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fft_SDAG_CODE
