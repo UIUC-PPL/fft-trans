@@ -14,9 +14,9 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   fftw_complex *in, *out, *buf;
   streamer_t streamer;
 
-  fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
-    in = data.ckLocalBranch()->getIn();
-    out = data.ckLocalBranch()->getOut();
+  fft(uint64_t N, CProxy_fftData dataProxy, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
+    in = dataProxy.ckLocalBranch()->getIn();
+    out = dataProxy.ckLocalBranch()->getOut();
 
     int len[] = {(int)N};
     p1 = fftw_plan_many_dft(1, len, n, out, len, 1, N, out, len, 1, N, sign, FFTW_ESTIMATE);
