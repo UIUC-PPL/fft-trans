@@ -13,10 +13,13 @@ mainmodule fft1d {
     entry void validate() {
       serial {
         data.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy));
+      }
+
+      when doneSwap() serial {
         init(FFTW_BACKWARD, CkCallback(CkReductionTarget(Main,startValidate), thisProxy));
       }
 
-      when doneSwap(), startValidate() serial {
+      when startValidate() serial {
         fftProxy.doFFT(CkCallback(CkReductionTarget(Main,validateDone), thisProxy), streamer);
       }
 

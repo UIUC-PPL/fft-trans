@@ -17,7 +17,7 @@ struct fftData : public CBase_fftData {
   fftw_complex* getIn() { return in; }
   fftw_complex* getOut() { return out; }
 
-  void swap(CkCallback cb) { memcpy(in, out, sizeof(fftw_complex) * n*N); contribute(cb); }
+  void swap(CkCallback cb) { fftw_complex *tmp; tmp = in; in = out; out = tmp; contribute(cb); }
 
   void calcResidual(CkCallback cb) {
     double infNorm = 0.0;
