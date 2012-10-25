@@ -5,22 +5,22 @@ LIBS = -lfftw3 -lm
 CHARMLIBS = -module NDMeshStreamer -module completion
 FFTW3 ?= $(HOME)/fftw-3.3
 
-OBJS = fft1d.o
+OBJS = main.o
 
-all: fft1d
+all: main
 
-fft1d: $(OBJS)
-	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS) $(CHARMLIBS)
+main: $(OBJS)
+	$(CHARMC) -language charm++ -o main $(OBJS) $(LIBS) $(CHARMLIBS)
 
-projections: fft1d.prj fft1d.sum
-fft1d.prj: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode projections $(LIBS) $(CHARMLIBS) -lz -o fft1d.prj $(OBJS)
+projections: main.prj main.sum
+main.prj: $(OBJS)
+	$(CHARMC) -language charm++ -tracemode projections $(LIBS) $(CHARMLIBS) -lz -o main.prj $(OBJS)
 
-fft1d.sum: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode summary $(LIBS) $(CHARMLIBS) -o fft1d.sum $(OBJS)
+main.sum: $(OBJS)
+	$(CHARMC) -language charm++ -tracemode summary $(LIBS) $(CHARMLIBS) -o main.sum $(OBJS)
 
-fft1d.decl.h: fft1d.ci
-	$(CHARMC)  fft1d.ci
+main.decl.h: main.ci
+	$(CHARMC)  main.ci
 
 fft.decl.h: fft.ci
 	$(CHARMC) fft.ci
@@ -29,7 +29,7 @@ cleanproj:
 	rm -f *.log *.sts *.projrc
 
 clean:
-	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum charmrun *~
+	rm -f *.decl.h *.def.h conv-host *.o main main.prj main.sum charmrun *~
 
-fft1d.o: fft1d.cc fft1d.decl.h fft.decl.h
-	$(CHARMC) -c fft1d.cc
+main.o: main.cc main.decl.h fft.decl.h
+	$(CHARMC) -c main.cc

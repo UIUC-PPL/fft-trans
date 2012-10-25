@@ -1,4 +1,4 @@
-mainmodule fft1d {
+mainmodule main {
   extern module fft;
 
   mainchare Main {

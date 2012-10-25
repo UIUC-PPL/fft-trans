@@ -4,7 +4,7 @@
 
 typedef CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_t;
 
-#include "fft1d.decl.h"
+#include "main.decl.h"
 #include "fftData.decl.h"
 PUPbytes(fftw_complex);
 
@@ -42,5 +42,5 @@ struct Main : public CBase_Main {
   }
 };
 
-#include "fft1d.def.h"
+#include "main.def.h"
 #include "fftData.def.h"

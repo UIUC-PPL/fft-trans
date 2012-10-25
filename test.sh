@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./charmrun +p$1 ++local fft1d $2
+./charmrun +p$1 ++local main $2
