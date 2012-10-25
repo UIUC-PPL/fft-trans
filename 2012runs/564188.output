@@ -1,0 +1,152 @@
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 104
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.542811 sec
+rate: 452.127014 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 112
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.446541 sec
+rate: 455.624074 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 120
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.516528 sec
+rate: 453.076439 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 128
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.439580 sec
+rate: 455.879032 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 134
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.612425 sec
+rate: 449.631535 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 142
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 12.951875 sec
+rate: 437.847332 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 150
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 8192
+cores: 8192
+size: 32480690176
+time: 13.116735 sec
+rate: 432.344161 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.524632
+End of program
+Charm++> Running on MPI version: 2.1
+Charm++> level of thread support used: MPI_THREAD_SINGLE (desired: MPI_THREAD_SINGLE)
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1171-g3acd0aa
+Charm++> MPI timer is synchronized
+Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
+[0] isomalloc.c> Disabling isomalloc because no free virtual address space
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 2048 unique compute nodes (4-way SMP).
+Running on NX 32 NY 8 NZ 8 NT 4
+NUMBUF = 104
+TRANSPOSING

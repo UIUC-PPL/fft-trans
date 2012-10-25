@@ -1,0 +1,107 @@
+/usr/bin/qsub.py -t 10 -n 256 -A CharmRTS --mode vn --env BG_MAPPING=ZYXT ./fft1d 65536 15
+
+submitted with cwd set to: /gpfs/home/arya/fft-trans
+
+
+Command: '/bgsys/drivers/ppcfloor/bin/mpirun' '-host' '172.17.4.1' '-np' '1024' '-partition' 'CHR-R00-M1-N00-256' '-mode' 'vn' '-cwd' '/gpfs/home/arya/fft-trans' '-exe' '/gpfs/home/arya/fft-trans/./fft1d' '-args' '65536 15' '-env' 'COBALT_JOBID=564742 BG_MAPPING=ZYXT'
+
+Environment:
+HISTTIMEFORMAT=%F %T 
+LS_COLORS=no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:
+LESS=-M -I -R
+MATLABPATH=
+XKEYSYMDB=/usr/X11R6/lib/X11/XKeysymDB
+MPIRUN_CONFIG_FILE=/etc/mpirun.cfg
+INFOPATH=/usr/local/info:/usr/share/info:/usr/info:/opt/gnome/share/info
+SHELL=/bin/bash
+TEXINPUTS=
+XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/etc/opt/kde3/share/:/opt/kde3/share/:/opt/gnome/share/
+DB2INSTANCE=db2cat
+HISTSIZE=1000
+LESS_ADVANCED_PREPROCESSOR=no
+MANPATH=/usr/man:/usr/share/man/:/usr/lib/perl5/man/:/usr/X11R6/man:/usr/local/man:/soft/apps/ibmcmp-apr2012/vacpp/bg/9.0/man:/soft/apps/ibmcmp-apr2012/xlf/bg/11.1/man:/software/common/adm/softenv/man:/home/ascovel/man
+GTK_PATH=/usr/local/lib/gtk-2.0:/opt/gnome/lib/gtk-2.0:/usr/lib/gtk-2.0
+JAVA_HOME=/opt/ibm/java2-ppc64-50
+PROFILEREAD=true
+PYTHONPATH=
+SDK_HOME=/usr/lib/jvm/java
+HOSTNAME=csn1
+CMP_MAIN_DIR=/soft/apps/ibmcmp-apr2012/xlf/bg/11.1
+MMCS_SERVER_IP=172.17.4.1
+MAIL=/var/mail/ascovel
+MACHTYPE=ppc64-suse-linux
+JAVA_ROOT=/usr/lib/jvm/java
+MINICOM=-c on
+CSHEDIT=emacs
+LESSOPEN=lessopen.sh %s
+CVS_RSH=ssh
+USER=root
+INPUTRC=/home/ascovel/.inputrc
+XL_DEFMSG=/soft/apps/ibmcmp-apr2012/xlf/bg/11.1/msg/en_US
+JDK_HOME=/usr/lib/jvm/java
+SHLVL=3
+CPU=ppc64
+SUDO_USER=ascovel
+IBM_MAIN_DIR=/soft/apps/ibmcmp-apr2012
+JAVA_BINDIR=/usr/lib/jvm/java/bin
+ACLOCAL_FLAGS=-I /opt/gnome/share/aclocal
+CLASSPATH=/dbhome/db2cat/sqllib/java/db2java.zip:/dbhome/db2cat/sqllib/java/db2jcc.jar:/dbhome/db2cat/sqllib/java/sqlj.zip:/dbhome/db2cat/sqllib/function:/dbhome/db2cat/sqllib/java/db2jcc_license_cu.jar:.
+PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/opt/kde3/lib/pkgconfig:/opt/gnome/lib/pkgconfig:/opt/gnome/lib/pkgconfig:/opt/gnome/share/pkgconfig
+LS_OPTIONS=-A -N --color=tty -T 0
+XNLSPATH=/usr/X11R6/lib/X11/nls
+_=/usr/bin/nohup
+DB_PROPERTY=/bgsys/local/etc/db.properties
+SSH_CONNECTION=10.40.2.1 49953 10.40.4.1 22
+XDG_CONFIG_DIRS=/usr/local/etc/xdg/:/etc/xdg/:/etc/opt/gnome/xdg/
+IDL_PATH=
+WINDOWMANAGER=/usr/X11R6/bin/gnome
+COLORTERM=1
+PAGER=less
+XLC_USR_CONFIG=/soft/apps/ibmcmp-apr2012/vacpp/bg/9.0/etc/V1R4M2.vac.cfg
+QT_SYSTEM_DIR=/usr/share/desktop-data
+LM_LICENSE_FILE=
+HOME=/root
+LD_LIBRARY_PATH=/bgsys/drivers/ppcfloor/lib64:
+LANG=en_US.UTF-8
+COBALT_JOBID=564742
+G_BROKEN_FILENAMES=1
+OSTYPE=linux
+IBMCMP_INCLUDE=/soft/apps/ibmcmp-apr2012/vac/bg/9.0/include:/soft/apps/ibmcmp-apr2012/vacpp/bg/9.0/include:/soft/apps/ibmcmp-apr2012/xlf/bg/11.1/include:/soft/apps/ibmcmp-apr2012/xlmass/bg/4.4/include:/soft/apps/ibmcmp-apr2012/xlsmp/bg/1.7/include
+NNTPSERVER=news
+G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252
+HOST=csn1-mgmt
+SIDL_DLL_PATH=
+GNOME2_PATH=/usr/local:/opt/gnome:/usr
+SUDO_GID=100
+FROM_HEADER=
+LESSCLOSE=lessclose.sh %s %s
+SSH_TTY=/dev/pts/3
+BGL_SN_QUERY_PATH=/bgsys/drivers/ppcfloor/bin
+WHATAMI=linux-sles10-ppc64
+BRIDGE_CONFIG_FILE=/bgsys/local/etc/bridge.config
+JRE_HOME=/usr/lib/jvm/java/jre
+MORE=-sl
+HOSTTYPE=ppc64
+SSH_CLIENT=10.40.2.1 49953 22
+LOGNAME=root
+PATH=/bin:/usr/sbin:/etc:/usr/X11R6/bin:/usr/bin:/sbin:/usr/local/bin:/bgsys/drivers/ppcfloor/bin:/dbhome/bgpdb2c/sqllib/lib:/soft/apps/ibmcmp-apr2012/vac/bg/9.0/bin:/soft/apps/ibmcmp-apr2012/vacpp/bg/9.0/bin:/soft/apps/ibmcmp-apr2012/xlf/bg/11.1/bin:/software/common/apps/projects-list/bin:/software/common/adm/softenv/bin:/home/ascovel/bin/linux-sles10-ppc64:/home/ascovel/bin:.:/software/common/apps/misc-scripts:/soft/apps/darshan/bin:/soft/apps/darshan/bin/default:/dbhome/db2cat/sqllib/bin:/dbhome/db2cat/sqllib/adm:/dbhome/db2cat/sqllib/misc:/bgsys/drivers/ppcfloor/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/usr/lpp/mmfs/bin
+ARCH=linux-sles10-ppc64
+TERM=screen
+XLF_USR_CONFIG=/soft/apps/ibmcmp-apr2012/xlf/bg/11.1/etc/V1R4M2.xlf.cfg
+PLATFORM=linux-sles10-ppc64
+GROFF_NO_SGR=yes
+INFODIR=/usr/local/info:/usr/share/info:/usr/info
+SUDO_UID=5151
+LESSKEY=/etc/lesskey.bin
+MPIRUN_VERBOSE=1
+SUDO_COMMAND=/bin/bash
+DISPLAY=localhost:10.0
+PYTHONSTARTUP=/etc/pythonstart
+PWD=/etc/init.d
+XAUTHLOCALHOSTNAME=csn1
+
+Info: stdin received from /dev/null
+Info: stdout sent to /gpfs/home/arya/fft-trans/564742.output
+Info: stderr sent to /gpfs/home/arya/fft-trans/564742.error
+
+Info: task completed normally with an exit code of 0; initiating job cleanup and removal

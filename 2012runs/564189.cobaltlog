@@ -1,0 +1,5 @@
+/usr/bin/qsub.py -t 40 -n 8192 -A CharmRTS --mode script cobalt32k.sh
+
+submitted with cwd set to: /gpfs/home/arya/fft-trans
+
+Info: user delete requested; removing job from the queue

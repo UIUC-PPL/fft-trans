@@ -1,0 +1,23 @@
+/usr/bin/qsub.py -t 30 -n 1024 -A CharmRTS --mode script cobalt4096.sh
+
+submitted with cwd set to: /gpfs/home/arya/fft-trans
+
+
+Command: '/gpfs/home/arya/fft-trans/cobalt4096.sh'
+
+Environment:
+SHELL=/bin/zsh
+COBALT_NODEFILE=/tmp/tmp4UbIra
+COBALT_PARTNAME=ANL-R36-1024
+COBALT_JOBID=564170
+LOGNAME=arya
+USER=arya
+COBALT_PARTSIZE=1024
+HOME=/home/arya
+COBALT_JOBSIZE=1024
+
+Info: stdin received from /dev/null
+Info: stdout sent to /gpfs/home/arya/fft-trans/564170.output
+Info: stderr sent to /gpfs/home/arya/fft-trans/564170.error
+
+Info: maximum execution time exceeded; initiating job terminiation

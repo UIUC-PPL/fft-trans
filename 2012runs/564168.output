@@ -1,0 +1,140 @@
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 13
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 11.745177 sec
+rate: 58.508677 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 14
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 11.611317 sec
+rate: 59.183187 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 15
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 10.514741 sec
+rate: 65.355368 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 16
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 10.263716 sec
+rate: 66.953795 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 17
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 10.219830 sec
+rate: 67.241311 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 18
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 10.339719 sec
+rate: 66.461646 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 19
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 10.413566 sec
+rate: 65.990341 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program

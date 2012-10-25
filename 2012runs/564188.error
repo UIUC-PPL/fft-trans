@@ -1,0 +1,79 @@
+------------- Processor 312 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 411.560MB)
+------------- Processor 410 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.722MB)
+------------- Processor 152 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.244MB)
+------------- Processor 373 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 415.936MB)
+------------- Processor 79 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 421.470MB)
+------------- Processor 60 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.997MB)
+------------- Processor 1484 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 422.099MB)
+------------- Processor 377 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.848MB)
+------------- Processor 26 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 417.375MB)
+------------- Processor 379 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.641MB)
+------------- Processor 1437 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.523MB)
+------------- Processor 719 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.599MB)
+------------- Processor 61 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.873MB)
+------------- Processor 205 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 415.622MB)
+------------- Processor 1213 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.698MB)
+------------- Processor 915 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.960MB)
+------------- Processor 882 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 420.236MB)
+------------- Processor 159 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.024MB)
+------------- Processor 862 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 416.758MB)
+------------- Processor 1212 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 412.735MB)
+------------- Processor 1138 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 416.705MB)
+------------- Processor 2746 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 421.090MB)
+------------- Processor 6862 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 421.437MB)
+------------- Processor 349 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 418.865MB)
+------------- Processor 991 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 417.641MB)
+------------- Processor 1361 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 421.692MB)
+------------- Processor 7359 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.864MB)
+------------- Processor 2619 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 428.519MB)
+------------- Processor 953 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 409.846MB)
+------------- Processor 2998 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 427.134MB)
+------------- Processor 7582 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 413.935MB)
+------------- Processor 7583 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 414.478MB)
+------------- Processor 5048 Exiting: Called CmiAbort ------------
+Reason: Could not malloc()--are we out of memory? (used: 422.577MB)
+<Oct 24 06:54:43.156902> FE_MPI (WARN) : SignalHandler() -  
+<Oct 24 06:54:43.157058> FE_MPI (WARN) : SignalHandler() - !------------------------------------------------!
+<Oct 24 06:54:43.157079> FE_MPI (WARN) : SignalHandler() - ! mpirun is now taking all the necessary actions !
+<Oct 24 06:54:43.157095> FE_MPI (WARN) : SignalHandler() - ! to terminate the job and to free the resources !
+<Oct 24 06:54:43.157112> FE_MPI (WARN) : SignalHandler() - ! occupied by this job. This may take a while... !
+<Oct 24 06:54:43.157127> FE_MPI (WARN) : SignalHandler() - !------------------------------------------------!
+<Oct 24 06:54:43.157143> FE_MPI (WARN) : SignalHandler() -  
+<Oct 24 06:54:43.159358> BE_MPI (WARN) : Received a message from frontend
+<Oct 24 06:54:43.159461> BE_MPI (WARN) : Execution of the current command interrupted
+<Oct 24 06:54:58.328250> BE_MPI (ERROR): The error message in the job record is as follows:
+<Oct 24 06:54:58.328305> BE_MPI (ERROR):   "killed with signal 9"
+<Oct 24 06:55:33.670283> FE_MPI (ERROR): Failure list:
+<Oct 24 06:55:33.673877> FE_MPI (ERROR):   - 1. Execution interrupted by signal (failure #71)

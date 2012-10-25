@@ -1,0 +1,11 @@
+<Oct 24 06:44:21.472596> FE_MPI (WARN) : SignalHandler() -  
+<Oct 24 06:44:21.474560> FE_MPI (WARN) : SignalHandler() - !------------------------------------------------!
+<Oct 24 06:44:21.474588> FE_MPI (WARN) : SignalHandler() - ! mpirun is now taking all the necessary actions !
+<Oct 24 06:44:21.474604> FE_MPI (WARN) : SignalHandler() - ! to terminate the job and to free the resources !
+<Oct 24 06:44:21.474619> FE_MPI (WARN) : SignalHandler() - ! occupied by this job. This may take a while... !
+<Oct 24 06:44:21.474636> FE_MPI (WARN) : SignalHandler() - !------------------------------------------------!
+<Oct 24 06:44:21.474651> FE_MPI (WARN) : SignalHandler() -  
+<Oct 24 06:44:26.395679> BE_MPI (WARN) : Received a message from frontend
+<Oct 24 06:44:26.395811> BE_MPI (WARN) : Execution of the current command interrupted
+<Oct 24 06:47:07.206368> FE_MPI (ERROR): Failure list:
+<Oct 24 06:47:07.208019> FE_MPI (ERROR):   - 1. Execution interrupted by signal (failure #71)

@@ -1,0 +1,19 @@
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1340-g9ae9f06
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 4 unique compute nodes (4-way SMP).
+Running on NX 2 NY 2 NZ 1 NT 1
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+cores: 4
+size: 1048576
+time: 0.380948 sec
+rate: 0.275254 GFlop/s
+Running on NX 2 NY 2 NZ 1 NT 1
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 4.59251e+14
+End of program

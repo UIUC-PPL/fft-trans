@@ -1,0 +1,21 @@
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 8: MODE: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 8: MAPPING: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 8: NP: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 8: BINARY: command not found
+<Oct 24 02:15:49.663876> FE_MPI (ERROR): Incorrect value on the '-mode' command line option: '-env'
+
+Try /bgsys/drivers/ppcfloor/bin/mpirun -help for more details
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 9: MODE: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 9: MAPPING: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 9: NP: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 9: BINARY: command not found
+<Oct 24 02:15:49.926722> FE_MPI (ERROR): Incorrect value on the '-mode' command line option: '-env'
+
+Try /bgsys/drivers/ppcfloor/bin/mpirun -help for more details
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 10: MODE: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 10: MAPPING: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 10: NP: command not found
+/gpfs/home/arya/fft-trans/cobalt1024.sh: line 10: BINARY: command not found
+<Oct 24 02:15:50.187279> FE_MPI (ERROR): Incorrect value on the '-mode' command line option: '-env'
+
+Try /bgsys/drivers/ppcfloor/bin/mpirun -help for more details

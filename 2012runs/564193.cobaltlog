@@ -1,0 +1,23 @@
+/usr/bin/qsub.py -t 60 -n 8192 -A PEACEndStation --mode script cobalt32k.sh
+
+submitted with cwd set to: /gpfs/home/arya/fft-trans
+
+
+Command: '/gpfs/home/arya/fft-trans/cobalt32k.sh'
+
+Environment:
+SHELL=/bin/zsh
+COBALT_NODEFILE=/tmp/tmpLkk0vG
+COBALT_PARTNAME=ANL-R40-R47-8192
+COBALT_JOBID=564193
+LOGNAME=arya
+USER=arya
+COBALT_PARTSIZE=8192
+HOME=/home/arya
+COBALT_JOBSIZE=8192
+
+Info: stdin received from /dev/null
+Info: stdout sent to /gpfs/home/arya/fft-trans/564193.output
+Info: stderr sent to /gpfs/home/arya/fft-trans/564193.error
+
+Info: maximum execution time exceeded; initiating job terminiation

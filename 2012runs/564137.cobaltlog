@@ -1,0 +1,23 @@
+/usr/bin/qsub.py -t 25 -n 256 -A CharmRTS --mode script cobalt1024.sh
+
+submitted with cwd set to: /gpfs/home/arya/fft-trans
+
+
+Command: '/gpfs/home/arya/fft-trans/cobalt1024.sh'
+
+Environment:
+SHELL=/bin/zsh
+COBALT_NODEFILE=/tmp/tmpktFQos
+COBALT_PARTNAME=CHR-R00-M1-N00-256
+COBALT_JOBID=564137
+LOGNAME=arya
+USER=arya
+COBALT_PARTSIZE=256
+HOME=/home/arya
+COBALT_JOBSIZE=256
+
+Info: stdin received from /dev/null
+Info: stdout sent to /gpfs/home/arya/fft-trans/564137.output
+Info: stderr sent to /gpfs/home/arya/fft-trans/564137.error
+
+Info: task completed normally with an exit code of 0; initiating job cleanup and removal

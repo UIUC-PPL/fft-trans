@@ -1,0 +1,8 @@
+<Oct 24 01:40:30.978236> BE_MPI (ERROR): Job execution failed
+<Oct 24 01:40:30.978359> BE_MPI (ERROR): Job 77325 is in state ERROR ('E')
+<Oct 24 01:40:31.012187> FE_MPI (ERROR): Job execution failed (error code - 50)
+<Oct 24 01:40:31.012315> FE_MPI (ERROR):  - Job execution failed - job switched to an error state
+<Oct 24 01:40:31.022408> BE_MPI (ERROR): The error message in the job record is as follows:
+<Oct 24 01:40:31.022458> BE_MPI (ERROR):   "Load failed on 172.16.9.49: Error opening executable file: No such file or directory"
+<Oct 24 01:41:06.320075> FE_MPI (ERROR): Failure list:
+<Oct 24 01:41:06.320180> FE_MPI (ERROR):   - 1. Job execution failed - job switched to an error state (failure #50)

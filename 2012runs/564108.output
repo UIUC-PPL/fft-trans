@@ -1,0 +1,80 @@
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 13
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 14.675596 sec
+rate: 46.825681 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 14
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 14.500096 sec
+rate: 47.392427 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 15
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 14.453313 sec
+rate: 47.545830 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program
+Charm++> Running on non-SMP mode
+Converse/Charm++ Commit ID: v6.4.0-1169-gdf5dce4
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 256 unique compute nodes (4-way SMP).
+Running on NX 8 NY 4 NZ 8 NT 4
+NUMBUF = 16
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 1024
+cores: 1024
+size: 4294967296
+time: 12.733191 sec
+rate: 53.968777 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.438414
+End of program

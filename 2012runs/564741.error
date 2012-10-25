@@ -1,0 +1,43 @@
+<Oct 25 08:07:32.328485> SCHED_IF (Info) : scheduler library loaded
+<Oct 25 08:07:32.860806> SCHED_IF (Info) : job information record created: id=100646
+<Oct 25 08:07:33.349153> SCHED_IF (Info) : scheduler job id is 564741
+<Oct 25 08:07:33.355969> FE_MPI (Info) : Scheduler interface library loaded
+<Oct 25 08:07:33.356040> FE_MPI (Info) : Collecting arguments from external scheduler
+<Oct 25 08:07:33.490862> FE_MPI (Info) : Scheduler interface library loaded from 'no description provided'
+<Oct 25 08:07:33.491236> FE_MPI (Info) : initialize() - using jobname '' provided by scheduler interface
+<Oct 25 08:07:33.491528> FE_MPI (Info) : Invoking mpirun backend
+<Oct 25 08:07:33.507538> FE_MPI (Info) : connectToServer() - Handshake successful
+<Oct 25 08:07:33.708568> BRIDGE (Info) : rm_set_serial() - The machine serial number (alias) is BGP
+<Oct 25 08:07:33.746968> FE_MPI (Info) : Preparing partition
+<Oct 25 08:07:33.786982> BE_MPI (Info) : Examining specified partition
+<Oct 25 08:07:35.534896> BE_MPI (Info) : Checking partition CHR-R00-M1-N00-256 initial state ...
+<Oct 25 08:07:35.535002> BE_MPI (Info) : Partition CHR-R00-M1-N00-256 initial state = FREE ('F')
+<Oct 25 08:07:35.535037> BE_MPI (Info) : Checking partition owner...
+<Oct 25 08:07:35.540943> BE_MPI (Info) : Setting new owner
+<Oct 25 08:07:35.590579> BE_MPI (Info) : Initiating boot of the partition
+<Oct 25 08:07:35.856361> BE_MPI (Info) : Waiting for partition CHR-R00-M1-N00-256 to boot...
+<Oct 25 08:08:51.026052> BE_MPI (Info) : Partition is ready
+<Oct 25 08:08:51.026237> BE_MPI (Info) : Done preparing partition
+<Oct 25 08:08:51.067845> FE_MPI (Info) : Adding job
+<Oct 25 08:08:51.068747> BE_MPI (Info) : Adding job to database...
+<Oct 25 08:08:51.134084> FE_MPI (Info) : Job added with the following id: 78160
+<Oct 25 08:08:51.134408> FE_MPI (Info) : Starting job 78160
+<Oct 25 08:08:51.227813> FE_MPI (Info) : Waiting for job to terminate
+<Oct 25 08:08:53.863928> BE_MPI (Info) : IO - Threads initialized
+<Oct 25 08:08:53.877180> BE_MPI (Info) : I/O input runner thread terminated
+<Oct 25 08:09:53.905257> BE_MPI (Info) : I/O output runner thread terminated
+<Oct 25 08:09:53.923877> BE_MPI (Info) : Job 78160 switched to state TERMINATED ('T')
+<Oct 25 08:09:53.923927> BE_MPI (Info) : Job successfully terminated - TERMINATED ('T')
+<Oct 25 08:09:53.968513> FE_MPI (Info) : Job terminated normally
+<Oct 25 08:09:53.968629> FE_MPI (Info) : exit status = (0)
+<Oct 25 08:09:53.968867> BE_MPI (Info) : Starting cleanup sequence
+<Oct 25 08:09:53.968909> BE_MPI (Info) : cleanupDatabase() - job already terminated / hasn't been added
+<Oct 25 08:09:53.974569> BE_MPI (Info) : Destroying partition CHR-R00-M1-N00-256
+<Oct 25 08:10:24.057064> BE_MPI (Info) : Partition CHR-R00-M1-N00-256 switched to state FREE ('F')
+<Oct 25 08:10:24.398296> FE_MPI (Info) : ==   FE completed   ==
+<Oct 25 08:10:24.398398> FE_MPI (Info) : == Exit status:   0 ==
+<Oct 25 08:10:24.398481> SCHED_IF (Info) : mpirun result code: 0
+<Oct 25 08:10:24.399916> SCHED_IF (Info) : job result code: 0
+<Oct 25 08:10:24.400856> SCHED_IF (Info) : boot failure: False
+<Oct 25 08:10:24.424397> SCHED_IF (Info) : resources associated with partition CHR-R00-M1-N00-256 have been released
+<Oct 25 08:10:24.425747> SCHED_IF (Info) : scheduler library unloaded
