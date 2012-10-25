@@ -9,7 +9,8 @@ typedef CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_t;
 #include "mpi-interoperate.h"
 PUPbytes(fftw_complex);
 
-#define BUFSIZE 8192 //tunable parameter per machine
+#define BUFSIZE 131072
+//tunable parameter per machine
 
 
 fftw_complex *globalDataIn;
@@ -50,7 +51,7 @@ struct Main : public CBase_Main {
   }
 };
 
-void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, uint64_t _N)
+void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, int _N)
 {
   globalDataIn = _dataIn;
   globalDataOut = _dataOut;
