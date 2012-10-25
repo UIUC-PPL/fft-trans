@@ -1,0 +1,43 @@
+GLOBAL 1D FFT Benchmark
+
+This implementation of Global FFT takes input size N and performs a complex 1D
+FFT on an NxN matrix where subsequent rows are contiguous data elements of a
+double precision complex vector. Three all-to-all transposes are required to
+perform the FFT and unscramble the data. All-to-all operations are done via a
+general Charm software routing library, Mesh Streamer, and external libraries
+(FFTW or ESSL) perform serial FFTs on the rows of the matrix.
+
+VERIFICATION
+
+The benchmark code self-validates by executing an inverse FFT and the residual
+is printed.
+
+CODE STRUCTURE
+
+main.cc, main.ci, data.cc:
+Driver code to run the FFT library.  The 'main' files initialize and run the
+FFT code, and the data.cc defines the set of distributed objects that hold
+the FFT data.  All of the parallel structure is in the 'main.ci'
+
+fft.cc, fft.ci:
+The core fft library code. fft.cc has the serial functions and calls. fft.ci
+contains all the parallel control code.
+
+RUNNING THE CODE
+
+To run the code, the environment variable "CHARMHOME" must point to a directory
+with Charm++ built.  Set the variable or modify the Makefile to point to the
+correct directory.
+
+FFTW3 must be installed in the system. Point the environmental variable
+"FFTW3" to the install directory or modify the Makefile.
+
+To run the code on 2 cores and an FFT size of 512^2, just run:
+make test
+
+To run the code on P cores and an FFT size of N^2, run:
+./test.sh <P> <N>
+
+RESTRICTIONS ON INPUT
+
+N % P = 0

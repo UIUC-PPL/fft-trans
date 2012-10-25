@@ -1,4 +1,4 @@
-mainmodule fft1d {
+mainmodule main {
   extern module fft;
 
   mainchare Main {
@@ -12,7 +12,7 @@ mainmodule fft1d {
     entry [reductiontarget] void printResidual(double r);
 
     entry void startBenchmark() {
-      serial { data = CProxy_fftData::ckNew(N, CkCallback(CkReductionTarget(Main,doneInit), thisProxy)); }
+      serial { dataProxy = CProxy_fftData::ckNew(N, CkCallback(CkReductionTarget(Main,doneInit), thisProxy)); }
 
       when doneInit() serial { init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy)); }
 
@@ -24,17 +24,17 @@ mainmodule fft1d {
       when stopTimer() serial {
         double time = CkWallTimer() - start;
         double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
-        CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n", CkNumPes(), N*N, time, gflops);
+        CkPrintf("cores: %d\nsize: %llu\ntime: %f sec\nrate: %f GFlop/s\n", CkNumPes(), N*N, time, gflops);
         validate();
       }
     };
 
     entry void validate() {
-      serial { data.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy)); }
+      serial { dataProxy.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy)); }
       when doneSwap() serial { init(FFTW_BACKWARD, CkCallback(CkReductionTarget(Main,startValidate), thisProxy)); }
 
       when startValidate() serial { fftProxy.doFFT(CkCallback(CkReductionTarget(Main,validateDone), thisProxy), streamer); }
-      when validateDone() serial { data.calcResidual(CkCallback(CkReductionTarget(Main,printResidual), thisProxy)); }
+      when validateDone() serial { dataProxy.calcResidual(CkCallback(CkReductionTarget(Main,printResidual), thisProxy)); }
 
       when printResidual(double r) serial { CkPrintf("residual = %g\n", r); CkExit(); }
     };

@@ -1,3 +1,6 @@
 #!/bin/bash
 
-./charmrun +p$1 ++local fft1d $2
+PROCS=$1
+N=$2
+
+./charmrun +p${PROCS} ++local main ${N}

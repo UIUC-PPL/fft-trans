@@ -1,6 +1,6 @@
 OPTS	= -O3
-CHARMC	?= $(HOME)/charm-production/bin/charmc $(OPTS)
-CC=mpixlcxx $(OPTS)
+CHARMHOME ?= $(HOME)/charm
+CHARMC  = $(CHARMHOME)/bin/charmc $(OPTS)
 
 ESSLPATH = /soft/apps/ESSL-4.4
 WRAPPATH = $(HOME)/esslfftw
@@ -13,28 +13,25 @@ BGP_LIBS = -L$(ESSLPATH)/lib \
 LIBS = $(BGP_LIBS) -lfftw3_esslbg -lesslbg -lmass -lxlfmath -lxlf90_r -lxlsmp -lxlomp_ser -lpthread
 CHARMLIBS = -module NDMeshStreamer -module completion
 
-OBJS = fft1d.o
+OBJS = main.o
 
-all: fft1d
+all: main
 
-fft_bench: fft_bench.o
-	${CC} fft_bench.o -o fft_bench $(LIBS)
+main: $(OBJS)
+	$(CHARMC) -language charm++ -o main $(OBJS) $(LIBS) $(CHARMLIBS)
 
-fft_bench.o: fft_bench.cpp
-	${CC} -c fft_bench.cpp $(INC)
+projections: main.prj main.sum
+main.prj: $(OBJS)
+	$(CHARMC) -language charm++ -tracemode projections $(LIBS) $(CHARMLIBS) -lz -o main.prj $(OBJS)
 
-fft1d: $(OBJS)
-	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS) $(CHARMLIBS)
+main.sum: $(OBJS)
+	$(CHARMC) -language charm++ -tracemode summary $(LIBS) $(CHARMLIBS) -o main.sum $(OBJS)
 
-projections: fft1d.prj fft1d.sum
-fft1d.prj: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode projections $(LIBS) $(CHARMLIBS) -lz -o fft1d.prj $(OBJS)
+main.o: main.cc main.decl.h fft.decl.h fftData.decl.h
+	$(CHARMC) -c main.cc $(INC)
 
-fft1d.sum: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode summary $(LIBS) $(CHARMLIBS) -o fft1d.sum $(OBJS)
-
-fft1d.decl.h: fft1d.ci
-	$(CHARMC)  fft1d.ci
+main.decl.h fftData.decl.h: main.ci
+	$(CHARMC)  main.ci
 
 fft.decl.h: fft.ci
 	$(CHARMC) fft.ci
@@ -43,7 +40,4 @@ cleanproj:
 	rm -f *.log *.sts *.projrc
 
 clean:
-	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun *~
-
-fft1d.o: fft1d.cc fft1d.decl.h fft.decl.h
-	$(CHARMC) -c fft1d.cc $(INC)
+	rm -f *.decl.h *.def.h conv-host *.o main main.prj main.sum charmrun *~
