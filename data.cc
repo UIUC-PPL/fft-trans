@@ -4,7 +4,7 @@ struct fftData : public CBase_fftData {
   fftw_complex *in, *out;
   uint64_t n, N;
 
-  fftData(uint64_t N) : n(N/CkNumPes()), N(N) {
+  fftData(uint64_t N, CkCallback cb) : n(N/CkNumPes()), N(N) {
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
     srand48(CkMyPe());
@@ -12,6 +12,8 @@ struct fftData : public CBase_fftData {
       in[i][0] = drand48();
       in[i][1] = drand48();
     }
+
+    contribute(cb);
   }
 
   fftw_complex* getIn() { return in; }

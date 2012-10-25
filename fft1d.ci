@@ -3,12 +3,36 @@ mainmodule fft1d {
 
   mainchare Main {
     entry Main(CkArgMsg *m);
+    entry [reductiontarget] void doneInit();
     entry [reductiontarget] void startTimer();
     entry [reductiontarget] void stopTimer();
     entry [reductiontarget] void startValidate();
     entry [reductiontarget] void validateDone();
     entry [reductiontarget] void doneSwap();
     entry [reductiontarget] void printResidual(double r);
+
+    entry void startBenchmark() {
+      serial {
+        data = CProxy_fftData::ckNew(N, CkCallback(CkReductionTarget(Main,doneInit), thisProxy));
+      }
+
+      when doneInit() serial {
+        init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+      }
+
+      when startTimer() serial {
+        start = CkWallTimer();
+        fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy), streamer);
+      }
+
+      when stopTimer() serial {
+        double time = CkWallTimer() - start;
+        double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
+        CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
+                 CkNumPes(), N*N, time, gflops);
+        validate();
+      }
+    };
 
     entry void validate() {
       serial {
@@ -34,7 +58,7 @@ mainmodule fft1d {
 
 module fftData {
   group fftData {
-    entry fftData(uint64_t N);
+    entry fftData(uint64_t N, CkCallback cb);
     entry void swap(CkCallback cb);
     entry void calcResidual(CkCallback cb);
   };

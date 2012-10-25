@@ -29,9 +29,7 @@ struct Main : public CBase_Main {
     if (N % CkNumPes() != 0)
       CkAbort("CkNumPes() not a factor of N\n");
 
-    // Construct an array of fft chares to do the calculation
-    data = CProxy_fftData::ckNew(N);
-    init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+    startBenchmark();
   }
 
   void init(int sign, CkCallback cb) {
@@ -41,20 +39,6 @@ struct Main : public CBase_Main {
 
     fftProxy = CProxy_fft::ckNew(N, data, sign, cb);
     streamer = streamer_t::ckNew(BUFSIZE, 4, dims, fftProxy);
-  }
-
-  void startTimer() {
-    start = CkWallTimer();
-    // Broadcast the 'go' signal to the fft chare array
-    fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy), streamer);
-  }
-
-  void stopTimer() {
-    double time = CkWallTimer() - start;
-    double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
-    CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
-             CkNumPes(), N*N, time, gflops);
-    validate();
   }
 };
 
