@@ -1,5 +1,5 @@
 OPTS	= -O3
-CHARMC	= $(HOME)/charm-production/bin/charmc $(OPTS)
+CHARMC	?= $(HOME)/charm-production/bin/charmc $(OPTS)
 CC=mpixlcxx $(OPTS)
 
 ESSLPATH = /soft/apps/ESSL-4.4
@@ -15,7 +15,7 @@ CHARMLIBS = -module NDMeshStreamer -module completion
 
 OBJS = fft1d.o
 
-all: fft1d projections fft_bench
+all: fft1d
 
 fft_bench: fft_bench.o
 	${CC} fft_bench.o -o fft_bench $(LIBS)
@@ -36,11 +36,14 @@ fft1d.sum: $(OBJS)
 fft1d.decl.h: fft1d.ci
 	$(CHARMC)  fft1d.ci
 
+fft.decl.h: fft.ci
+	$(CHARMC) fft.ci
+
 cleanproj:
 	rm -f *.log *.sts *.projrc
 
 clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun *~
 
-fft1d.o: fft1d.cc fft1d.decl.h
+fft1d.o: fft1d.cc fft1d.decl.h fft.decl.h
 	$(CHARMC) -c fft1d.cc $(INC)

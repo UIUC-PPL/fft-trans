@@ -1,59 +1,50 @@
 mainmodule fft1d {
-
-  readonly int numChares;
-  readonly CProxy_GroupChunkMeshStreamer<fftw_complex> aggregator;
+  extern module fft;
 
   mainchare Main {
     entry Main(CkArgMsg *m);
-    entry [reductiontarget] void FFTReady();
-    entry [reductiontarget] void FFTDone();
-  };
+    entry [reductiontarget] void doneInit();
+    entry [reductiontarget] void startTimer();
+    entry [reductiontarget] void stopTimer();
+    entry [reductiontarget] void startValidate();
+    entry [reductiontarget] void validateDone();
+    entry [reductiontarget] void doneSwap();
+    entry [reductiontarget] void printResidual(double r);
 
-  group fft : MeshStreamerGroupClient<fftw_complex> {
-    entry fft(uint64_t N, CProxy_Main mainProxy);
-    entry void streamerReady();
-    entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
-    entry void initValidation();
-    entry [reductiontarget] void printResidual(double residual);
-    entry void doneStreaming();
+    entry void startBenchmark() {
+      serial { data = CProxy_fftData::ckNew(N, CkCallback(CkReductionTarget(Main,doneInit), thisProxy)); }
 
-    entry void doFFT(CkCallback doneCB) {
-      for(iteration = 0; iteration < 3; ++iteration) {
-        serial {
-          if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
-          initStreamer();
-        }
+      when doneInit() serial { init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy)); }
 
-        when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }
-
-        for(count = 0; count < numChares; ++count)
-          when receiveArray(fftw_complex data[numItems], int numItems, int src) serial {
-            applyTranspose(data, numItems, src);
-          }
-
-        if (iteration < 2) serial {
-          fftw_execute(p1);
-          if(iteration == 0) twiddle(validating ? 1 : -1);
-        }
-
-        when doneStreaming() {}
+      when startTimer() serial {
+        start = CkWallTimer();
+        fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy), streamer);
       }
 
-      serial {
-        if(!validating)
-          contribute(doneCB);
-        else {
-          char filename[80];
-          sprintf(filename, "%d-%ld.dump%d", numChares, N, CkMyPe());
-          //writeCommFile(n, in, filename);
-          calcResidual();
-        }
+      when stopTimer() serial {
+        double time = CkWallTimer() - start;
+        double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
+        CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n", CkNumPes(), N*N, time, gflops);
+        validate();
       }
     };
-   };
 
-   message MeshStreamerMessage<ChunkDataItem>;
-   group MeshStreamerGroupClient<fftw_complex>;
-   group GroupChunkMeshStreamer<fftw_complex>;
-   group MeshStreamer<ChunkDataItem>;
+    entry void validate() {
+      serial { data.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy)); }
+      when doneSwap() serial { init(FFTW_BACKWARD, CkCallback(CkReductionTarget(Main,startValidate), thisProxy)); }
+
+      when startValidate() serial { fftProxy.doFFT(CkCallback(CkReductionTarget(Main,validateDone), thisProxy), streamer); }
+      when validateDone() serial { data.calcResidual(CkCallback(CkReductionTarget(Main,printResidual), thisProxy)); }
+
+      when printResidual(double r) serial { CkPrintf("residual = %g\n", r); CkExit(); }
+    };
+  };
+};
+
+module fftData {
+  group fftData {
+    entry fftData(uint64_t N, CkCallback cb);
+    entry void swap(CkCallback cb);
+    entry void calcResidual(CkCallback cb);
+  };
 };
