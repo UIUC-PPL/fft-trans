@@ -1,5 +1,5 @@
 OPTS	= -O3
-CHARMHOME ?= $(HOME)/charm
+CHARMHOME ?= $(HOME)/charms/charm/mpi-linux-x86_64
 CHARMC  = $(CHARMHOME)/bin/charmc $(OPTS)
 FFTW3   ?= $(HOME)/fftw-3.3
 INC     = -I$(FFTW3)/include

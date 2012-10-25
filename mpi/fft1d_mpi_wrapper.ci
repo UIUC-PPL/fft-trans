@@ -1,0 +1,15 @@
+module fft1d_mpi_wrapper {
+  extern module fft;
+  chare Controller {
+    entry Controller(uint64_t size, int sign);
+    entry [reductiontarget] void init();
+    entry [reductiontarget] void startTimer();
+    entry [reductiontarget] void stopTimer();
+  };
+};
+
+module fftData {
+  group fftData {
+    entry fftData( CkCallback cb);
+  };
+};
