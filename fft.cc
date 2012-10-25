@@ -18,8 +18,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     in = data.ckLocalBranch()->getIn();
     out = data.ckLocalBranch()->getOut();
 
-    p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
-                            out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
+    p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N, out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
 
     buf = new fftw_complex[n*n];
 
@@ -29,7 +28,8 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
 
   void initStreamer(streamer_t streamer_) {
     streamer = streamer_;
-    streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
+    streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy),
+                                   CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
 
   void sendTranspose(fftw_complex *src_buf) {
