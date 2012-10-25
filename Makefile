@@ -7,13 +7,7 @@ FFTW3 ?= $(HOME)/fftw-3.3
 
 OBJS = fft1d.o
 
-all: fft1d fft_ref projections fft_bench
-
-fft_bench: fft_bench.o
-	${CC} fft_bench.o -o fft_bench $(LIBS)
-
-fft_bench.o: fft_bench.cpp
-	${CC} -c fft_bench.cpp $(INC)
+all: fft1d
 
 fft1d: $(OBJS)
 	$(CHARMC) -language charm++ -o fft1d $(OBJS) $(LIBS) $(CHARMLIBS)
@@ -31,17 +25,11 @@ fft1d.decl.h: fft1d.ci
 fft.decl.h: fft.ci
 	$(CHARMC) fft.ci
 
-fft_ref: fft_ref.o
-	${CC} fft_ref.o -o fft_ref -L$(FFTW3)/lib -lfftw3_mpi $(LIBS)
-
-fft_ref.o: fft_ref.cpp
-	${CC} -c fft_ref.cpp -I$(FFTW3)/include
-
 cleanproj:
 	rm -f *.log *.sts *.projrc
 
 clean:
-	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun fft_ref *~
+	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum charmrun *~
 
 fft1d.o: fft1d.cc fft1d.decl.h fft.decl.h
 	$(CHARMC) -c fft1d.cc
