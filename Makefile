@@ -1,5 +1,6 @@
 OPTS	= -O3
-CHARMC	?= $(HOME)/charm/bin/charmc $(OPTS)
+CHARMHOME ?= $(HOME)/charm
+CHARMC	= $(CHARMHOME)/bin/charmc $(OPTS)
 LIBS    = -lfftw3 -lm
 CHARMLIBS = -module NDMeshStreamer -module completion
 FFTW3   ?= $(HOME)/fftw-3.3
