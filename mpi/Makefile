@@ -1,0 +1,43 @@
+BGQ_TYPICAL_FLOOR=/bgsys/drivers/ppcfloor
+BGQ_INSTALL=$(BGQ_TYPICAL_FLOOR)
+BGQ_BIN=$(BGQ_FLOOR)/gnu-linux/bin
+BGQ_INC=-I$(BGQ_INSTALL)/comm/xl/include -I$(BGQ_INSTALL)/spi/include -I$(BGQ_INSTALL) -I$(BGQ_INSTALL)/spi/include/kernel/cnk/
+
+BGQ_LIB="-L$(BGQ_INSTALL)/comm/xl.legacy.ndebug/lib -lmpich -lopa -lmpl -ldl -L$(BGQ_INSTALL)/comm/sys-fast/lib -lpami -L$(BGQ_INSTALL)/spi/lib -lSPI -lSPI_cnk -lpthread -lrt"
+
+OPTS = -O3
+CHARMDIR=$(HOME)/Yanhua/git/charmgit/charm/mpi-bluegeneq-xlc/
+#CHARMDIR=$(HOME)/Yanhua/git/charmgit/charm/pami-bluegeneq-smp-xlc/
+#/charms/charm/mpi-linux-x86_64/
+CHARMC=$(CHARMDIR)/bin/charmc $(OPTS)
+CXX=bgxlc $(OPTS) $(BGQ_INC) $(BGQ_LIB)
+FFTW3DIR = $(HOME)/fftw3
+
+INC = -I$(FFTW3DIR)/include
+LIBDIR = -L$(FFTW3DIR)/lib 
+LIBS = -lfftw3 -lm	-module NDMeshStreamer -module completion
+
+all: fft_charm_mpi
+
+fft_charm_mpi: fft_charm_mpi.cc libmodulefft1d_mpi_wrapper.a
+	$(CXX) -c fft_charm_mpi.cc -o fft_charm_mpi.o -I$(CHARMDIR)/include $(INC)
+	$(CHARMC) -mpi -o fft_charm_mpi fft_charm_mpi.o -L./ -module fft1d_mpi_wrapper \
+	$(LIBDIR) $(LIBS) 
+
+libmodulefft1d_mpi_wrapper.a: fft1d_mpi_wrapper.cc fft1d_mpi_wrapper.decl.h fft1d_mpi_wrapper.def.h  fft.decl.h
+	$(CHARMC) $(OPTS) -o libmodulefft1d_mpi_wrapper.a fft1d_mpi_wrapper.cc $(INC)
+
+fft1d_mpi_wrapper.decl.h fft1d_mpi_wrapper.def.h: fft1d_mpi_wrapper.ci
+	$(CHARMC) $(OPTS) fft1d_mpi_wrapper.ci
+
+fft.decl.h: fft.ci
+	$(CHARMC) fft.ci
+
+test: fft_charm_mpi
+	mpirun -np 8 ./fft_charm_mpi 1024 1
+
+clean:
+	rm -f *dump* *.decl.h *.def.h conv-host *.o *~
+
+clobber: clean
+	rm -f fft_charm_mpi charmrun libmodulefft1d_mpi_wrapper.a *.o charmrun  libmodulefft1d_mpi_wrapper.a

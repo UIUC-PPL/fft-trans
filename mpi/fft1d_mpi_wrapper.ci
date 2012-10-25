@@ -1,0 +1,62 @@
+module fft1d_mpi_wrapper {
+  extern module fft;
+
+  chare Main {
+    entry Main(uint64_t );
+    entry [reductiontarget] void doneInit();
+    entry [reductiontarget] void startTimer();
+    entry [reductiontarget] void stopTimer();
+    entry [reductiontarget] void startValidate();
+    entry [reductiontarget] void validateDone();
+    entry [reductiontarget] void doneSwap();
+    
+    entry void startBenchmark() {
+      serial {
+        data = CProxy_fftData::ckNew(CkCallback(CkReductionTarget(Main,doneInit), thisProxy));
+      }
+
+      when doneInit() serial {
+        init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+      }
+
+      when startTimer() serial {
+        start = CkWallTimer();
+        fftProxy.doFFT(CkCallback(CkReductionTarget(Main,stopTimer), thisProxy), streamer);
+      }
+
+      when stopTimer() serial {
+        double time = CkWallTimer() - start;
+        double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
+        CkPrintf("cores: %d\nsize: %ld\ntime: %f sec\nrate: %f GFlop/s\n",
+                 CkNumPes(), N*N, time, gflops);
+        validate();
+      }
+    };
+
+    entry void validate() {
+      serial {
+        data.swap(CkCallback(CkReductionTarget(Main,doneSwap), thisProxy));
+      }
+
+      when doneSwap() serial {
+        init(FFTW_BACKWARD, CkCallback(CkReductionTarget(Main,startValidate), thisProxy));
+      }
+
+      when startValidate() serial {
+        fftProxy.doFFT(CkCallback(CkReductionTarget(Main,validateDone), thisProxy), streamer);
+      }
+
+      when validateDone() serial {
+        CkExit();
+      }
+
+    };
+  };
+};
+
+module fftData {
+  group fftData {
+    entry fftData( CkCallback cb);
+    entry void swap(CkCallback cb);
+  };
+};
