@@ -1,6 +1,9 @@
 #include <fftw3.h>
 #include "TopoManager.h"
 #include "NDMeshStreamer.h"
+
+typedef CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_t;
+
 #include "fft1d.decl.h"
 PUPbytes(fftw_complex);
 
@@ -33,7 +36,7 @@ struct Main : public CBase_Main {
   uint64_t N;
   CProxy_fft fftProxy;
   CProxy_fftData data;
-  CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
+  streamer_t streamer;
 
   Main(CkArgMsg* m) {
     N = atol(m->argv[1]);
@@ -49,7 +52,7 @@ struct Main : public CBase_Main {
     // Construct an array of fft chares to do the calculation
     data = CProxy_fftData::ckNew(N);
     fftProxy = CProxy_fft::ckNew(N, data, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
-    streamer = CProxy_GroupChunkMeshStreamer<fftw_complex>::ckNew(BUFSIZE, 4, dims, fftProxy);
+    streamer = streamer_t::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
   void startTimer() {
@@ -74,7 +77,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
   uint64_t n, N;
   fftw_plan p1;
   fftw_complex *in, *out, *buf;
-  CProxy_GroupChunkMeshStreamer<fftw_complex> streamer;
+  streamer_t streamer;
 
   fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
     in = data.ckLocalBranch()->getIn();
@@ -89,7 +92,7 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     contribute(startCB);
   }
 
-  void initStreamer(CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_) {
+  void initStreamer(streamer_t streamer_) {
     streamer = streamer_;
     streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
   }
