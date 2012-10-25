@@ -1,4 +1,5 @@
 mainmodule fft1d {
+  extern module fft;
 
   mainchare Main {
     entry Main(CkArgMsg *m);
@@ -26,47 +27,12 @@ mainmodule fft1d {
       when printResidual(double r) serial { CkPrintf("residual = %g\n", r); CkExit(); }
     };
   };
+};
 
+module fftData {
   group fftData {
     entry fftData(uint64_t N);
     entry void swap(CkCallback cb);
     entry void calcResidual(CkCallback cb);
   };
-
-  group fft : MeshStreamerGroupClient<fftw_complex> {
-    entry fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB);
-    entry void streamerReady();
-    entry void receiveArray(fftw_complex data[numItems], int numItems, int src);
-    entry void doneStreaming();
-
-    entry void doFFT(CkCallback doneCB, streamer_t streamer) {
-      for(iteration = 0; iteration < 3; ++iteration) {
-        serial {
-          if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
-          initStreamer(streamer);
-        }
-
-        when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }
-
-        for(count = 0; count < CkNumPes(); ++count)
-          when receiveArray(fftw_complex data[numItems], int numItems, int src) serial {
-            applyTranspose(data, numItems, src);
-          }
-
-        if (iteration < 2) serial {
-          fftw_execute(p1);
-          if(iteration == 0) twiddle(sign);
-        }
-
-        when doneStreaming() {}
-      }
-
-      serial { contribute(doneCB); }
-    };
-  };
-
-  message MeshStreamerMessage<ChunkDataItem>;
-  group MeshStreamerGroupClient<fftw_complex>;
-  group GroupChunkMeshStreamer<fftw_complex>;
-  group MeshStreamer<ChunkDataItem>;
 };

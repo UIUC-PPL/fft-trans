@@ -28,6 +28,9 @@ fft1d.sum: $(OBJS)
 fft1d.decl.h: fft1d.ci
 	$(CHARMC)  fft1d.ci
 
+fft.decl.h: fft.ci
+	$(CHARMC) fft.ci
+
 fft_ref: fft_ref.o
 	${CC} fft_ref.o -o fft_ref -L$(FFTW3)/lib -lfftw3_mpi $(LIBS)
 
@@ -40,5 +43,5 @@ cleanproj:
 clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft1d.sum fft_bench charmrun fft_ref *~
 
-fft1d.o: fft1d.cc fft1d.decl.h
+fft1d.o: fft1d.cc fft1d.decl.h fft.decl.h
 	$(CHARMC) -c fft1d.cc
