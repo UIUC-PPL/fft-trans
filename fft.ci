@@ -9,10 +9,7 @@ module fft {
 
     entry void doFFT(CkCallback doneCB, streamer_t streamer) {
       for(iteration = 0; iteration < 3; ++iteration) {
-        serial {
-          if(CkMyPe() == 0) CkPrintf("TRANSPOSING\n");
-          initStreamer(streamer);
-        }
+        serial { initStreamer(streamer); }
 
         when streamerReady() serial { sendTranspose(iteration == 0 ? in : out); }
 
