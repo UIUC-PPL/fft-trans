@@ -18,7 +18,8 @@ struct fft : public MeshStreamerGroupClient<fftw_complex> {
     in = data.ckLocalBranch()->getIn();
     out = data.ckLocalBranch()->getOut();
 
-    p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N, out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
+    int len[] = {(int)N};
+    p1 = fftw_plan_many_dft(1, len, n, out, len, 1, N, out, len, 1, N, sign, FFTW_ESTIMATE);
 
     buf = new fftw_complex[n*n];
 
