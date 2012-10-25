@@ -1,4 +1,4 @@
-OPTS	= -O3
+OPTS	?= -O3
 CHARMHOME ?= $(HOME)/charm
 CHARMC  = $(CHARMHOME)/bin/charmc $(OPTS)
 FFTW3   ?= $(HOME)/fftw-3.3
