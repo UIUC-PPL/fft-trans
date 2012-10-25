@@ -28,10 +28,12 @@ struct Controller : public CBase_Controller {
   CProxy_fftData data;
   streamer_t streamer;
 
+  //controller chare constructor creates data group
   Controller(uint64_t _N, int _sign) : N(_N), sign(_sign) {
     data = CProxy_fftData::ckNew(CkCallback(CkReductionTarget(Controller,init), thisProxy));
   }
 
+  //once data group are created, create fft chare-array and streamer
   void init() {
     TopoManager tmgr; // get dimensions for software routing
     int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
@@ -39,11 +41,13 @@ struct Controller : public CBase_Controller {
     streamer = streamer_t::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
+  //start the actual fft
   void startTimer() {
     start = CkWallTimer();
     fftProxy.doFFT(CkCallback(CkReductionTarget(Controller,stopTimer), thisProxy), streamer);
   }
 
+  //end of fft
   void stopTimer() {
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
@@ -53,11 +57,14 @@ struct Controller : public CBase_Controller {
   }
 };
 
+
+//interface function to transfer control to Charm
 void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, int _N, int sign)
 {
   globalDataIn = _dataIn;
   globalDataOut = _dataOut;
   MPI_Barrier(MPI_COMM_WORLD);
+  //zero processor creates the controller chare
   if(CkMyPe() == 0) {
     CkPrintf("FFT-1D using Charm++\n");
     CProxy_Controller main = CProxy_Controller::ckNew(_N, sign);

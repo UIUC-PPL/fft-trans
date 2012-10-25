@@ -1,39 +1,35 @@
-OPTS	= -O3
-CHARMHOME ?= $(HOME)/charms/charm/mpi-linux-x86_64
-CHARMC  = $(CHARMHOME)/bin/charmc $(OPTS)
-FFTW3   ?= $(HOME)/fftw-3.3
-INC     = -I$(FFTW3)/include
-LIBS    = -L$(FFTW3)/lib -lfftw3 -lm
-CHARMLIBS = -module NDMeshStreamer -module completion
+CHARMHOME?=$(HOME)/charm/mpi-linux-x86_64/
+CHARMC=$(CHARMHOME)/bin/charmc $(OPTS)
+OPTS = -O3
 
-OBJS = main.o
+CXX=mpicc $(OPTS)
+FFTW3DIR?=$(HOME)/fftw-3.3
 
-all: main
+INC = -I$(FFTW3DIR)/include
+LIBDIR = -L$(FFTW3DIR)/lib 
+LIBS = -lfftw3 -lm -module NDMeshStreamer -module completion
 
-main: $(OBJS)
-	$(CHARMC) -language charm++ -o main $(OBJS) $(LIBS) $(CHARMLIBS)
+all: fft_charm_mpi
 
-projections: main.prj main.sum
-main.prj: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode projections $(LIBS) $(CHARMLIBS) -lz -o main.prj $(OBJS)
+fft_charm_mpi: fft_charm_mpi.cc libmodulefft1d_mpi_wrapper.a
+	$(CXX) -c fft_charm_mpi.cc -o fft_charm_mpi.o -I$(CHARMHOME)/include $(INC)
+	$(CHARMC) -mpi -o fft_charm_mpi fft_charm_mpi.o -L./ -module fft1d_mpi_wrapper \
+	$(LIBDIR) $(LIBS) 
 
-main.sum: $(OBJS)
-	$(CHARMC) -language charm++ -tracemode summary $(LIBS) $(CHARMLIBS) -o main.sum $(OBJS)
+libmodulefft1d_mpi_wrapper.a: fft1d_mpi_wrapper.cc fft1d_mpi_wrapper.decl.h fft1d_mpi_wrapper.def.h  fft.decl.h
+	$(CHARMC) $(OPTS) -o libmodulefft1d_mpi_wrapper.a fft1d_mpi_wrapper.cc $(INC)
 
-main.o: main.cc main.decl.h fft.decl.h fftData.decl.h
-	$(CHARMC) -c main.cc $(INC)
-
-main.decl.h fftData.decl.h: main.ci
-	$(CHARMC)  main.ci
+fft1d_mpi_wrapper.decl.h fft1d_mpi_wrapper.def.h: fft1d_mpi_wrapper.ci
+	$(CHARMC) $(OPTS) fft1d_mpi_wrapper.ci
 
 fft.decl.h: fft.ci
 	$(CHARMC) fft.ci
 
-test: main
-	./test.sh 2 512
-
-cleanproj:
-	rm -f *.log *.sts *.projrc
+test: fft_charm_mpi
+	mpirun -np 8 ./fft_charm_mpi 1024 1
 
 clean:
-	rm -f *.decl.h *.def.h conv-host *.o main main.prj main.sum charmrun *~
+	rm -f *dump* *.decl.h *.def.h conv-host *.o *~
+
+clobber: clean
+	rm -f fft_charm_mpi charmrun libmodulefft1d_mpi_wrapper.a *.o charmrun  libmodulefft1d_mpi_wrapper.a
