@@ -50,7 +50,7 @@ struct Main : public CBase_Main {
   }
 };
 
-void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, int _N)
+void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, uint64_t _N)
 {
   globalDataIn = _dataIn;
   globalDataOut = _dataOut;
@@ -61,7 +61,6 @@ void fft1d(fftw_complex *_dataIn, fftw_complex *_dataOut, int _N)
   }
   CsdScheduler(-1);
 }
-
 
 
 #include "fft1d_mpi_wrapper.def.h"
