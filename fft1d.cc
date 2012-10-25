@@ -8,26 +8,9 @@ typedef CProxy_GroupChunkMeshStreamer<fftw_complex> streamer_t;
 PUPbytes(fftw_complex);
 
 #define BUFSIZE 8192 //tunable parameter per machine
-#define TWOPI 6.283185307179586
-#define SET_VALUES(a,b,c)  do { (a)[0] = b; (a)[1] = c; } while (0);
 
-struct fftData : public CBase_fftData {
-  fftw_complex *in, *out;
-  uint64_t n, N;
-
-  fftData(uint64_t N) : n(N/CkNumPes()), N(N) {
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * n*N);
-    srand48(CkMyPe());
-    for(int i = 0; i < n*N; i++) SET_VALUES(in[i], drand48(), drand48());
-  }
-
-  fftw_complex* getIn() { return in; }
-  fftw_complex* getOut() { return out; }
-  void swap(CkCallback cb) { memcpy(in, out, sizeof(fftw_complex) * n*N); contribute(cb); }
-  void initValidation(CkCallback cb);
-  void calcResidual(CkCallback cb);
-};
+#include "data.cc"
+#include "fft.cc"
 
 struct Main : public CBase_Main {
   Main_SDAG_CODE
@@ -42,16 +25,20 @@ struct Main : public CBase_Main {
     N = atol(m->argv[1]);
     delete m;
 
-    TopoManager tmgr; // get dimensions for software routing
-    int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
-    CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
-
     if (N % CkNumPes() != 0)
       CkAbort("CkNumPes() not a factor of N\n");
 
     // Construct an array of fft chares to do the calculation
     data = CProxy_fftData::ckNew(N);
-    fftProxy = CProxy_fft::ckNew(N, data, FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+    init(FFTW_FORWARD, CkCallback(CkReductionTarget(Main,startTimer), thisProxy));
+  }
+
+  void init(int sign, CkCallback cb) {
+    TopoManager tmgr; // get dimensions for software routing
+    int dims[4] = {tmgr.getDimNZ(), tmgr.getDimNY(), tmgr.getDimNX(), tmgr.getDimNT()};
+    CkPrintf("Running on NX %d NY %d NZ %d NT %d\n", dims[0], dims[1], dims[2], dims[3]);
+
+    fftProxy = CProxy_fft::ckNew(N, data, sign, cb);
     streamer = streamer_t::ckNew(BUFSIZE, 4, dims, fftProxy);
   }
 
@@ -70,66 +57,4 @@ struct Main : public CBase_Main {
   }
 };
 
-struct fft : public MeshStreamerGroupClient<fftw_complex> {
-  fft_SDAG_CODE
-
-  int iteration, count, sign;
-  uint64_t n, N;
-  fftw_plan p1;
-  fftw_complex *in, *out, *buf;
-  streamer_t streamer;
-
-  fft(uint64_t N, CProxy_fftData data, int sign, CkCallback startCB) : n(N/CkNumPes()), N(N), sign(sign) {
-    in = data.ckLocalBranch()->getIn();
-    out = data.ckLocalBranch()->getOut();
-
-    p1 = fftw_plan_many_dft(1, (int*)&N, n, out, (int*)&N, 1, N,
-                            out, (int*)&N, 1, N, sign, FFTW_ESTIMATE);
-
-    buf = new fftw_complex[n*n];
-
-    // Reduction to signal that initialization is complete
-    contribute(startCB);
-  }
-
-  void initStreamer(streamer_t streamer_) {
-    streamer = streamer_;
-    streamer.ckLocalBranch()->init(1, CkCallback(CkIndex_fft::streamerReady(), thisProxy), CkCallback(CkIndex_fft::doneStreaming(), thisProxy), 0, false);
-  }
-
-  void sendTranspose(fftw_complex *src_buf) {
-    for(int i = 0; i < CkNumPes(); i++) {
-      for(int j = 0, l = 0; j < n; j++)
-        memcpy(buf[(l++)*n], src_buf[i*n+j*N], sizeof(fftw_complex)*n);
-
-      streamer.ckLocalBranch()->insertData(buf, n*n, i);
-    }
-    streamer.ckLocalBranch()->done();
-  }
-
-  void applyTranspose(fftw_complex *data, int numItems, int src) {
-    for(int j = 0, l = 0; j < n; j++)
-      for(int i = 0; i < n; i++)
-        SET_VALUES(out[src*n+(i*N+j)], data[l][0], data[l++][1]);
-  }
-
-  void twiddle(double sign) {
-    double a, c, s, re, im;
-
-    for(int i = 0; i < n; i++)
-      for(int j = 0; j < N; j++) {
-        a = sign * (TWOPI*(i+CkMyPe()*n)*j)/(N*N);
-        c = cos(a);
-        s = sin(a);
-
-        int idx = i*N+j;
-
-        re = c*out[idx][0] - s*out[idx][1];
-        im = s*out[idx][0] + c*out[idx][1];
-        SET_VALUES(out[idx], re, im);
-      }
-  }
-};
-
-#include "verify.cc"
 #include "fft1d.def.h"
