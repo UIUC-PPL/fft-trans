@@ -11,7 +11,7 @@ INC = -I$(WRAPPATH)/include -I$(ESSLPATH)/include
 BGP_LIBS = -L$(ESSLPATH)/lib64 \
            -L$(WRAPPATH)/lib64 \
            -L/soft/compilers/ibmcmp-feb2012/xlf/bg/14.1/lib64
-LIBS = $(BGP_LIBS) -lfftw3_esslbg -lesslbg -lmass -lxlfmath -lxlf90_r -lxlsmp -lxlomp_ser -lpthread
+LIBS = $(BGP_LIBS) -lfftw3_esslbg -lesslsmpbg -lmass -lxlfmath -lxlf90_r -lxlsmp -lxlomp_ser -lpthread
 
 OBJS = fft1d.o
 

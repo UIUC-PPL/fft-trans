@@ -39,7 +39,7 @@ mainmodule fft1d {
           }
 
         if (iteration < 2) atomic "compute" {
-          fftw_execute(p1);
+	  fftw_execute(p1);
           if(iteration == 0)
             twiddle(validating ? 1 : -1);
         }
@@ -55,11 +55,15 @@ mainmodule fft1d {
 	if(thisIndex == 0) {
           for(int i = 0; i < 6; i++)
             CkPrintf("time[%d] = %f sec\n",i,time[i]);
+          for(int i = 0; i < 3; i++)
+            CkPrintf("memcpy_time[%d] = %f sec\n",i,memcpy_time[i]);
+          for(int i = 0; i < 3; i++)
+            CkPrintf("transpose_time[%d] = %f sec\n",i,transpose_time[i]);
 	}
 
         if(!validating)
           contribute(CkCallback(CkIndex_Main::doneFFT(), mainProxy));
-        else {
+	else {
           char filename[80];
           sprintf(filename, "%d-%ld.dump%d", numChares, N, thisIndex);
           //writeCommFile(n, in, filename);

@@ -64,6 +64,8 @@ struct fft : public CBase_fft {
   bool validating;
   double start;
   double time[6];
+  double memcpy_time[3];
+  double transpose_time[3];
 
   fft() {
     __sdag_init();
@@ -83,12 +85,15 @@ struct fft : public CBase_fft {
     for(int i = 0; i < n; i++) {
       in[i][0] = drand48();
       in[i][1] = drand48();
+      out[i][0] = 0;
+      out[i][0] = 0;
     }
 
     msgs = new fftMsg*[numChares];
     for(int i = 0; i < numChares; i++) {
       msgs[i] = new (n/numChares) fftMsg;
       msgs[i]->source = thisIndex;
+      memset(msgs[i]->data, 0, sizeof(fftw_complex)*n/numChares);
     }
 
     // Reduction to the mainchare to signal that initialization is complete
@@ -102,8 +107,13 @@ struct fft : public CBase_fft {
       //  Stagger communication order to avoid hotspots and the
       //  associated contention.
       int k = i % numChares;
+
+      memcpy_time[iteration] = CkWallTimer();
+
       for(int j = 0, l = 0; j < N/numChares; j++)
         memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N], sizeof(fftw_complex)*N/numChares);
+
+      memcpy_time[iteration] = CkWallTimer() - memcpy_time[iteration];
 
       // Tag each message with the iteration in which it was
       // generated, to prevent mis-matched messages from chares that
@@ -117,11 +127,16 @@ struct fft : public CBase_fft {
 
   void applyTranspose(fftMsg *m) {
     int k = m->source;
+
+    transpose_time[iteration] = CkWallTimer();
+
     for(int j = 0, l = 0; j < N/numChares; j++)
       for(int i = 0; i < N/numChares; i++) {
         out[k*N/numChares+(i*N+j)][0] = m->data[l][0];
         out[k*N/numChares+(i*N+j)][1] = m->data[l++][1];
       }
+
+    transpose_time[iteration] = CkWallTimer() - transpose_time[iteration];
 
     // Save just-received messages to reuse for later sends, to
     // avoid reallocation
