@@ -1,0 +1,4 @@
+2012-05-23 18:30:37.686 (INFO ) [0xfff82b28a40] EAS-20040-31371-128:15892:ibm.runjob.client.options.Parser: set local socket to runjob_mux from properties file
+2012-05-23 18:30:40.652 (INFO ) [0xfff82b28a40] EAS-20040-31371-128:44282:ibm.runjob.client.Job: job 44282 started
+Blue Gene/Q running at clock speed of 1600 Mhz
+2012-05-23 18:30:42.728 (INFO ) [0xfff82b28a40] EAS-20040-31371-128:44282:ibm.runjob.client.Job: exited with status 0

@@ -1,0 +1,17 @@
+Converse/Charm++ Commit ID: v6.4.0-471-gb108555
+[0] isomalloc.c> Disabling isomalloc because isomalloc disabled by conv-mach
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 16 unique compute nodes (64-way SMP).
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+chares: 256
+cores: 16
+size: 1073741824
+time: 73.639220 sec
+rate: 2.187167 GFlop/s
+TRANSPOSING
+TRANSPOSING
+TRANSPOSING
+residual = 0.346156
+End of program

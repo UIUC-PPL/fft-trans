@@ -1,0 +1,3 @@
+2012-05-23 19:24:47.258 (INFO ) [0xfffaccc8a40] EAS-02040-13371-128:25468:ibm.runjob.client.options.Parser: set local socket to runjob_mux from properties file
+2012-05-23 19:24:47.291 (FATAL) [0xfffaccc8a40] EAS-02040-13371-128:25468:ibm.runjob.client.Job: could not start job: block is busy
+2012-05-23 19:24:47.291 (FATAL) [0xfffaccc8a40] EAS-02040-13371-128:25468:ibm.runjob.client.Job: block EAS-02040-13371-128 has a job running
