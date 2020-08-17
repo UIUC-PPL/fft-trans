@@ -1,7 +1,13 @@
 #include "fft1d.decl.h"
-#include <fftw3.h>
+#include "fft1d.h"
 #include <limits>
 #include "fileio.h"
+
+#ifdef MODE_CPU
+#include <fftw3.h>
+#elif defined MODE_GPU
+#include <cufft.h>
+#endif
 
 #define TWOPI 6.283185307179586
 
@@ -19,16 +25,26 @@ struct Main : public CBase_Main {
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
-    numChares = atoi(m->argv[1]);
-    N = atoi(m->argv[2]);
+    int c;
+    while ((c = getopt(m->argc, m->argv, "c:n:")) != -1 ) {
+      switch (c) {
+        case 'c':
+          numChares = atoi(optarg);
+          break;
+        case 'n':
+          N = atoi(optarg);
+          break;
+      }
+    }
     delete m;
 
     mainProxy = thisProxy;
 
-    if (N % numChares != 0)
+    if (N % numChares != 0) {
       CkAbort("numChares not a factor of N\n");
+    }
 
-    // Construct an array of fft chares to do the calculation
+    // Construct an array of FFT chares to do the calculation
     fftProxy = CProxy_fft::ckNew(numChares);
   }
 
@@ -44,7 +60,8 @@ struct Main : public CBase_Main {
     CkPrintf("chares: %d\ncores: %d\nsize: %d\ntime: %f sec\nrate: %f GFlop/s\n",
              numChares, CkNumPes(), N*N, time, gflops);
 
-    fftProxy.initValidation();
+    //fftProxy.initValidation();
+    CkExit();
   }
 
   void printResidual(double r) {

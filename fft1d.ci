@@ -1,4 +1,5 @@
 mainmodule fft1d {
+  include "fft1d.h";
 
   readonly CProxy_Main mainProxy;
   readonly int numChares;
@@ -21,29 +22,32 @@ mainmodule fft1d {
     entry void initValidation();
 
     entry void doFFT() {
-      for(iteration = 0; iteration < 3; ++iteration) {
-        atomic "transpose" {
-          if(thisIndex == 0)
-            CkPrintf("TRANSPOSING\n");
+      for (iteration = 0; iteration < 3; ++iteration) {
+        serial "transpose" {
+          if (thisIndex == 0) {
+            CkPrintf("Transposing...\n");
+          }
           sendTranspose(iteration == 0 ? in : out);
         }
 
-        for(count = 0; count < numChares; ++count)
-          when getTranspose[iteration] (fftMsg *m) atomic {
+        for (count = 0; count < numChares; ++count) {
+          when getTranspose[iteration] (fftMsg *m) serial {
             applyTranspose(m);
           }
+        }
 
-        if (iteration < 2) atomic "compute" {
+        if (iteration < 2) serial "compute" {
           fftw_execute(p1);
-          if(iteration == 0)
+          if (iteration == 0) {
             twiddle(validating ? 1 : -1);
+          }
         }
       }
 
-      atomic {
-        if(!validating)
-          contribute(CkCallback(CkReductionTarget(Main,FFTDone), mainProxy));
-        else {
+      serial {
+        if (!validating) {
+          contribute(CkCallback(CkReductionTarget(Main, FFTDone), mainProxy));
+        } else {
           char filename[80];
           sprintf(filename, "%d-%d.dump%d", numChares, N, thisIndex);
           writeCommFile(n, in, filename);

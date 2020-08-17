@@ -1,3 +1,8 @@
+#include "fft1d.h"
+
+#ifdef MODE_CPU
+#include <fftw3.h>
+
 void readCommFile(fftw_complex *data, char *filename) {
   FILE *pFile;
   if(!(pFile = fopen (filename,"r"))) {
@@ -23,4 +28,4 @@ void writeCommFile(int n, fftw_complex *data, char *filename) {
 
   fclose(pFile);
 }
-
+#endif

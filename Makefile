@@ -1,11 +1,11 @@
 OPTS	= -O3
-CHARMC	= $(HOME)/charm/bin/charmc $(OPTS)
+CHARMC	= $(HOME)/work/charm/bin/charmc $(OPTS)
 CC=mpicxx
 LIBS = -lfftw3 -lm
 
 OBJS = fft1d.o
 
-all: fft1d fft_ref fft1d.prj fft_bench
+all: fft1d fft_ref fft_bench
 
 fft_bench: fft_bench.o
 	${CC} fft_bench.o -o fft_bench $(LIBS)
@@ -23,8 +23,12 @@ fft1d.prj: $(OBJS)
 summary: $(OBJS)
 	$(CHARMC) -language charm++ -tracemode summary $(LIBS) -o fft1d.sum $(OBJS)
 
+fft1d.ci: fft1d.h
+
 fft1d.decl.h: fft1d.ci
-	$(CHARMC)  fft1d.ci
+	$(CHARMC) fft1d.ci
+
+fft1d.def.h: fft1d.ci
 
 fft_ref: fft_ref.o
 	${CC} fft_ref.o -o fft_ref -L/expand/home/arya/fftw-3.3/lib -lfftw3_mpi -lfftw3 -lm
@@ -38,5 +42,5 @@ cleanproj:
 clean:
 	rm -f *.decl.h *.def.h conv-host *.o fft1d fft1d.prj fft_bench charmrun fft_ref *~
 
-fft1d.o: fft1d.C fft1d.decl.h
+fft1d.o: fft1d.C fft1d.decl.h fft1d.def.h fft1d.h
 	$(CHARMC) -c fft1d.C
