@@ -6,6 +6,7 @@
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ int N;
+/*readonly*/ bool validate;
 
 #ifdef MODE_CUDA
 extern void invokeTwiddle(complex_t* out, int N, int numChares, int k,
@@ -25,15 +26,22 @@ struct Main : public CBase_Main {
     // Default parameters
     numChares = 4;
     N = 128;
+    validate = false;
 
     int c;
-    while ((c = getopt(m->argc, m->argv, "c:n:")) != -1 ) {
+    while ((c = getopt(m->argc, m->argv, "c:n:v")) != -1 ) {
       switch (c) {
         case 'c':
           numChares = atoi(optarg);
           break;
         case 'n':
           N = atoi(optarg);
+          break;
+        case 'v':
+          validate = true;
+          break;
+        default:
+          CkAbort("Invalid parameter");
           break;
       }
     }
@@ -46,7 +54,8 @@ struct Main : public CBase_Main {
     }
 
     CkPrintf("\n1D FFT\n");
-    CkPrintf("\tChares: %d\n\tN: %d, Size: %d\n\n", numChares, N, N*N);
+    CkPrintf("\tChares: %d\n\tN: %d, Size: %d\n", numChares, N, N*N);
+    CkPrintf("\tValidate: %s\n\n", validate ? "true" : "false");
 
     // Construct an array of FFT chares to do the calculation
     fftProxy = CProxy_fft::ckNew(numChares);
@@ -63,12 +72,16 @@ struct Main : public CBase_Main {
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
     CkPrintf("\nTime: %f sec\nRate: %f GFlop/s\n", time, gflops);
 
-    //fftProxy.initValidation();
-    CkExit();
+    if (validate) {
+      CkPrintf("\nPerforming validation\n");
+      fftProxy.initValidation();
+    } else {
+      CkExit();
+    }
   }
 
   void printResidual(double r) {
-    CkPrintf("Residual = %g\n", r);
+    CkPrintf("\nResidual = %g\n", r);
     CkExit();
   }
 };
@@ -302,10 +315,11 @@ struct fft : public CBase_fft {
   }
 
   void initValidation() {
+    validating = true;
+
 #ifdef MODE_CPU
     memcpy(in, out, sizeof(complex_t) * n);
 
-    validating = true;
     fftw_destroy_plan(p1);
     int length[] = {N};
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,

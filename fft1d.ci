@@ -4,6 +4,7 @@ mainmodule fft1d {
   readonly CProxy_Main mainProxy;
   readonly int numChares;
   readonly int N;
+  readonly bool validate;
 
   message fftMsg {
     complex_t data[];
@@ -21,7 +22,6 @@ mainmodule fft1d {
     entry void initComplete();
     entry void prepTransposeDone();
     entry void getTranspose(fftMsg *m);
-    entry void initValidation();
 
     entry void doFFT() {
       for (iteration = 0; iteration < 3; ++iteration) {
@@ -56,14 +56,14 @@ mainmodule fft1d {
         if (!validating) {
           contribute(CkCallback(CkReductionTarget(Main, FFTDone), mainProxy));
         } else {
-          /*
           char filename[80];
           sprintf(filename, "%d-%d.dump%d", numChares, N, thisIndex);
           writeCommFile(n, in, filename);
           calcResidual();
-          */
         }
       }
     };
+
+    entry void initValidation();
   };
 };
