@@ -2,6 +2,7 @@
 
 #define BLOCK_DIM 16
 
+#ifdef MODE_CUDA
 __global__ void twiddleKernel(complex_t* out, int N, int numChares, int k,
     double sign) {
   int i = blockDim.x * blockIdx.x + threadIdx.x;
@@ -30,3 +31,4 @@ void invokeTwiddle(complex_t* out, int N, int numChares, int k, double sign,
   twiddleKernel<<<grid_dim, block_dim, 0, stream>>>(out, N, numChares, k, sign);
   hapiCheck(cudaPeekAtLastError());
 }
+#endif

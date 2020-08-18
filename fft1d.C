@@ -249,11 +249,11 @@ struct fft : public CBase_fft {
 
   void fftExecute() {
 #ifdef MODE_CPU
+    fftw_execute(p1);
+#elif defined MODE_CUDA
     hapiCheck(cudaEventRecord(comm_event, comm_stream));
     hapiCheck(cudaStreamWaitEvent(compute_stream, comm_event, 0));
 
-    fftw_execute(p1);
-#elif defined MODE_CUDA
     cufftExecC2C(p1, d_out, d_out, CUFFT_FORWARD);
 #endif
   }

@@ -1,4 +1,4 @@
-OPTS	= -O3 -DMODE_CUDA
+OPTS = -O3
 
 CHARM_DIR = $(HOME)/work/charm
 CHARMC = $(CHARM_DIR)/bin/charmc $(OPTS)
@@ -7,8 +7,8 @@ CHARM_INC = -I$(CHARM_DIR)/include
 NVCC_FLAGS = -c -std=c++11 -use_fast_math -lineinfo $(OPTS)
 CC = mpicxx
 MPI_LIBS = -lfftw3 -lm
-#CHARM_LIBS = -lfftw3 -lm
-CHARM_LIBS = -lcufft
+CHARM_LIBS = -lfftw3 -lm
+#CHARM_LIBS = -lcufft
 
 OBJS = fft1d.o fft1dcu.o
 
