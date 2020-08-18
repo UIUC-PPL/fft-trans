@@ -3,11 +3,14 @@
 #include <limits>
 #include "fileio.h"
 
-#define TWOPI 6.283185307179586
-
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ int N;
+
+#ifdef MODE_CUDA
+extern void invokeTwiddle(complex_t* out, int N, int numChares, int k,
+    double sign, cudaStream_t stream);
+#endif
 
 struct fftMsg : public CMessage_fftMsg {
   int source;
@@ -149,6 +152,9 @@ struct fft : public CBase_fft {
 #ifdef MODE_CPU
     thisProxy[thisIndex].prepTransposeDone();
 #elif defined MODE_CUDA
+    hapiCheck(cudaEventRecord(compute_event, compute_stream));
+    hapiCheck(cudaStreamWaitEvent(comm_stream, compute_event, 0));
+
     if (iteration == 0) {
       hapiCheck(cudaMemcpyAsync(h_in, d_in, sizeof(complex_t) * n,
             cudaMemcpyDeviceToHost, comm_stream));
@@ -175,10 +181,13 @@ struct fft : public CBase_fft {
       // associated contention.
       int k = i % numChares;
       for (int j = 0, l = 0; j < N/numChares; j++) {
-        /* TODO
+#ifdef MODE_CPU
         memcpy(msgs[k]->data[(l++)*N/numChares], src_buf[k*N/numChares+j*N],
             sizeof(complex_t)*N/numChares);
-            */
+#elif defined MODE_CUDA
+        memcpy(&msgs[k]->data[(l++)*N/numChares], &src_buf[k*N/numChares+j*N],
+            sizeof(complex_t)*N/numChares);
+#endif
       }
 
       // Tag each message with the iteration in which it was
@@ -201,7 +210,26 @@ struct fft : public CBase_fft {
       }
     }
 #elif defined MODE_CUDA
-    // TODO
+    // Tranpose on CPU
+    for (int j = 0, l = 0; j < N/numChares; j++) {
+      for (int i = 0; i < N/numChares; i++) {
+        h_out[k*N/numChares+(i*N+j)].x = m->data[l].x;
+        h_out[k*N/numChares+(i*N+j)].y = m->data[l++].y;
+      }
+    }
+
+    /*
+    // TODO: Transpose on GPU
+    // Memcpy received data to pinned host buffer
+    memcpy(&h_out[k*n/numChares], m->data[0], sizeof(complex_t) * n/numChares);
+
+    // Transfer to device memory
+    hapiCheck(cudaMemcpyAsync(&d_out[k*n/numChares], &h_out[k*n/numChares],
+          sizeof(complex_t) * n/numChares, cudaMemcpyHostToDevice, comm_stream));
+
+    // FIXME: Need to be on compute stream?
+    invokeTranspose();
+    */
 #endif
 
     // Save just-received messages to reuse for later sends, to
@@ -211,19 +239,29 @@ struct fft : public CBase_fft {
     msgs[k]->source = thisIndex;
   }
 
+  void transferTransposed() {
+#ifdef MODE_CUDA
+    // Transfer to device memory
+    hapiCheck(cudaMemcpyAsync(d_out, h_out, sizeof(complex_t) * n,
+          cudaMemcpyHostToDevice, comm_stream));
+#endif
+  }
+
   void fftExecute() {
 #ifdef MODE_CPU
+    hapiCheck(cudaEventRecord(comm_event, comm_stream));
+    hapiCheck(cudaStreamWaitEvent(compute_stream, comm_event, 0));
+
     fftw_execute(p1);
 #elif defined MODE_CUDA
-    // TODO
+    cufftExecC2C(p1, d_out, d_out, CUFFT_FORWARD);
 #endif
   }
 
   void twiddle(double sign) {
-    double a, c, s, re, im;
-
     int k = thisIndex;
 #ifdef MODE_CPU
+    double a, c, s, re, im;
     for (int i = 0; i < N/numChares; i++) {
       for (int j = 0; j < N; j++) {
         a = sign * (TWOPI*(i+k*N/numChares)*j)/(N*N);
@@ -239,7 +277,7 @@ struct fft : public CBase_fft {
       }
     }
 #elif defined MODE_CUDA
-    // TODO
+    invokeTwiddle(d_out, N, numChares, k, sign, compute_stream);
 #endif
   }
 

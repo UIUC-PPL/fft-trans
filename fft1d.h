@@ -16,4 +16,6 @@ typedef fftw_complex complex_t;
 typedef cufftComplex complex_t;
 #endif
 
+#define TWOPI 6.283185307179586
+
 #endif // __FFT1D_H_
