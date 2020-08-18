@@ -139,8 +139,8 @@ struct fft : public CBase_fft {
 #elif defined MODE_CUDA
     // FIXME: Random number generation and assignment happens on the host
     for (int i = 0; i < n; i++) {
-      h_in[i].x = (float)drand48();
-      h_in[i].y = (float)drand48();
+      h_in[i].x = static_cast<float>(drand48());
+      h_in[i].y = static_cast<float>(drand48());
     }
     hapiCheck(cudaMemcpyAsync(d_in, h_in, sizeof(complex_t) * n,
           cudaMemcpyHostToDevice, comm_stream));
