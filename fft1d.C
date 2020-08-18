@@ -284,8 +284,9 @@ struct fft : public CBase_fft {
 #elif defined MODE_CUDA
     hapiCheck(cudaEventRecord(comm_event, comm_stream));
     hapiCheck(cudaStreamWaitEvent(compute_stream, comm_event, 0));
+    int direction = validating ? CUFFT_INVERSE : CUFFT_FORWARD;
 
-    if (cufftExecC2C(p1, d_out, d_out, CUFFT_FORWARD) != CUFFT_SUCCESS) {
+    if (cufftExecC2C(p1, d_out, d_out, direction) != CUFFT_SUCCESS) {
       CkAbort("CUFFT Error: Unable to execute plan");
     }
 #endif
@@ -325,30 +326,54 @@ struct fft : public CBase_fft {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_BACKWARD, FFTW_ESTIMATE);
 #elif defined MODE_CUDA
-    // TODO
+    hapiCheck(cudaMemcpyAsync(d_in, d_out, sizeof(complex_t) * n,
+          cudaMemcpyDeviceToDevice, comm_stream));
+
+    // Can reuse plan since direction is provided at execution time with cuFFT
 #endif
 
     contribute(CkCallback(CkReductionTarget(Main, FFTReady), mainProxy));
   }
 
-  void calcResidual() {
+  void doValidation() {
+    char filename[80];
+    sprintf(filename, "%d-%d.dump%d", numChares, N, thisIndex);
 #ifdef MODE_CPU
+    writeCommFile(n, in, filename);
+#elif defined MODE_CUDA
+    writeCommFile(n, h_in, filename);
+#endif
+    calcResidual();
+  }
+
+  void calcResidual() {
+#ifdef MODE_CUDA
+    // Move GPU data to host
+    hapiCheck(cudaMemcpyAsync(h_out, d_out, sizeof(complex_t) * n,
+          cudaMemcpyDeviceToHost, comm_stream));
+    hapiCheck(cudaStreamSynchronize(comm_stream));
+#endif
+
+    // Always perform residual calculation on the host
     double infNorm = 0.0;
 
     srand48(thisIndex);
     for(int i = 0; i < n; i++) {
+#ifdef MODE_CPU
       out[i][0] = out[i][0]/(N*N) - drand48();
       out[i][1] = out[i][1]/(N*N) - drand48();
 
       double mag = sqrt(pow(out[i][0], 2) + pow(out[i][1], 2));
+#elif defined MODE_CUDA
+      h_out[i].x = h_out[i].x/(N*N) - static_cast<float>(drand48());
+      h_out[i].y = h_out[i].y/(N*N) - static_cast<float>(drand48());
+
+      double mag = sqrt(pow(h_out[i].x, 2) + pow(h_out[i].y, 2));
+#endif
       if(mag > infNorm) infNorm = mag;
     }
 
     double r = infNorm / (std::numeric_limits<double>::epsilon() * log((double)N * N));
-#elif defined MODE_CUDA
-    // TODO
-    double r = 0;
-#endif
 
     CkCallback cb(CkReductionTarget(Main, printResidual), mainProxy);
     contribute(sizeof(double), &r, CkReduction::max_double, cb);

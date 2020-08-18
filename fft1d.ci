@@ -56,10 +56,7 @@ mainmodule fft1d {
         if (!validating) {
           contribute(CkCallback(CkReductionTarget(Main, FFTDone), mainProxy));
         } else {
-          char filename[80];
-          sprintf(filename, "%d-%d.dump%d", numChares, N, thisIndex);
-          writeCommFile(n, in, filename);
-          calcResidual();
+          doValidation();
         }
       }
     };
