@@ -12,7 +12,9 @@ CHARM_LIBS = -lfftw3 -lm
 
 OBJS = fft1d.o fft1dcu.o
 
-all: fft1d fft_ref fft_bench
+all: fft1d
+
+every: fft1d fft_ref fft_bench
 
 fft_bench: fft_bench.o
 	${CC} fft_bench.o -o fft_bench $(MPI_LIBS)
