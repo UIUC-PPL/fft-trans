@@ -2,7 +2,7 @@
 #define __FFT1D_H_
 
 // Set CPU as default execution mode
-#if !defined MODE_CUDA
+#if !defined MODE_CPU && !defined MODE_CUDA
 #define MODE_CPU
 #endif
 

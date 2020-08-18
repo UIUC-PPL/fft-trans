@@ -121,8 +121,13 @@ struct fft : public CBase_fft {
     p1 = fftw_plan_many_dft(1, length, N/numChares, out, length, 1, N,
                             out, length, 1, N, FFTW_FORWARD, FFTW_ESTIMATE);
 #elif defined MODE_CUDA
-    cufftPlanMany(&p1, 1, length, length, 1, N, length, 1, N, CUFFT_C2C, N/numChares);
-    cufftSetStream(p1, compute_stream);
+    if (cufftPlanMany(&p1, 1, length, length, 1, N, length, 1, N, CUFFT_C2C,
+          N/numChares) != CUFFT_SUCCESS) {
+      CkAbort("CUFFT Error: Unable to create plan");
+    }
+    if (cufftSetStream(p1, compute_stream) != CUFFT_SUCCESS) {
+      CkAbort("CUFFT Error: Unable to set CUDA stream");
+    }
 #endif
 
     srand48(thisIndex);
@@ -132,10 +137,15 @@ struct fft : public CBase_fft {
       in[i][1] = drand48();
     }
 #elif defined MODE_CUDA
+    // FIXME: Random number generation and assignment happens on the host
     for (int i = 0; i < n; i++) {
       h_in[i].x = (float)drand48();
       h_in[i].y = (float)drand48();
     }
+    hapiCheck(cudaMemcpyAsync(d_in, h_in, sizeof(complex_t) * n,
+          cudaMemcpyHostToDevice, comm_stream));
+    CkCallback* cb = new CkCallback(CkIndex_fft::initComplete(), thisProxy[thisIndex]);
+    hapiAddCallback(comm_stream, cb);
 #endif
 
     msgs = new fftMsg*[numChares];
@@ -144,8 +154,16 @@ struct fft : public CBase_fft {
       msgs[i]->source = thisIndex;
     }
 
+#ifdef MODE_CPU
     // Reduction to the mainchare to signal that initialization is complete
     contribute(CkCallback(CkReductionTarget(Main, FFTReady), mainProxy));
+#endif
+  }
+
+  void initComplete() {
+#ifdef MODE_CUDA
+    contribute(CkCallback(CkReductionTarget(Main, FFTReady), mainProxy));
+#endif
   }
 
   void prepTranspose() {
@@ -254,7 +272,9 @@ struct fft : public CBase_fft {
     hapiCheck(cudaEventRecord(comm_event, comm_stream));
     hapiCheck(cudaStreamWaitEvent(compute_stream, comm_event, 0));
 
-    cufftExecC2C(p1, d_out, d_out, CUFFT_FORWARD);
+    if (cufftExecC2C(p1, d_out, d_out, CUFFT_FORWARD) != CUFFT_SUCCESS) {
+      CkAbort("CUFFT Error: Unable to execute plan");
+    }
 #endif
   }
 

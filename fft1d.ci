@@ -18,6 +18,7 @@ mainmodule fft1d {
 
   array [1D] fft {
     entry fft();
+    entry void initComplete();
     entry void prepTransposeDone();
     entry void getTranspose(fftMsg *m);
     entry void initValidation();
