@@ -3,6 +3,18 @@
 #define BLOCK_DIM 16
 
 #ifdef MODE_CUDA
+__global__ void transposeKernel(complex_t* out, complex_t* recv, int N,
+    int numChares, int k) {
+  int i = blockDim.x * blockIdx.x + threadIdx.x;
+  int j = blockDim.y * blockIdx.y + threadIdx.y;
+  int idx = (N/numChares * j) + i;
+
+  if (i < N/numChares && j < N/numChares) {
+    out[k*N/numChares+(i*N+j)].x = recv[idx].x;
+    out[k*N/numChares+(i*N+j)].y = recv[idx].y;
+  }
+}
+
 __global__ void twiddleKernel(complex_t* out, int N, int numChares, int k,
     double sign) {
   int i = blockDim.x * blockIdx.x + threadIdx.x;
@@ -20,6 +32,16 @@ __global__ void twiddleKernel(complex_t* out, int N, int numChares, int k,
     out[idx].x = re;
     out[idx].y = im;
   }
+}
+
+void invokeTranspose(complex_t* out, complex_t* recv, int N, int numChares,
+    int k, cudaStream_t stream) {
+  dim3 block_dim(BLOCK_DIM, BLOCK_DIM);
+  dim3 grid_dim((N/numChares+block_dim.x-1) / block_dim.x,
+      (N/numChares+block_dim.y-1) / block_dim.y);
+
+  transposeKernel<<<grid_dim, block_dim, 0, stream>>>(out, recv, N, numChares, k);
+  hapiCheck(cudaPeekAtLastError());
 }
 
 void invokeTwiddle(complex_t* out, int N, int numChares, int k, double sign,

@@ -9,6 +9,8 @@
 /*readonly*/ bool validate;
 
 #ifdef MODE_CUDA
+extern void invokeTranspose(complex_t* out, complex_t* recv, int N, int numChares,
+    int k, cudaStream_t stream);
 extern void invokeTwiddle(complex_t* out, int N, int numChares, int k,
     double sign, cudaStream_t stream);
 #endif
@@ -69,7 +71,7 @@ struct Main : public CBase_Main {
 
   void FFTDone() {
     double time = CkWallTimer() - start;
-    double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1000000000);
+    double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1e9);
     CkPrintf("\nTime: %f sec\nRate: %f GFlop/s\n", time, gflops);
 
     if (validate) {
@@ -97,6 +99,7 @@ struct fft : public CBase_fft {
 #elif defined MODE_CUDA
   complex_t *h_in, *h_out;
   complex_t *d_in, *d_out;
+  complex_t** d_recvs;
   cufftHandle p1;
   cudaStream_t compute_stream;
   cudaStream_t comm_stream;
@@ -121,6 +124,10 @@ struct fft : public CBase_fft {
     hapiCheck(cudaMallocHost(&h_out, sizeof(complex_t) * n));
     hapiCheck(cudaMalloc(&d_in, sizeof(complex_t) * n));
     hapiCheck(cudaMalloc(&d_out, sizeof(complex_t) * n));
+    d_recvs = (complex_t**)malloc(sizeof(complex_t*) * numChares);
+    for (int i = 0; i < numChares; i++) {
+      hapiCheck(cudaMalloc(&d_recvs[i], sizeof(complex_t) * n/numChares));
+    }
 
     hapiCheck(cudaStreamCreateWithPriority(&compute_stream, cudaStreamDefault, 0));
     hapiCheck(cudaStreamCreateWithPriority(&comm_stream, cudaStreamDefault, -1));
@@ -241,6 +248,7 @@ struct fft : public CBase_fft {
       }
     }
 #elif defined MODE_CUDA
+    /*
     // Tranpose on CPU
     for (int j = 0, l = 0; j < N/numChares; j++) {
       for (int i = 0; i < N/numChares; i++) {
@@ -248,19 +256,17 @@ struct fft : public CBase_fft {
         h_out[k*N/numChares+(i*N+j)].y = m->data[l++].y;
       }
     }
+    */
 
-    /*
-    // TODO: Transpose on GPU
     // Memcpy received data to pinned host buffer
-    memcpy(&h_out[k*n/numChares], m->data[0], sizeof(complex_t) * n/numChares);
+    memcpy(&h_out[k*n/numChares], m->data, sizeof(complex_t) * n/numChares);
 
     // Transfer to device memory
-    hapiCheck(cudaMemcpyAsync(&d_out[k*n/numChares], &h_out[k*n/numChares],
+    hapiCheck(cudaMemcpyAsync(d_recvs[k], &h_out[k*n/numChares],
           sizeof(complex_t) * n/numChares, cudaMemcpyHostToDevice, comm_stream));
 
-    // FIXME: Need to be on compute stream?
-    invokeTranspose();
-    */
+    // XXX: Need to be on compute stream?
+    invokeTranspose(d_out, d_recvs[k], N, numChares, k, comm_stream);
 #endif
 
     // Save just-received messages to reuse for later sends, to
@@ -268,14 +274,6 @@ struct fft : public CBase_fft {
     delete msgs[k];
     msgs[k] = m;
     msgs[k]->source = thisIndex;
-  }
-
-  void transferTransposed() {
-#ifdef MODE_CUDA
-    // Transfer to device memory
-    hapiCheck(cudaMemcpyAsync(d_out, h_out, sizeof(complex_t) * n,
-          cudaMemcpyHostToDevice, comm_stream));
-#endif
   }
 
   void fftExecute() {

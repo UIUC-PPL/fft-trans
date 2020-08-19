@@ -42,8 +42,6 @@ mainmodule fft1d {
           }
         }
 
-        serial { transferTransposed(); }
-
         if (iteration < 2) serial "compute" {
           fftExecute();
           if (iteration == 0) {
