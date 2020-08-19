@@ -18,9 +18,9 @@ cd $HOME/work/fft-trans
 ppn=1
 pemap="L0,4,8,84,88,92"
 
-echo "# 1D FFT Nsight Profiling"
+echo "# 1D FFT Nsight Profiling (Multi-process)"
 
-for mul in 1 2 4 8 16
+for mul in 1
 do
   n_chares=$((n_procs * mul))
   echo "# Multiplier $mul ($n_chares chares on $n_procs processes)"
