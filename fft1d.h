@@ -13,6 +13,7 @@ typedef fftw_complex complex_t;
 #include <cufft.h>
 #include <cuda_runtime_api.h>
 #include "hapi.h"
+#include "hapi_nvtx.h"
 typedef cufftComplex complex_t;
 #endif
 

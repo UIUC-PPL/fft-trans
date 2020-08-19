@@ -1,12 +1,15 @@
 #include "fft1d.decl.h"
 #include "fft1d.h"
-#include <limits>
 #include "fileio.h"
+#include <limits>
+#include <sstream>
 
 /*readonly*/ CProxy_Main mainProxy;
 /*readonly*/ int numChares;
 /*readonly*/ int N;
 /*readonly*/ bool validate;
+
+#define CUDA_SYNC 0
 
 #ifdef MODE_CUDA
 extern void invokeTranspose(complex_t* out, complex_t* recv, int N, int numChares,
@@ -25,6 +28,8 @@ struct Main : public CBase_Main {
   CProxy_fft fftProxy;
 
   Main(CkArgMsg* m) {
+    NVTXTracer("Main::Main", NVTXColor::Turquoise);
+
     // Default parameters
     numChares = 4;
     N = 128;
@@ -64,12 +69,14 @@ struct Main : public CBase_Main {
   }
 
   void FFTReady() {
+    NVTXTracer("Main::FFTReady", NVTXColor::Turquoise);
     start = CkWallTimer();
     // Broadcast the 'go' signal to the fft chare array
     fftProxy.doFFT();
   }
 
   void FFTDone() {
+    NVTXTracer("Main::FFTDone", NVTXColor::Turquoise);
     double time = CkWallTimer() - start;
     double gflops = 5 * (double)N*N * log2((double)N*N) / (time * 1e9);
     CkPrintf("\nTime: %f sec\nRate: %f GFlop/s\n", time, gflops);
@@ -110,6 +117,9 @@ struct fft : public CBase_fft {
   bool validating;
 
   fft() {
+    std::ostringstream os;
+    os << "fft::fft (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::PeterRiver);
     __sdag_init();
 
     validating = false;
@@ -181,12 +191,20 @@ struct fft : public CBase_fft {
   }
 
   void initComplete() {
+    std::ostringstream os;
+    os << "fft::initComplete (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::PeterRiver);
+
 #ifdef MODE_CUDA
     contribute(CkCallback(CkReductionTarget(Main, FFTReady), mainProxy));
 #endif
   }
 
   void prepTranspose() {
+    std::ostringstream os;
+    os << "fft::prepTranspose (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::WetAsphalt);
+
 #ifdef MODE_CPU
     thisProxy[thisIndex].prepTransposeDone();
 #elif defined MODE_CUDA
@@ -200,12 +218,21 @@ struct fft : public CBase_fft {
       hapiCheck(cudaMemcpyAsync(h_out, d_out, sizeof(complex_t) * n,
             cudaMemcpyDeviceToHost, comm_stream));
     }
+#if CUDA_SYNC
+    cudaStreamSynchronize(comm_stream);
+    thisProxy[thisIndex].prepTransposeDone();
+#else
     CkCallback* cb = new CkCallback(CkIndex_fft::prepTransposeDone(), thisProxy[thisIndex]);
     hapiAddCallback(comm_stream, cb);
+#endif // CUDA_SYNC
 #endif
   }
 
   void sendTranspose() {
+    std::ostringstream os;
+    os << "fft::sendTranspose (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::WetAsphalt);
+
 #ifdef MODE_CPU
     complex_t* src_buf = (iteration == 0) ? in : out;
 #elif defined MODE_CUDA
@@ -239,6 +266,10 @@ struct fft : public CBase_fft {
   }
 
   void applyTranspose(fftMsg *m) {
+    std::ostringstream os;
+    os << "fft::applyTranspose (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::Carrot);
+
     int k = m->source;
 #ifdef MODE_CPU
     for (int j = 0, l = 0; j < N/numChares; j++) {
@@ -277,6 +308,10 @@ struct fft : public CBase_fft {
   }
 
   void fftExecute() {
+    std::ostringstream os;
+    os << "fft::fftExecute (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::Clouds);
+
 #ifdef MODE_CPU
     fftw_execute(p1);
 #elif defined MODE_CUDA
@@ -291,6 +326,10 @@ struct fft : public CBase_fft {
   }
 
   void twiddle(double sign) {
+    std::ostringstream os;
+    os << "fft::twiddle (" << std::to_string(thisIndex) << ")";
+    NVTXTracer(os.str(), NVTXColor::GreenSea);
+
     int k = thisIndex;
 #ifdef MODE_CPU
     double a, c, s, re, im;
