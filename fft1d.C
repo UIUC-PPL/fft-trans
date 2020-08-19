@@ -358,7 +358,7 @@ struct fft : public CBase_fft {
     double infNorm = 0.0;
 
     srand48(thisIndex);
-    for(int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
 #ifdef MODE_CPU
       out[i][0] = out[i][0]/(N*N) - drand48();
       out[i][1] = out[i][1]/(N*N) - drand48();
